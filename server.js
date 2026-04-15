@@ -19,11 +19,11 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Servir archivos estáticos (el HTML y assets)
-app.use(express.static(join(__dirname, 'public')));
+app.use(express.static(__dirname));
 
 // Ruta principal
 app.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'public', 'index.html'));
+  res.sendFile(join(__dirname, 'index.html'));
 });
 
 // API para procesar cotización
