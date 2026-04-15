@@ -10,6 +10,9 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Debug: mostrar dónde estamos buscando
+console.log('Directorio actual:', __dirname);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -18,12 +21,20 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Servir archivos estáticos (el HTML y assets)
-app.use(express.static(__dirname));
+// Servir archivos estáticos - intentar múltiples ubicaciones
+app.use(express.static(join(__dirname)));
+app.use(express.static(join(__dirname, 'public')));
 
 // Ruta principal
 app.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'index.html'));
+  const indexPath = join(__dirname, 'index.html');
+  console.log('Buscando index.html en:', indexPath);
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error('Error sirviendo index.html:', err);
+      res.status(404).send('index.html no encontrado');
+    }
+  });
 });
 
 // API para procesar cotización
