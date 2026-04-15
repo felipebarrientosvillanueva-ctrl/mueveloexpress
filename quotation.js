@@ -4,11 +4,13 @@ import { Buffer } from 'buffer';
 import { randomBytes } from 'crypto';
 
 // Configurar transporte de email
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
+host: 'smtp.sendgrid.net',
+port: 587,
+secure: false,
+auth: {
+  user: 'apikey',
+  pass: process.env.EMAIL_PASSWORD
+}
   }
 });
 
