@@ -217,7 +217,7 @@ function generatePDF(formData, pricing, quotationId) {
 // Enviar email con PDF
 async function sendEmail(formData, pricing, quotationId, pdfBuffer) {
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+from: 'cotizaciones@mueveloexpress.cl',
     to: formData.email,
     subject: `Tu cotización de mudanza - Mueveloexpress (ID: ${quotationId})`,
     html: `
