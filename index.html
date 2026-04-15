@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mueveloexpress — Mudanzas en Todo Chile</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --red:#D32F2F;--red-dark:#B71C1C;--red-light:#FFF5F5;
+  --navy:#0F1C2E;--navy-mid:#1E2D3D;
+  --gray:#64748B;--gray-light:#F8FAFC;
+  --border:#E2E8F0;--text:#1E293B;--white:#FFFFFF;
+}
+html{scroll-behavior:smooth;}
+body{font-family:"Outfit",sans-serif;color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased;}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 60px;height:72px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow .3s;}
+nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.07);}
+.logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900;color:var(--navy);text-decoration:none;cursor:pointer;letter-spacing:-.4px;}
+.logo span{color:var(--red);}
+.nav-links{display:flex;align-items:center;gap:36px;}
+.nav-links a{font-size:14px;font-weight:500;color:var(--gray);text-decoration:none;cursor:pointer;transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-phone{font-size:13px;font-weight:600;color:var(--navy);letter-spacing:.3px;}
+.nav-cta{background:var(--red);color:white;padding:10px 22px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;box-shadow:0 2px 8px rgba(211,47,47,.3);letter-spacing:.3px;}
+.nav-cta:hover{background:var(--red-dark);box-shadow:0 4px 16px rgba(211,47,47,.4);transform:translateY(-1px);}
+.hero{background:#FAFBFC;min-height:640px;display:flex;align-items:center;padding:80px 60px;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;top:-120px;right:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(211,47,47,.06) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+.hero-inner{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1.1fr .9fr;gap:80px;align-items:center;position:relative;z-index:1;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:white;border:1.5px solid var(--border);border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.hero h1{font-size:clamp(40px,5vw,62px);font-weight:900;line-height:1.05;color:var(--navy);margin-bottom:24px;letter-spacing:-2px;}
+.hero h1 em{font-style:normal;color:var(--red);}
+.hero-sub{font-size:17px;color:var(--gray);line-height:1.75;margin-bottom:36px;max-width:460px;}
+.hero-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:32px;}
+.btn-primary{background:var(--red);color:white;padding:16px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all .25s;display:inline-flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(211,47,47,.35);}
+.btn-primary:hover{background:var(--red-dark);transform:translateY(-2px);box-shadow:0 8px 28px rgba(211,47,47,.45);}
+.btn-ghost{background:white;color:var(--navy);padding:16px 26px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);transition:all .2s;display:inline-flex;align-items:center;gap:8px;text-decoration:none;}
+.btn-ghost:hover{border-color:var(--navy);}
+.hero-pills{display:flex;flex-wrap:wrap;gap:16px;}
+.hero-pill{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--gray);}
+.pill-check{width:18px;height:18px;background:rgba(211,47,47,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--red);}
+.hero-visual{position:relative;}
+.hero-main-card{background:white;border-radius:24px;padding:36px;box-shadow:0 24px 64px rgba(0,0,0,.1),0 8px 24px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.04);position:relative;}
+.hero-main-card::before{content:"";position:absolute;top:0;left:24px;right:24px;height:3px;background:var(--red);border-radius:0 0 3px 3px;}
+.hc-tag{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:14px;}
+.hc-title{font-size:20px;font-weight:900;color:var(--navy);margin-bottom:6px;letter-spacing:-.5px;}
+.hc-sub{font-size:13px;color:var(--gray);line-height:1.55;margin-bottom:22px;}
+.hc-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
+.hc-step{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text);}
+.hc-step-num{width:24px;height:24px;border-radius:50%;background:var(--red);color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hc-step .hc-step-time{color:var(--gray);margin-left:auto;font-size:12px;font-weight:500;}
+.hc-divider{height:1px;background:var(--border);margin:20px 0;}
+.hc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;}
+.hcs{text-align:center;padding:14px 8px;background:var(--gray-light);border-radius:12px;}
+.hcs-n{font-size:24px;font-weight:900;color:var(--red);line-height:1;letter-spacing:-1px;}
+.hcs-l{font-size:10px;font-weight:700;color:var(--gray);margin-top:4px;letter-spacing:.5px;text-transform:uppercase;}
+.hc-btn{width:100%;background:var(--red);color:white;padding:15px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .2s;letter-spacing:.3px;}
+.hc-btn:hover{background:var(--red-dark);}
+.stats-strip{background:var(--navy);padding:0 60px;}
+.stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);}
+.stat-box{text-align:center;padding:40px 20px;border-right:1px solid rgba(255,255,255,.08);}
+.stat-box:last-child{border-right:none;}
+.stat-box .num{font-size:44px;font-weight:900;color:white;line-height:1;letter-spacing:-2px;}
+.stat-box .num span{color:var(--red);}
+.stat-box .lbl{font-size:11px;font-weight:600;color:rgba(255,255,255,.4);margin-top:8px;letter-spacing:1px;text-transform:uppercase;}
+.trust-bar{background:white;border-bottom:1px solid var(--border);padding:18px 60px;}
+.trust-bar-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--gray);}
+section{padding:90px 60px;}
+.section-inner{max-width:1200px;margin:0 auto;}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:14px;}
+.section-label::before{content:"";width:24px;height:2px;background:var(--red);border-radius:1px;}
+h2.section-title{font-size:clamp(30px,4vw,48px);font-weight:900;color:var(--navy);line-height:1.1;margin-bottom:16px;letter-spacing:-1.5px;}
+.section-sub{font-size:16px;color:var(--gray);line-height:1.75;max-width:520px;margin-bottom:56px;}
+.services{background:var(--gray-light);}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.service-card{background:white;border-radius:18px;padding:32px;border:1.5px solid var(--border);transition:all .3s;position:relative;overflow:hidden;}
+.service-card::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform .3s;transform-origin:left;}
+.service-card:hover{border-color:transparent;box-shadow:0 12px 40px rgba(0,0,0,.09);transform:translateY(-4px);}
+.service-card:hover::after{transform:scaleX(1);}
+.sc-icon{width:52px;height:52px;background:var(--red-light);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px;}
+.sc-title{font-size:17px;font-weight:800;color:var(--navy);margin-bottom:10px;letter-spacing:-.3px;}
+.sc-desc{font-size:13.5px;color:var(--gray);line-height:1.7;}
+.sc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;}
+.sc-tag{background:var(--gray-light);color:var(--gray);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;}
+.how{background:white;}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+.step-box{text-align:center;position:relative;padding:0 24px;}
+.step-connector{position:absolute;top:27px;left:calc(50% + 30px);width:calc(100% - 60px);height:2px;background:linear-gradient(90deg,var(--red),rgba(211,47,47,.15));}
+.step-box:last-child .step-connector{display:none;}
+.step-num-wrap{width:56px;height:56px;border-radius:50%;background:white;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;z-index:1;transition:all .3s;}
+.step-box.active .step-num-wrap{background:var(--red);border-color:var(--red);box-shadow:0 0 0 8px rgba(211,47,47,.08);}
+.step-num{font-size:20px;font-weight:900;color:var(--red);}
+.step-box.active .step-num{color:white;}
+.step-title{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:8px;letter-spacing:-.2px;}
+.step-desc{font-size:13px;color:var(--gray);line-height:1.65;}
+.why{background:var(--navy);}
+.why .section-label{color:rgba(239,68,68,.75);}
+.why .section-label::before{background:rgba(239,68,68,.75);}
+.why h2.section-title{color:white;}
+.why .section-sub{color:rgba(255,255,255,.45);}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.why-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:28px;transition:all .3s;}
+.why-card:hover{background:rgba(255,255,255,.07);border-color:rgba(211,47,47,.3);}
+.why-icon{width:44px;height:44px;background:rgba(211,47,47,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px;}
+.why-title{font-size:15px;font-weight:700;color:white;margin-bottom:6px;}
+.why-desc{font-size:13px;color:rgba(255,255,255,.4);line-height:1.7;}
+.coverage{background:var(--gray-light);}
+.coverage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.coverage-card{background:white;border-radius:14px;padding:20px 22px;display:flex;align-items:center;gap:14px;border:1.5px solid var(--border);transition:all .2s;}
+.coverage-card:hover{border-color:var(--red);box-shadow:0 4px 16px rgba(211,47,47,.1);}
+.cov-dot{width:10px;height:10px;border-radius:50%;background:var(--red);flex-shrink:0;}
+.cov-name{font-size:14px;font-weight:700;color:var(--navy);}
+.cov-sub{font-size:11.5px;color:var(--gray);margin-top:2px;}
+.reviews{background:white;}
+.reviews-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:24px;}
+.reviews-score-block{display:flex;align-items:center;gap:20px;}
+.reviews-big{font-size:80px;font-weight:900;color:var(--navy);line-height:1;letter-spacing:-4px;}
+.reviews-detail{display:flex;flex-direction:column;gap:4px;}
+.reviews-stars{color:#F59E0B;font-size:24px;letter-spacing:2px;}
+.reviews-count{font-size:13px;color:var(--gray);}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.review-card{background:var(--gray-light);border-radius:18px;padding:28px;border:1.5px solid var(--border);transition:box-shadow .2s;}
+.review-card:hover{box-shadow:0 8px 32px rgba(0,0,0,.08);}
+.rc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.rc-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:white;flex-shrink:0;}
+.rc-user{display:flex;align-items:center;gap:12px;}
+.rc-name{font-size:14px;font-weight:700;color:var(--navy);}
+.rc-date{font-size:11.5px;color:var(--gray);margin-top:2px;}
+.rc-badge{display:flex;align-items:center;gap:4px;background:white;border:1px solid var(--border);border-radius:20px;padding:3px 8px;font-size:11px;font-weight:600;color:#4285F4;}
+.rc-stars{color:#F59E0B;font-size:13px;letter-spacing:1px;margin-bottom:12px;}
+.rc-text{font-size:13.5px;color:#475569;line-height:1.7;}
+.contact-cta{background:var(--navy);padding:90px 60px;position:relative;overflow:hidden;}
+.contact-cta::before{content:"";position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(211,47,47,.15) 0%,transparent 65%);border-radius:50%;}
+.contact-cta-inner{max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1;}
+.contact-cta h2{font-size:clamp(32px,4vw,50px);font-weight:900;color:white;line-height:1.1;margin-bottom:16px;letter-spacing:-1.5px;}
+.contact-cta p{font-size:16px;color:rgba(255,255,255,.5);line-height:1.75;margin-bottom:40px;}
+.contact-cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-red-solid{background:var(--red);color:white;padding:16px 32px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:10px;cursor:pointer;border:none;box-shadow:0 4px 16px rgba(211,47,47,.4);transition:all .2s;}
+.btn-red-solid:hover{background:var(--red-dark);transform:translateY(-2px);}
+.btn-outline-white{background:transparent;color:white;padding:16px 28px;border-radius:10px;font-size:15px;font-weight:600;border:1.5px solid rgba(255,255,255,.2);cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;text-decoration:none;}
+.btn-outline-white:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.05);}
+footer{background:#080F19;padding:56px 60px 32px;}
+.footer-inner{max-width:1200px;margin:0 auto;}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:40px;margin-bottom:48px;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,.3);margin-top:12px;max-width:240px;line-height:1.7;}
+.footer-logo-text{font-size:22px;font-weight:900;color:white;letter-spacing:-.5px;}
+.footer-logo-text span{color:var(--red);}
+.footer-col h4{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px;}
+.footer-col a{display:block;font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:10px;transition:color .2s;cursor:pointer;}
+.footer-col a:hover{color:rgba(255,255,255,.85);}
+.footer-wa-link{display:inline-flex;align-items:center;gap:8px;background:rgba(37,211,102,.1);color:#25D366 !important;padding:10px 16px;border-radius:8px;font-weight:600 !important;transition:background .2s !important;margin-top:4px;}
+.footer-wa-link:hover{background:rgba(37,211,102,.18) !important;}
+.footer-divider{height:1px;background:rgba(255,255,255,.06);margin-bottom:24px;}
+.footer-copy{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-copy p{font-size:12px;color:rgba(255,255,255,.2);}
+.wizard-overlay{position:fixed;inset:0;background:rgba(5,10,20,.65);backdrop-filter:blur(4px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.wizard-overlay.open{display:flex;}
+.wizard-box{background:white;border-radius:24px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.2);}
+.wizard-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:10;}
+.wizard-logo{font-size:16px;font-weight:900;color:var(--navy);letter-spacing:-.3px;}
+.wizard-logo span{color:var(--red);}
+.wizard-close{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gray);transition:all .2s;}
+.wizard-close:hover{background:var(--gray-light);}
+.wizard-progress{padding:0 28px;margin-top:20px;}
+.progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--red);border-radius:2px;transition:width .4s ease;}
+.progress-text{font-size:11px;color:var(--gray);margin-top:8px;text-align:right;font-weight:500;}
+.sofia-row{display:flex;align-items:center;gap:0;margin:24px 28px 0;}
+.sofia-row::before,.sofia-row::after{content:"";flex:1;height:1.5px;background:var(--border);}
+.sofia-avatar-placeholder{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 16px;border:3px solid white;box-shadow:0 4px 12px rgba(211,47,47,.25);}
+.wizard-step{padding:28px;display:none;}
+.wizard-step.active{display:block;}
+.wiz-question{font-size:clamp(20px,2.5vw,24px);font-weight:800;color:var(--navy);line-height:1.35;margin-bottom:8px;text-align:center;letter-spacing:-.3px;}
+.wiz-question strong{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--red);}
+.wiz-sub{font-size:14px;color:var(--gray);text-align:center;margin-bottom:28px;line-height:1.65;}
+.wiz-input{width:100%;border:2px solid var(--border);border-radius:10px;padding:14px 16px;font-size:15px;font-family:"Outfit",sans-serif;outline:none;transition:border-color .2s;color:var(--text);}
+.wiz-input:focus{border-color:var(--red);}
+.wiz-input-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.wiz-label{font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:6px;display:block;letter-spacing:.2px;}
+.wiz-select{width:100%;border:2px solid var(--border);border-radius:10px;padding:14px 16px;font-size:15px;font-family:"Outfit",sans-serif;outline:none;appearance:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 14px center;transition:border-color .2s;cursor:pointer;color:var(--text);}
+.wiz-select:focus{border-color:var(--red);}
+.wiz-error{background:#FFF5F5;border:1px solid #FCA5A5;border-radius:8px;padding:10px 14px;font-size:13px;color:#DC2626;text-align:center;margin-bottom:16px;display:none;}
+.wiz-error.show{display:block;}
+.wiz-addr-row{display:grid;grid-template-columns:1.2fr 2fr;gap:12px;margin-bottom:12px;}
+.wiz-subrow{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:12px;margin-bottom:12px;}
+.wiz-choices{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.wiz-choice{border:2px solid var(--border);border-radius:10px;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:14px;font-size:14px;font-weight:500;color:var(--text);transition:all .2s;background:white;}
+.wiz-choice:hover{border-color:var(--red);background:var(--red-light);}
+.wiz-choice.selected{border-color:var(--red);background:var(--red-light);color:var(--red);font-weight:600;}
+.choice-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.wiz-choice.selected .choice-check{background:var(--red);border-color:var(--red);}
+.wiz-choice.selected .choice-check::after{content:"\2713";color:white;font-size:13px;}
+.inventory-header{background:var(--gray-light);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;font-size:13px;color:var(--gray);font-weight:500;}
+.inventory-header strong{color:var(--red);font-weight:700;}
+.inv-categories{border:2px solid var(--border);border-radius:14px;overflow:hidden;}
+.inv-cat{border-bottom:1px solid var(--border);}
+.inv-cat:last-child{border-bottom:none;}
+.inv-cat-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:white;transition:background .2s;}
+.inv-cat-header:hover{background:var(--gray-light);}
+.inv-cat-title{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:var(--navy);}
+.inv-cat-icon{font-size:18px;}
+.inv-arrow{font-size:12px;color:var(--gray);transition:transform .2s;}
+.inv-cat.open .inv-arrow{transform:rotate(180deg);}
+.inv-items{display:none;padding:4px 0;}
+.inv-cat.open .inv-items{display:block;}
+.inv-item{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid var(--gray-light);}
+.inv-item-name{font-size:13px;color:var(--text);}
+.inv-counter{display:flex;align-items:center;gap:10px;}
+.inv-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:var(--gray);transition:all .2s;line-height:1;}
+.inv-btn.plus{border-color:var(--red);color:var(--red);}
+.inv-btn.plus:hover{background:var(--red);color:white;}
+.inv-btn.minus:hover{border-color:#DC2626;color:#DC2626;}
+.inv-count{font-size:14px;font-weight:700;color:var(--navy);min-width:20px;text-align:center;}
+.phone-row{display:flex;border:2px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s;}
+.phone-row:focus-within{border-color:var(--red);}
+.phone-prefix{background:var(--gray-light);padding:14px 12px;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--navy);border-right:1px solid var(--border);white-space:nowrap;}
+.phone-input{flex:1;border:none;padding:14px 14px;font-size:15px;font-family:"Outfit",sans-serif;outline:none;color:var(--text);}
+.wiz-check-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;cursor:pointer;}
+.wiz-checkbox{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;cursor:pointer;accent-color:var(--red);}
+.wiz-check-label{font-size:13px;color:var(--gray);}
+.wiz-check-label a{color:var(--red);}
+.wiz-footer{padding:0 28px 28px;display:flex;gap:12px;}
+.wiz-btn{flex:1;padding:15px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:"Outfit",sans-serif;}
+.wiz-btn-next{background:var(--red);color:white;}
+.wiz-btn-next:hover{background:var(--red-dark);}
+.wiz-btn-next:disabled{background:#D1D5DB;cursor:not-allowed;}
+.wiz-btn-back{background:var(--gray-light);color:var(--gray);max-width:100px;}
+.wiz-btn-back:hover{background:var(--border);}
+.wiz-final{text-align:center;padding:40px 28px;}
+.wiz-final-icon{font-size:56px;margin-bottom:20px;}
+.wiz-final h2{font-size:24px;font-weight:900;color:var(--navy);margin-bottom:12px;letter-spacing:-.5px;}
+.wiz-final p{font-size:15px;color:var(--gray);line-height:1.7;margin-bottom:28px;}
+.wiz-final-wa{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:white;padding:16px 32px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;transition:all .2s;}
+.wiz-final-wa:hover{background:#1DA853;transform:translateY(-2px);}
+.wiz-final-wa svg{width:22px;height:22px;fill:white;}
+@media(max-width:960px){
+  nav{padding:0 24px;}
+  .hero{padding:60px 24px;}
+  .hero-inner{grid-template-columns:1fr;gap:48px;}
+  .hero-float-badge{display:none;}
+  .stats-strip{padding:0 24px;}
+  .stats-inner{grid-template-columns:repeat(2,1fr);}
+  .stat-box{border-right:none;border-bottom:1px solid rgba(255,255,255,.08);}
+  section{padding:64px 24px;}
+  .trust-bar{padding:16px 24px;}
+  .trust-bar-inner{gap:20px;}
+  .services-grid,.reviews-grid{grid-template-columns:1fr 1fr;}
+  .how-steps{grid-template-columns:1fr 1fr;gap:32px;}
+  .step-connector{display:none;}
+  .why-grid{grid-template-columns:1fr 1fr;}
+  .coverage-grid{grid-template-columns:1fr 1fr;}
+  .contact-cta{padding:64px 24px;}
+  footer{padding:48px 24px 24px;}
+  .wiz-input-row,.wiz-addr-row,.wiz-subrow{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .nav-links,.nav-phone{display:none;}
+  .hero h1{font-size:36px;}
+  .services-grid,.why-grid,.reviews-grid{grid-template-columns:1fr;}
+  .how-steps{grid-template-columns:1fr;}
+  .coverage-grid{grid-template-columns:1fr;}
+}
+/* ── PHOTO UPLOAD ── */
+.photo-scan-panel{background:linear-gradient(135deg,#FFF5F5,#FFFAFA);border:2px dashed rgba(211,47,47,.3);border-radius:14px;padding:20px;margin-bottom:20px;transition:border-color .3s;}
+.photo-scan-panel:hover{border-color:var(--red);}
+.photo-scan-header{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.photo-scan-toggle{margin-left:auto;font-size:12px;font-weight:700;color:var(--red);border:1.5px solid var(--red);border-radius:20px;padding:5px 14px;background:transparent;cursor:pointer;font-family:"Outfit",sans-serif;white-space:nowrap;transition:all .2s;}
+.photo-scan-toggle:hover{background:var(--red);color:white;}
+.photo-scan-body{margin-top:16px;}
+.photo-drop-zone{border:2px dashed #CBD5E1;border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:white;}
+.photo-drop-zone:hover,.photo-drop-zone.drag-over{border-color:var(--red);background:var(--red-light);}
+.photo-previews{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px;}
+.photo-preview{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:2px solid var(--border);}
+.photo-preview img{width:100%;height:100%;object-fit:cover;}
+.photo-preview-remove{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.65);color:white;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;line-height:1;}
+.photo-analyze-btn{width:100%;margin-top:12px;padding:13px;background:var(--red);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:"Outfit",sans-serif;transition:background .2s;letter-spacing:.2px;}
+.photo-analyze-btn:hover{background:var(--red-dark);}
+.photo-analyze-btn:disabled{background:#D1D5DB;cursor:not-allowed;}
+.photo-loading{text-align:center;padding:20px;display:none;}
+.photo-spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.photo-results{background:var(--gray-light);border-radius:10px;padding:14px;margin-top:12px;display:none;}
+.photo-result-item{display:flex;align-items:center;justify-content:space-between;padding:7px 0;font-size:13px;border-bottom:1px solid var(--border);}
+.photo-result-item:last-child{border-bottom:none;}
+.photo-result-name{color:var(--text);font-weight:500;}
+.photo-result-badge{background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+.photo-error{background:#FFF5F5;border:1px solid #FCA5A5;border-radius:8px;padding:10px 14px;font-size:13px;color:#DC2626;margin-top:10px;display:none;}
+</style>
+</head>
+<body>
+<nav id="mainNav">
+  <div class="logo" style="gap:0;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" style="width:52px;height:52px;margin-right:10px;">
+      <defs><clipPath id="nc"><circle cx="50" cy="50" r="44"/></clipPath></defs>
+      <circle cx="50" cy="50" r="48" fill="white" stroke="#B71C1C" stroke-width="3"/>
+      <circle cx="50" cy="50" r="44" fill="white"/>
+      <path d="M6,50 A44,44 0 0,1 94,50" fill="none" stroke="#1A1A1A" stroke-width="7" stroke-linecap="round"/>
+      <g clip-path="url(#nc)">
+        <line x1="8" y1="54" x2="20" y2="54" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="5" y1="60" x2="19" y2="60" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="9" y1="66" x2="21" y2="66" stroke="#D32F2F" stroke-width="2.2" stroke-linecap="round"/>
+        <rect x="20" y="48" width="42" height="22" rx="3" fill="#D32F2F"/>
+        <rect x="58" y="50" width="22" height="20" rx="3" fill="#D32F2F"/>
+        <rect x="59" y="52" width="18" height="10" rx="2" fill="#90CAF9" opacity="0.9"/>
+        <circle cx="32" cy="73" r="6" fill="#1A1A1A"/><circle cx="32" cy="73" r="3" fill="#9E9E9E"/>
+        <circle cx="60" cy="73" r="6" fill="#1A1A1A"/><circle cx="60" cy="73" r="3" fill="#9E9E9E"/>
+        <circle cx="74" cy="73" r="6" fill="#1A1A1A"/><circle cx="74" cy="73" r="3" fill="#9E9E9E"/>
+        <rect x="20" y="68" width="62" height="3" fill="#D32F2F"/>
+      </g>
+      <text x="50" y="46" font-family="Arial Black,Impact,sans-serif" font-size="13" font-weight="900" font-style="italic" fill="#1A1A1A" text-anchor="middle">MUEVELO</text>
+      <text x="50" y="91" font-family="Arial,sans-serif" font-size="8.5" font-weight="700" fill="#D32F2F" text-anchor="middle" letter-spacing="3">EXPRESS</text>
+    </svg>
+    <span>muevelo<span>express</span></span>
+  </div>
+  <div class="nav-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="#cobertura">Cobertura</a>
+    <a href="#reviews">Reseñas</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-phone">+56 9 8334 2334</span>
+    <button class="nav-cta" onclick="openWizard()">Cotizar gratis</button>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="dot"></span>Empresa de Mudanzas &middot; Todo Chile</div>
+      <h1>Tu mudanza,<br>sin el <em>estrés.</em></h1>
+      <p class="hero-sub">Cotiza en 2 minutos, recibe precio exacto y nosotros nos encargamos de todo. Más de 1.200 familias ya confiaron en nosotros.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="openWizard()">&#128667; Cotizar mi mudanza gratis</button>
+        <a href="https://wa.me/56983342334?text=Hola!+Quiero+cotizar+una+mudanza." target="_blank" class="btn-ghost">Hablar por WhatsApp</a>
+      </div>
+      <div class="hero-pills">
+        <div class="hero-pill"><div class="pill-check">&#10003;</div>Sin pago anticipado</div>
+        <div class="hero-pill"><div class="pill-check">&#10003;</div>Seguro incluido</div>
+        <div class="hero-pill"><div class="pill-check">&#10003;</div>Precio transparente</div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-main-card">
+        <div class="hc-tag">CALCULADORA DE MUDANZA</div>
+        <div class="hc-title">¿Cuánto cuesta tu mudanza?</div>
+        <div class="hc-sub">Responde unas preguntas y recibe precio exacto al instante</div>
+        <div class="hc-steps">
+          <div class="hc-step"><div class="hc-step-num">1</div>Tipo y dirección de tu hogar <span class="hc-step-time">~30 seg</span></div>
+          <div class="hc-step"><div class="hc-step-num">2</div>Lista tu inventario de muebles <span class="hc-step-time">~1 min</span></div>
+          <div class="hc-step"><div class="hc-step-num">3</div>Recibe tu cotización exacta <span class="hc-step-time">&#161;gratis!</span></div>
+        </div>
+        <div class="hc-divider"></div>
+        <div class="hc-stats">
+          <div class="hcs"><div class="hcs-n">96%</div><div class="hcs-l">Satisfacción</div></div>
+          <div class="hcs"><div class="hcs-n">1.2K</div><div class="hcs-l">Mudanzas</div></div>
+          <div class="hcs"><div class="hcs-n">15+</div><div class="hcs-l">Ciudades</div></div>
+        </div>
+        <button class="hc-btn" onclick="openWizard()">Calcular precio gratis &rarr;</button>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-box"><div class="num">96<span>%</span></div><div class="lbl">Clientes satisfechos</div></div>
+    <div class="stat-box"><div class="num">1.200<span>+</span></div><div class="lbl">Mudanzas realizadas</div></div>
+    <div class="stat-box"><div class="num">15<span>+</span></div><div class="lbl">Ciudades en Chile</div></div>
+    <div class="stat-box"><div class="num">2<span>min</span></div><div class="lbl">Para recibir cotización</div></div>
+  </div>
+</div>
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item">&#10003; Sin pago por adelantado</div>
+    <div class="trust-item">&#128737; Seguro de traslado incluido</div>
+    <div class="trust-item">&#128221; Presupuesto sin letra chica</div>
+    <div class="trust-item">&#128295; Desmontaje y armado gratis</div>
+    <div class="trust-item">&#9200; Puntualidad garantizada</div>
+  </div>
+</div>
+<section class="services" id="servicios">
+  <div class="section-inner">
+    <div class="section-label">Nuestros Servicios</div>
+    <h2 class="section-title">Todo lo que necesitas<br>para tu mudanza</h2>
+    <p class="section-sub">Desde el embalaje hasta la instalación en tu nuevo hogar. Nuestro equipo se encarga de todo.</p>
+    <div class="services-grid">
+      <div class="service-card"><div class="sc-icon">&#127968;</div><div class="sc-title">Mudanzas de Hogar</div><div class="sc-desc">Movemos casas y departamentos con el mayor cuidado. Desmontamos, embalamos y armamos cada mueble en destino.</div><div class="sc-tags"><span class="sc-tag">Casa</span><span class="sc-tag">Departamento</span><span class="sc-tag">Embalaje</span></div></div>
+      <div class="service-card"><div class="sc-icon">&#127970;</div><div class="sc-title">Mudanzas de Oficina</div><div class="sc-desc">Trasladamos tu empresa minimizando el tiempo de inactividad. Trabajamos fines de semana y fuera de horario laboral.</div><div class="sc-tags"><span class="sc-tag">Oficinas</span><span class="sc-tag">Corporativo</span><span class="sc-tag">Industrial</span></div></div>
+      <div class="service-card"><div class="sc-icon">&#128666;</div><div class="sc-title">Fletes Express</div><div class="sc-desc">¿Solo necesitas mover algunos ítems? Nuestro servicio de flete rápido es ideal para traslados pequeños y urgentes.</div><div class="sc-tags"><span class="sc-tag">Flete</span><span class="sc-tag">Rápido</span><span class="sc-tag">Flexible</span></div></div>
+      <div class="service-card"><div class="sc-icon">&#128230;</div><div class="sc-title">Embalaje Profesional</div><div class="sc-desc">Materiales de primera calidad para proteger tus pertenencias. Vidrios, espejos y electrónica con cuidado especial.</div><div class="sc-tags"><span class="sc-tag">Cajas</span><span class="sc-tag">Protección</span><span class="sc-tag">Vidrios</span></div></div>
+      <div class="service-card"><div class="sc-icon">&#128452;</div><div class="sc-title">Bodegas y Almacenaje</div><div class="sc-desc">¿Necesitas guardar cosas temporalmente? Bodegas seguras en Santiago y regiones por períodos flexibles.</div><div class="sc-tags"><span class="sc-tag">Bodega</span><span class="sc-tag">Mensual</span><span class="sc-tag">Seguro</span></div></div>
+      <div class="service-card"><div class="sc-icon">&#127758;</div><div class="sc-title">Mudanzas Regionales</div><div class="sc-desc">Trasladamos tus cosas a cualquier región de Chile. Valparaíso, Concepción, La Serena, Temuco y más ciudades.</div><div class="sc-tags"><span class="sc-tag">Nacional</span><span class="sc-tag">Regiones</span><span class="sc-tag">Interurbano</span></div></div>
+    </div>
+  </div>
+</section>
+<section class="how" id="como-funciona">
+  <div class="section-inner">
+    <div class="section-label">Cómo Funciona</div>
+    <h2 class="section-title">Tu mudanza en 4 pasos simples</h2>
+    <p class="section-sub">Un proceso claro, transparente y sin sorpresas de inicio a fin.</p>
+    <div class="how-steps">
+      <div class="step-box active"><div class="step-connector"></div><div class="step-num-wrap"><div class="step-num">1</div></div><div class="step-title">Cotiza gratis</div><div class="step-desc">Completa el formulario en menos de 2 minutos. Es 100% gratis y sin compromiso.</div></div>
+      <div class="step-box"><div class="step-connector"></div><div class="step-num-wrap"><div class="step-num">2</div></div><div class="step-title">Recibe tu precio</div><div class="step-desc">Te enviamos el presupuesto exacto por WhatsApp o correo en menos de 1 hora.</div></div>
+      <div class="step-box"><div class="step-connector"></div><div class="step-num-wrap"><div class="step-num">3</div></div><div class="step-title">Confirma y agenda</div><div class="step-desc">Elige la fecha que más te acomode. Sin pago por adelantado.</div></div>
+      <div class="step-box"><div class="step-connector"></div><div class="step-num-wrap"><div class="step-num">4</div></div><div class="step-title">Nos movemos</div><div class="step-desc">Nuestro equipo llega puntual y se encarga de todo con el mayor cuidado.</div></div>
+    </div>
+  </div>
+</section>
+<section class="why">
+  <div class="section-inner">
+    <div class="section-label">Por Qué Elegirnos</div>
+    <h2 class="section-title">Mudanzas con garantía real</h2>
+    <p class="section-sub" style="margin-bottom:48px;">No solo movemos tus cosas. Nos comprometemos con tu tranquilidad en cada etapa.</p>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">&#9200;</div><div class="why-title">Puntualidad garantizada</div><div class="why-desc">Llegamos en el horario acordado o te compensamos. El tiempo de nuestros clientes es sagrado.</div></div>
+      <div class="why-card"><div class="why-icon">&#128737;</div><div class="why-title">Seguro de traslado incluido</div><div class="why-desc">Todos nuestros traslados incluyen seguro básico. Tus pertenencias están protegidas de inicio a fin.</div></div>
+      <div class="why-card"><div class="why-icon">&#128176;</div><div class="why-title">Precio justo y transparente</div><div class="why-desc">Sin costos ocultos. El precio que cotizas es el que pagas. Garantizado por escrito.</div></div>
+      <div class="why-card"><div class="why-icon">&#128119;</div><div class="why-title">Equipo profesional</div><div class="why-desc">Personal entrenado, uniformado y con antecedentes verificados. Tu hogar en las mejores manos.</div></div>
+      <div class="why-card"><div class="why-icon">&#128241;</div><div class="why-title">Seguimiento en tiempo real</div><div class="why-desc">Sigue tu mudanza en todo momento. Te mantenemos informado paso a paso por WhatsApp.</div></div>
+      <div class="why-card"><div class="why-icon">&#128295;</div><div class="why-title">Desmontaje y armado incluido</div><div class="why-desc">Desmontamos y armamos todos tus muebles sin costo adicional. Tú solo descansas.</div></div>
+    </div>
+  </div>
+</section>
+<section class="coverage" id="cobertura">
+  <div class="section-inner">
+    <div class="section-label">Cobertura Nacional</div>
+    <h2 class="section-title">Llegamos a todo Chile</h2>
+    <p class="section-sub">Flota propia y equipo local en las principales ciudades del país.</p>
+    <div class="coverage-grid">
+      <div class="coverage-card"><div class="cov-dot"></div><div><div class="cov-name">Santiago</div><div class="cov-sub">RM completa &middot; Express disponible</div></div></div>
+      <div class="coverage-card"><div class="cov-dot"></div><div><div class="cov-name">Valparaíso</div><div class="cov-sub">Viña del Mar &middot; Valparaíso</div></div></div>
+      <div class="coverage-card"><div class="cov-dot"></div><div><div class="cov-name">Concepción</div><div class="cov-sub">Biobío &middot; Talcahuano</div></div></div>
+      <div class="coverage-card"><div class="cov-dot"></div><div><div class="cov-name">La Serena</div><div class="cov-sub">Coquimbo &middot; La Serena</div></div></div>
+      <div class="coverage-card"><div class="cov-dot"></div><div><div class="cov-name">Temuco</div><div class="cov-sub">Araucanía &middot; Padre Las Casas</div></div></div>
+      <div class="coverage-card"><div class="cov-dot"></div><div><div class="cov-name">Antofagasta</div><div class="cov-sub">Norte &middot; Calama</div></div></div>
+      <div class="coverage-card"><div class="cov-dot"></div><div><div class="cov-name">Puerto Montt</div><div class="cov-sub">Los Lagos &middot; Osorno</div></div></div>
+      <div class="coverage-card"><div class="cov-dot"></div><div><div class="cov-name">Rancagua</div><div class="cov-sub">O'Higgins &middot; San Fernando</div></div></div>
+      <div class="coverage-card"><div class="cov-dot" style="background:#94A3B8;"></div><div><div class="cov-name" style="color:#64748B;">Otras ciudades</div><div class="cov-sub">Consulta disponibilidad</div></div></div>
+    </div>
+  </div>
+</section>
+<section class="reviews" id="reviews">
+  <div class="section-inner">
+    <div class="reviews-top">
+      <div>
+        <div class="section-label">Reseñas</div>
+        <h2 class="section-title">Lo que dicen<br>nuestros clientes</h2>
+      </div>
+      <div class="reviews-score-block">
+        <div class="reviews-big">4.9</div>
+        <div class="reviews-detail">
+          <div class="reviews-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <div class="reviews-count">Basado en 98 reseñas</div>
+          <div class="reviews-count" style="color:#4285F4;font-weight:600;font-size:12px;margin-top:2px;">Google Reviews &#10003;</div>
+        </div>
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="rc-top"><div class="rc-user"><div class="rc-avatar" style="background:linear-gradient(135deg,#7C3AED,#5B21B6)">P</div><div><div class="rc-name">Patricia Morales</div><div class="rc-date">Marzo 2026</div></div></div><div class="rc-badge"><span style="font-size:13px;font-weight:900;color:#4285F4;">G</span>Verificado</div></div>
+        <div class="rc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="rc-text">"Excelente servicio. Llegaron puntuales, muy cuidadosos con los muebles y dejaron todo en su lugar. El equipo fue muy amable y profesional. Totalmente recomendados."</p>
+      </div>
+      <div class="review-card">
+        <div class="rc-top"><div class="rc-user"><div class="rc-avatar" style="background:linear-gradient(135deg,#0369A1,#0284C7)">C</div><div><div class="rc-name">Carlos Fuentes</div><div class="rc-date">Febrero 2026</div></div></div><div class="rc-badge"><span style="font-size:13px;font-weight:900;color:#4285F4;">G</span>Verificado</div></div>
+        <div class="rc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="rc-text">"Me mudé de Santiago a Valparaíso y temía que algo se rompiera. Todo llegó perfecto. El precio fue muy razonable y el trato excelente. Los volvería a contratar sin dudar."</p>
+      </div>
+      <div class="review-card">
+        <div class="rc-top"><div class="rc-user"><div class="rc-avatar" style="background:linear-gradient(135deg,#047857,#059669)">V</div><div><div class="rc-name">Valentina Ríos</div><div class="rc-date">Enero 2026</div></div></div><div class="rc-badge"><span style="font-size:13px;font-weight:900;color:#4285F4;">G</span>Verificado</div></div>
+        <div class="rc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="rc-text">"Increíble servicio. Cotizaron rápido, llegaron a la hora y el equipo fue súper profesional. Armaron todos los muebles y dejaron el departamento impecable. ¡10/10!"</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="contact-cta">
+  <div class="contact-cta-inner">
+    <h2>¿Listo para tu mudanza sin estrés?</h2>
+    <p>Cotiza gratis en 2 minutos y recibe tu presupuesto exacto. Sin compromisos, sin letra chica.</p>
+    <div class="contact-cta-btns">
+      <button class="btn-red-solid" onclick="openWizard()">&#128667; Cotizar mi mudanza gratis</button>
+      <a href="https://wa.me/56983342334?text=Hola!+Quiero+cotizar+una+mudanza." target="_blank" class="btn-outline-white">Hablar por WhatsApp</a>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo-text">muevelo<span>express</span></div>
+        <p>La empresa de mudanzas más confiable de Chile. Más de 1.200 familias nos han elegido.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <a href="#servicios">Mudanzas de Hogar</a>
+        <a href="#servicios">Mudanzas de Oficina</a>
+        <a href="#servicios">Fletes Express</a>
+        <a href="#servicios">Embalaje Profesional</a>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#cobertura">Cobertura</a>
+        <a href="#reviews">Reseñas</a>
+        <a href="#">Términos y condiciones</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <a href="tel:+56983342334">+56 9 8334 2334</a>
+        <a href="https://wa.me/56983342334" target="_blank" class="footer-wa-link">&#128172; WhatsApp directo</a>
+        <a href="https://instagram.com/mueveloexpress" target="_blank">@mueveloexpress</a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-copy">
+      <p>© 2026 Mueveloexpress · Todos los derechos reservados</p>
+      <p>Mudanzas en todo Chile &#127464;&#127473;</p>
+    </div>
+  </div>
+</footer>
+<!-- ════ WIZARD OVERLAY ════ -->
+<div class="wizard-overlay" id="wizardOverlay">
+  <div class="wizard-box">
+    <div class="wizard-header">
+      <div class="wizard-logo" style="font-size:17px;font-weight:800;color:#1A1A1A;">muevelo<span style="color:#D32F2F;">express</span></div>
+      <button class="wizard-close" onclick="closeWizard()">×</button>
+    </div>
+    <div class="wizard-progress">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:8%"></div></div>
+      <div class="progress-text" id="progressText">Paso 1 de 12</div>
+    </div>
+    <div class="sofia-row">
+      <div class="sofia-avatar-placeholder">👩‍💼</div>
+    </div>
+    <!-- STEP 1 -->
+    <div class="wizard-step active" id="step-1">
+      <p class="wiz-question">¡Hola! Soy Sofía. Vamos a conseguir<br>un buen precio para tu mudanza 😊</p>
+      <p class="wiz-sub">¿Cuál es tu nombre?</p>
+      <div class="wiz-input-row">
+        <div><label class="wiz-label">Nombre</label><input class="wiz-input" id="inp-nombre" type="text" placeholder="Tu nombre" oninput="checkStep1()"></div>
+        <div><label class="wiz-label">Apellido</label><input class="wiz-input" id="inp-apellido" type="text" placeholder="Tu apellido" oninput="checkStep1()"></div>
+      </div>
+      <div class="wiz-error" id="err-1">Por favor ingresa tu nombre y apellido.</div>
+    </div>
+    <!-- STEP 2 -->
+    <div class="wizard-step" id="step-2">
+      <p class="wiz-question" id="q-step2">¡Gracias! ¿Para cuándo necesitas la mudanza?</p>
+      <p class="wiz-sub">Ingresa una fecha estimada — puede ser aproximada.</p>
+      <label class="wiz-label">Fecha estimada</label>
+      <input class="wiz-input" id="inp-fecha" type="date" style="margin-bottom:14px;">
+      <div class="wiz-error" id="err-2">Por favor ingresa una fecha estimada.</div>
+    </div>
+    <!-- STEP 3 -->
+    <div class="wizard-step" id="step-3">
+      <p class="wiz-question">¿Cuál es la <strong>dirección de inicio</strong>?</p>
+      <p class="wiz-sub">De dónde vamos a recoger tus cosas.</p>
+      <div class="wiz-error" id="err-3">Por favor completa los datos de la dirección de origen.</div>
+      <div class="wiz-addr-row">
+        <div><label class="wiz-label">Tipo</label><select class="wiz-select" id="sel-origen-tipo"><option value="">Selecciona...</option><option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option></select></div>
+        <div><label class="wiz-label">Dirección</label><input class="wiz-input" id="inp-origen-dir" type="text" placeholder="Ej: Av. Providencia 1234, Santiago"></div>
+      </div>
+      <div class="wiz-subrow" id="subrow-origen" style="display:none;">
+        <div><label class="wiz-label">N° Depto / Oficina</label><input class="wiz-input" id="inp-origen-num" type="text" placeholder="Ej: 305"></div>
+        <div><label class="wiz-label">Piso</label><input class="wiz-input" id="inp-origen-piso" type="number" placeholder="Ej: 3" min="1"></div>
+        <div><label class="wiz-label">¿Hay ascensor?</label><select class="wiz-select" id="sel-origen-asc"><option value="">Selecciona...</option><option>Sí, hay ascensor</option><option>No hay ascensor</option></select></div>
+      </div>
+    </div>
+    <!-- STEP 4 -->
+    <div class="wizard-step" id="step-4">
+      <p class="wiz-question">¿Y cuál es tu <strong>dirección de destino</strong>?</p>
+      <p class="wiz-sub">Adónde vamos a llevar tus cosas.</p>
+      <div class="wiz-error" id="err-4">Por favor completa los datos de la dirección de destino.</div>
+      <div class="wiz-addr-row">
+        <div><label class="wiz-label">Tipo</label><select class="wiz-select" id="sel-destino-tipo"><option value="">Selecciona...</option><option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option></select></div>
+        <div><label class="wiz-label">Dirección</label><input class="wiz-input" id="inp-destino-dir" type="text" placeholder="Ej: Las Condes 5678, Santiago"></div>
+      </div>
+      <div class="wiz-subrow" id="subrow-destino" style="display:none;">
+        <div><label class="wiz-label">N° Depto / Oficina</label><input class="wiz-input" id="inp-destino-num" type="text" placeholder="Ej: 102"></div>
+        <div><label class="wiz-label">Piso</label><input class="wiz-input" id="inp-destino-piso" type="number" placeholder="Ej: 1" min="1"></div>
+        <div><label class="wiz-label">¿Hay ascensor?</label><select class="wiz-select" id="sel-destino-asc"><option value="">Selecciona...</option><option>Sí, hay ascensor</option><option>No hay ascensor</option></select></div>
+      </div>
+    </div>
+    <!-- STEP 5 -->
+    <div class="wizard-step" id="step-5">
+      <p class="wiz-question">En tu dirección de inicio,<br>¿<strong>cabe todo en el ascensor</strong>?</p>
+      <div class="wiz-choices" id="choices-asc-orig">
+        <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','todo')"><div class="choice-check"></div>Cabe todo en el ascensor</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','algunas')"><div class="choice-check"></div>Algunas cosas no caben</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','noaplica')"><div class="choice-check"></div>No aplica (no hay ascensor / es casa)</div>
+      </div>
+      <div class="wiz-error" id="err-5">Por favor selecciona una opción.</div>
+    </div>
+    <!-- STEP 6 -->
+    <div class="wizard-step" id="step-6">
+      <p class="wiz-question">¿Tienes algún mueble <strong>muy delicado</strong><br>con el que tengamos que tener más cuidado?</p>
+      <p class="wiz-sub">Por ejemplo, de cristal, vidrio grueso o de alto valor.</p>
+      <div class="wiz-choices" id="choices-delicado">
+        <div class="wiz-choice" onclick="selectChoice(this,'delicado','si')"><div class="choice-check"></div>Sí, tengo muebles delicados</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'delicado','no')"><div class="choice-check"></div>No, todo es estándar</div>
+      </div>
+      <div class="wiz-error" id="err-6">Por favor selecciona una opción.</div>
+    </div>
+    <!-- STEP 7 -->
+    <div class="wizard-step" id="step-7">
+      <p class="wiz-question">En tu dirección de <strong>inicio</strong>,<br>¿el camión puede estacionarse cerca?</p>
+      <div class="wiz-choices" id="choices-estac-orig">
+        <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','menos40')"><div class="choice-check"></div>Sí, a menos de 40 metros</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','mas40')"><div class="choice-check"></div>No, a más de 40 metros</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','subterraneo')"><div class="choice-check"></div>La entrada es por subterráneo</div>
+      </div>
+      <div class="wiz-error" id="err-7">Por favor selecciona una opción.</div>
+    </div>
+    <!-- STEP 8 -->
+    <div class="wizard-step" id="step-8">
+      <p class="wiz-question">¿Y en la dirección de <strong>destino</strong>?</p>
+      <div class="wiz-choices" id="choices-estac-dest">
+        <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','menos40')"><div class="choice-check"></div>Sí, a menos de 40 metros</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','mas40')"><div class="choice-check"></div>No, a más de 40 metros</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','subterraneo')"><div class="choice-check"></div>La entrada es por subterráneo</div>
+      </div>
+      <div class="wiz-error" id="err-8">Por favor selecciona una opción.</div>
+    </div>
+    <!-- STEP 9: Inventario + Fotos -->
+    <div class="wizard-step" id="step-9">
+      <p class="wiz-question">¡Ya estamos casi listos!<br>Agrega los ítems de tu inventario</p>
+      <!-- FOTO SCAN -->
+      <div class="photo-scan-panel" id="photoScanPanel">
+        <div class="photo-scan-header" onclick="togglePhotoPanel()">
+          <span style="font-size:28px;">&#128247;</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--navy);">¿Prefieres subir fotos?</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:2px;">Nuestra IA detecta tus muebles automáticamente</div>
+          </div>
+          <button class="photo-scan-toggle" id="photoToggleBtn">Probar IA &#8595;</button>
+        </div>
+        <div class="photo-scan-body" id="photoScanBody" style="display:none;">
+          <div class="photo-drop-zone" id="photoDropZone" onclick="document.getElementById('photoFileInput').click()">
+            <input type="file" id="photoFileInput" accept="image/*" multiple style="display:none;">
+            <div style="font-size:32px;margin-bottom:8px;">&#128444;</div>
+            <div style="font-size:14px;font-weight:600;color:var(--navy);">Haz clic o arrastra fotos aquí</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:6px;">Hasta 5 fotos &middot; JPG o PNG &middot; Una habitación por foto</div>
+          </div>
+          <div class="photo-previews" id="photoPreviews"></div>
+          <button class="photo-analyze-btn" id="photoAnalyzeBtn" onclick="analyzePhotos()" disabled>&#10024; Analizar fotos con IA</button>
+          <div class="photo-loading" id="photoLoading">
+            <div class="photo-spinner"></div>
+            <div style="font-size:14px;font-weight:700;color:var(--navy);">Analizando tus fotos...</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:4px;">Identificando muebles y objetos</div>
+          </div>
+          <div class="photo-results" id="photoResults">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;">&#9989; Detectamos estos muebles:</div>
+            <div id="photoResultsList"></div>
+            <div style="font-size:12px;color:var(--gray);margin-top:10px;font-style:italic;">Revisa y ajusta las cantidades abajo si es necesario.</div>
+          </div>
+          <div class="photo-error" id="photoError">No pudimos analizar las fotos. Por favor agrega los muebles manualmente abajo.</div>
+        </div>
+      </div>
+      <div class="inventory-header">
+        <span>Volumen total: <strong id="vol-total">0 m³</strong></span>
+        <span>Ítems: <strong id="items-total">0</strong></span>
+      </div>
+      <div class="inv-categories">
+        <div class="inv-cat" id="cat-camas">
+          <div class="inv-cat-header" onclick="toggleCat('camas')"><div class="inv-cat-title"><span class="inv-cat-icon">🛏️</span>Camas</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Cama King (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 2 Plazas (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 1½ Plaza (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 1 Plaza (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Camarote (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cuna desarmable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-comodas">
+          <div class="inv-cat-header" onclick="toggleCat('comodas')"><div class="inv-cat-title"><span class="inv-cat-icon">🗄️</span>Cómodas, Veladores y Otros</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Velador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cómoda</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estante / Repisa</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Biblioteca</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Rack TV</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Ropero / Closet</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Zapatera</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-mesas">
+          <div class="inv-cat-header" onclick="toggleCat('mesas')"><div class="inv-cat-title"><span class="inv-cat-icon">🪑</span>Mesas</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Mesa de Centro</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 8+ personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa Plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-sofas">
+          <div class="inv-cat-header" onclick="toggleCat('sofas')"><div class="inv-cat-title"><span class="inv-cat-icon">🛋️</span>Sofás</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Sillón / Sitial</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sofá 2 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sofá 3 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sillón en L</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Futón / Sofá Cama</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-sillas">
+          <div class="inv-cat-header" onclick="toggleCat('sillas')"><div class="inv-cat-title"><span class="inv-cat-icon">🪑</span>Sillas</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Silla de Comedor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla de Escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.25)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.25)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla Reclinable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla Plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.08)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.08)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-cocina">
+          <div class="inv-cat-header" onclick="toggleCat('cocina')"><div class="inv-cat-title"><span class="inv-cat-icon">🍳</span>Cocina</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Refrigerador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lavadora / Secadora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lavavajillas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cocina / Horno</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Microondas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.12)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.12)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-electronica">
+          <div class="inv-cat-header" onclick="toggleCat('electronica')"><div class="inv-cat-title"><span class="inv-cat-icon">📺</span>Electrónica</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">TV hasta 50"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">TV 55"-65"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">TV 70"+"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Computador de escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Equipo de música / Parlantes</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-otros">
+          <div class="inv-cat-header" onclick="toggleCat('otros')"><div class="inv-cat-title"><span class="inv-cat-icon">💡</span>Lámparas, Terraza y Otros</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Lámpara de pie</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Bicicleta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Planta grande (macetero)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Caja / Maleta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- STEP 10 -->
+    <div class="wizard-step" id="step-10">
+      <p class="wiz-question">Ingresa tu correo y celular.<br>Así te enviamos tu presupuesto 😉</p>
+      <div style="margin-bottom:14px;"><label class="wiz-label">Correo electrónico</label><input class="wiz-input" id="inp-email" type="email" placeholder="tu@correo.com"></div>
+      <div style="margin-bottom:14px;"><label class="wiz-label">Teléfono / WhatsApp</label><div class="phone-row"><div class="phone-prefix">🇨🇱 +56</div><input class="phone-input" id="inp-telefono" type="tel" placeholder="9 XXXX XXXX" maxlength="9"></div></div>
+      <label class="wiz-check-row"><input type="checkbox" class="wiz-checkbox" id="chk-terms" checked><span class="wiz-check-label">Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de privacidad</a></span></label>
+      <div class="wiz-error" id="err-10">Por favor completa tu correo y teléfono.</div>
+    </div>
+    <!-- STEP FINAL -->
+    <div class="wizard-step" id="step-final">
+      <div class="wiz-final">
+        <div class="wiz-final-icon">🎉</div>
+        <h2 id="final-title">¡Listo!</h2>
+        <p id="final-msg">Recibimos tu solicitud. Nuestro equipo te enviará el presupuesto al WhatsApp y correo que nos dejaste en menos de 1 hora.</p>
+        <a id="final-wa-link" href="#" target="_blank" class="wiz-final-wa">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Hablar por WhatsApp ahora
+        </a>
+      </div>
+    </div>
+    <div class="wiz-footer" id="wizFooter">
+      <button class="wiz-btn wiz-btn-back" id="btnBack" onclick="wizBack()" style="display:none;">← Atrás</button>
+      <button class="wiz-btn wiz-btn-next" id="btnNext" onclick="wizNext()">Comencemos →</button>
+    </div>
+  </div>
+</div>
+<script>
+let currentStep = 1;
+const totalSteps = 12;
+let totalVol = 0;
+let totalItems = 0;
+const choices = {};
+
+function openWizard(){ document.getElementById('wizardOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeWizard(){ document.getElementById('wizardOverlay').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('wizardOverlay').addEventListener('click',function(e){ if(e.target===this) closeWizard(); });
+
+function updateProgress(){
+  const pct = Math.round((currentStep/totalSteps)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressText').textContent = `Paso ${currentStep} de ${totalSteps}`;
+}
+function selectChoice(el, group, val){
+  const parent = el.closest('.wiz-choices');
+  parent.querySelectorAll('.wiz-choice').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  choices[group] = val;
+}
+function checkStep1(){
+  const n = document.getElementById('inp-nombre').value.trim();
+  if(n) document.getElementById('q-step2').textContent = `${n}, ¡gracias por confiar en Mueveloexpress! ¿Para cuándo necesitas la mudanza?`;
+}
+document.getElementById('sel-origen-tipo').addEventListener('change',function(){
+  document.getElementById('subrow-origen').style.display = (this.value==='Departamento'||this.value==='Oficina') ? 'grid' : 'none';
+});
+document.getElementById('sel-destino-tipo').addEventListener('change',function(){
+  document.getElementById('subrow-destino').style.display = (this.value==='Departamento'||this.value==='Oficina') ? 'grid' : 'none';
+});
+function toggleCat(id){
+  document.getElementById('cat-'+id).classList.toggle('open');
+}
+function changeItem(btn, delta, vol){
+  const counter = btn.parentElement;
+  const span = counter.querySelector('.inv-count');
+  let val = parseInt(span.textContent)||0;
+  val = Math.max(0, val+delta);
+  span.textContent = val;
+  totalVol = Math.max(0, totalVol + delta*vol);
+  totalItems = Math.max(0, totalItems+delta);
+  document.getElementById('vol-total').textContent = totalVol.toFixed(1)+' m³';
+  document.getElementById('items-total').textContent = totalItems;
+}
+function validateStep(step){
+  const hideErr = id=>{ const e=document.getElementById(id); if(e) e.classList.remove('show'); };
+  const showErr = id=>{ const e=document.getElementById(id); if(e) e.classList.add('show'); };
+  hideErr('err-'+step);
+  if(step===1){ const n=document.getElementById('inp-nombre').value.trim(); const a=document.getElementById('inp-apellido').value.trim(); if(!n||!a){showErr('err-1');return false;} return true; }
+  if(step===2){ const f=document.getElementById('inp-fecha').value; if(!f){showErr('err-2');return false;} return true; }
+  if(step===3){ const t=document.getElementById('sel-origen-tipo').value; const d=document.getElementById('inp-origen-dir').value.trim(); if(!t||!d){showErr('err-3');return false;} return true; }
+  if(step===4){ const t=document.getElementById('sel-destino-tipo').value; const d=document.getElementById('inp-destino-dir').value.trim(); if(!t||!d){showErr('err-4');return false;} return true; }
+  if(step===5){ if(!choices['asc-orig']){showErr('err-5');return false;} return true; }
+  if(step===6){ if(!choices['delicado']){showErr('err-6');return false;} return true; }
+  if(step===7){ if(!choices['estac-orig']){showErr('err-7');return false;} return true; }
+  if(step===8){ if(!choices['estac-dest']){showErr('err-8');return false;} return true; }
+  if(step===9){ return true; }
+  if(step===10){ const e=document.getElementById('inp-email').value.trim(); const t=document.getElementById('inp-telefono').value.trim(); if(!e||!t||t.length<8){showErr('err-10');return false;} return true; }
+  return true;
+}
+function wizNext(){
+  if(currentStep<=10 && !validateStep(currentStep)) return;
+  if(currentStep===10){ buildFinalStep(); showStep('final'); document.getElementById('wizFooter').style.display='none'; return; }
+  const nextStep = currentStep+1;
+  showStep(nextStep);
+  currentStep = nextStep;
+  updateProgress();
+  if(currentStep>1) document.getElementById('btnBack').style.display='';
+  if(currentStep===10) document.getElementById('btnNext').textContent='Recibir presupuesto →';
+}
+function wizBack(){
+  if(currentStep<=1) return;
+  currentStep--;
+  showStep(currentStep);
+  updateProgress();
+  if(currentStep===1) document.getElementById('btnBack').style.display='none';
+  document.getElementById('btnNext').textContent = currentStep<10 ? 'Siguiente →' : 'Recibir presupuesto →';
+}
+function showStep(s){
+  document.querySelectorAll('.wizard-step').forEach(el=>el.classList.remove('active'));
+  const target = s==='final' ? document.getElementById('step-final') : document.getElementById('step-'+s);
+  if(target) target.classList.add('active');
+}
+async function buildFinalStep(){
+  const nombre = document.getElementById('inp-nombre').value+' '+document.getElementById('inp-apellido').value;
+  const fecha = document.getElementById('inp-fecha').value;
+  const origenTipo = document.getElementById('sel-origen-tipo').value;
+  const origenDir = document.getElementById('inp-origen-dir').value;
+  const origenNum = document.getElementById('inp-origen-num').value;
+  const origenPiso = document.getElementById('inp-origen-piso').value;
+  const origenAsc = document.getElementById('sel-origen-asc').value;
+  const destinoTipo = document.getElementById('sel-destino-tipo').value;
+  const destinoDir = document.getElementById('inp-destino-dir').value;
+  const destinoNum = document.getElementById('inp-destino-num').value;
+  const destinoPiso = document.getElementById('inp-destino-piso').value;
+  const destinoAsc = document.getElementById('sel-destino-asc').value;
+  const email = document.getElementById('inp-email').value;
+  const tel = document.getElementById('inp-telefono').value;
+
+  const ascOrigSelected = document.querySelector('[onclick*="asc-orig"][onclick*="selectChoice"].wiz-choice.selected');
+  const ascDestSelected = document.querySelector('[onclick*="asc-dest"][onclick*="selectChoice"].wiz-choice.selected');
+  const delicadoSelected = document.querySelector('[onclick*="delicado"][onclick*="selectChoice"].wiz-choice.selected');
+  const estacOrigSelected = document.querySelector('[onclick*="estac-orig"][onclick*="selectChoice"].wiz-choice.selected');
+  const estacDestSelected = document.querySelector('[onclick*="estac-dest"][onclick*="selectChoice"].wiz-choice.selected');
+
+  const formData = {
+    nombre,
+    fecha,
+    origen: { tipo: origenTipo, direccion: origenDir, numero: origenNum, piso: origenPiso, ascensor: origenAsc, ascSeleccionado: ascOrigSelected?.textContent || 'no' },
+    destino: { tipo: destinoTipo, direccion: destinoDir, numero: destinoNum, piso: destinoPiso, ascensor: destinoAsc, ascSeleccionado: ascDestSelected?.textContent || 'no' },
+    delicado: delicadoSelected?.textContent.includes('Sí') ? 'si' : 'no',
+    estacionamiento: { origen: estacOrigSelected?.textContent || 'no', destino: estacDestSelected?.textContent || 'no' },
+    email,
+    telefono: tel,
+    inventario: getInventoryData(),
+    volumenTotal: totalVol,
+    itemsTotal: totalItems
+  };
+
+  document.getElementById('final-title').textContent = `¡Listo, ${nombre.split(' ')[0]}! 🎉`;
+  document.getElementById('final-msg').textContent = `Procesando tu cotización...`;
+
+  try {
+    const response = await fetch('/api/cotizar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    if(response.ok) {
+      const result = await response.json();
+      document.getElementById('final-msg').textContent = `✅ ¡Excelente! Te enviaremos el presupuesto a ${email} y al +56${tel} en menos de 1 hora.`;
+      const msg = `Hola Mueveloexpress! Quiero cotizar una mudanza:\n\n👤 Nombre: ${nombre}\n📅 Fecha estimada: ${fecha}\n📍 Origen: ${origenTipo} · ${origenDir}\n📦 Destino: ${destinoTipo} · ${destinoDir}\n📊 Volumen estimado: ${totalVol.toFixed(1)} m³ (${totalItems} ítems)\n✉️ Email: ${email}\n📱 Teléfono: +56${tel}`;
+      document.getElementById('final-wa-link').href = `https://wa.me/56983342334?text=${encodeURIComponent(msg)}`;
+    } else {
+      document.getElementById('final-msg').textContent = `❌ Error procesando la cotización. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
+    }
+  } catch(err) {
+    console.error('Error enviando cotización:', err);
+    document.getElementById('final-msg').textContent = `❌ No pudimos conectar con nuestro servidor. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
+  }
+}
+
+function getInventoryData() {
+  const inventory = {};
+  document.querySelectorAll('.inv-item').forEach(item => {
+    const name = item.querySelector('.inv-item-name').textContent;
+    const count = parseInt(item.querySelector('.inv-count').textContent);
+    if(count > 0) inventory[name] = count;
+  });
+  return inventory;
+}
+window.addEventListener('scroll', function(){ document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20); });
+
+// ── PHOTO UPLOAD & AI ──
+let uploadedPhotos = [];
+function togglePhotoPanel(){
+  const body = document.getElementById('photoScanBody');
+  const btn = document.getElementById('photoToggleBtn');
+  const isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? 'Probar IA ↓' : 'Cerrar ↑';
+}
+document.getElementById('photoFileInput').addEventListener('change', function(e){ handlePhotoFiles(e.target.files); });
+const dropZone = document.getElementById('photoDropZone');
+dropZone.addEventListener('dragover', e=>{e.preventDefault();dropZone.classList.add('drag-over');});
+dropZone.addEventListener('dragleave', ()=>dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e=>{ e.preventDefault(); dropZone.classList.remove('drag-over'); handlePhotoFiles(e.dataTransfer.files); });
+function handlePhotoFiles(files){
+  const allowed = [...files].filter(f=>f.type.startsWith('image/')).slice(0, 5 - uploadedPhotos.length);
+  allowed.forEach(file=>{
+    if(uploadedPhotos.length >= 5) return;
+    const reader = new FileReader();
+    reader.onload = e=>{ uploadedPhotos.push({data: e.target.result.split(',')[1], type: file.type, url: e.target.result}); renderPhotoPreviews(); };
+    reader.readAsDataURL(file);
+  });
+}
+function renderPhotoPreviews(){
+  const container = document.getElementById('photoPreviews');
+  container.innerHTML = uploadedPhotos.map((p,i)=>
+    '<div class="photo-preview"><img src="'+p.url+'" alt="Foto '+(i+1)+'"><button class="photo-preview-remove" onclick="removePhoto('+i+')">&#215;</button></div>'
+  ).join('');
+  document.getElementById('photoAnalyzeBtn').disabled = uploadedPhotos.length === 0;
+}
+function removePhoto(i){ uploadedPhotos.splice(i,1); renderPhotoPreviews(); }
+async function analyzePhotos(){
+  if(uploadedPhotos.length === 0) return;
+  const analyzeBtn = document.getElementById('photoAnalyzeBtn');
+  const loading = document.getElementById('photoLoading');
+  const results = document.getElementById('photoResults');
+  const errorDiv = document.getElementById('photoError');
+  analyzeBtn.style.display = 'none';
+  loading.style.display = 'block';
+  results.style.display = 'none';
+  errorDiv.style.display = 'none';
+  try{
+    const imageContent = uploadedPhotos.map(p => ({
+      type: 'image',
+      source: { type: 'base64', media_type: p.type || 'image/jpeg', data: p.data }
+    }));
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-6',
+        max_tokens: 1024,
+        messages: [{
+          role: 'user',
+          content: [
+            ...imageContent,
+            { type: 'text', text: 'Eres un asistente especializado en mudanzas. Analiza estas fotos y lista todos los muebles y electrodomésticos que puedas ver. Responde ÚNICAMENTE con un JSON válido con este formato exacto, sin texto adicional:\n{"items": [{"nombre": "nombre del mueble en español de Chile", "cantidad": número}]}\n\nReglas:\n- Solo muebles y objetos grandes que se mueven en mudanzas\n- NO incluyas paredes, ventanas, pisos ni objetos pequeños\n- Usa nombres en español de Chile (Cama 2 Plazas, Ropero, Velador, Sillón, Refrigerador, etc.)' }
+          ]
+        }]
+      })
+    });
+    if(!response.ok) throw new Error('API error');
+    const apiData = await response.json();
+    const responseText = apiData.content?.[0]?.text || '';
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error('No JSON found');
+    const parsed = JSON.parse(jsonMatch[0]);
+    if(parsed.items && parsed.items.length > 0){ populateInventoryFromAI(parsed.items); }
+    else { errorDiv.style.display = 'block'; }
+  } catch(err){ console.error(err); errorDiv.style.display = 'block'; }
+  loading.style.display = 'none';
+  analyzeBtn.style.display = 'block';
+}
+function populateInventoryFromAI(items){
+  const resultsList = document.getElementById('photoResultsList');
+  resultsList.innerHTML = items.map(item=>'<div class="photo-result-item"><span class="photo-result-name">'+item.nombre+'</span><span class="photo-result-badge">'+item.cantidad+'x</span></div>').join('');
+  document.getElementById('photoResults').style.display = 'block';
+  items.forEach(item=>{ autoFillInventoryItem(item.nombre.toLowerCase(), Math.max(1, parseInt(item.cantidad)||1)); });
+}
+function autoFillInventoryItem(nombre, cantidad){
+  const allItems = document.querySelectorAll('.inv-item');
+  let bestMatch = null;
+  let bestScore = 0;
+  allItems.forEach(item=>{
+    const itemName = item.querySelector('.inv-item-name').textContent.toLowerCase();
+    const score = textSimilarity(nombre, itemName);
+    if(score > bestScore && score > 0.35){ bestScore = score; bestMatch = item; }
+  });
+  if(bestMatch){
+    const cat = bestMatch.closest('.inv-cat');
+    if(cat && !cat.classList.contains('open')) toggleCat(cat.id.replace('cat-',''));
+    const plusBtn = bestMatch.querySelector('.inv-btn.plus');
+    for(let i = 0; i < cantidad; i++) plusBtn.click();
+  }
+}
+function textSimilarity(str1, str2){
+  const normalize = s => s.toLowerCase().replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i').replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/[^a-z0-9\s]/g,'');
+  const words1 = normalize(str1).split(/\s+/).filter(w=>w.length > 2);
+  const words2 = normalize(str2).split(/\s+/).filter(w=>w.length > 2);
+  if(!words1.length || !words2.length) return 0;
+  let matches = 0;
+  words1.forEach(w1=>{ if(words2.some(w2=> w2.includes(w1) || w1.includes(w2))) matches++; });
+  return matches / Math.max(words1.length, words2.length);
+}
+
+// Init
+updateProgress();
+document.getElementById('btnBack').style.display='none';
+document.getElementById('btnNext').textContent = 'Comencemos →';
+</script>
+</body>
+</html>
