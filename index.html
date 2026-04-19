@@ -15,7 +15,7 @@
 }
 html{scroll-behavior:smooth;}
 body{font-family:"Outfit",sans-serif;color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased;}
-nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 60px;height:72px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow .3s;}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 60px;height:100px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow .3s;}
 nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.07);}
 .logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900;color:var(--navy);text-decoration:none;cursor:pointer;letter-spacing:-.4px;}
 .logo span{color:var(--red);}
@@ -294,11 +294,11 @@ footer{background:#080F19;padding:56px 60px 32px;}
 </head>
 <body>
 <nav id="mainNav">
-  <a href="#" class="logo" style="gap:12px;display:flex;align-items:center;">
-    <img src="/logo.png" alt="Mueveloexpress" style="height:100px;object-fit:contain;">
-    <div style="display:flex;flex-direction:column;gap:0;line-height:1;">
-      <span style="font-size:16px;font-weight:900;color:#1A1A1A;letter-spacing:-0.5px;">MUEVELO</span>
-      <span style="font-size:16px;font-weight:900;color:#D32F2F;letter-spacing:-0.5px;">EXPRESS</span>
+  <a href="#" class="logo" style="gap:14px;display:flex;align-items:center;">
+    <img src="/logo.png" alt="Mueveloexpress" style="height:110px;object-fit:contain;">
+    <div style="display:flex;flex-direction:column;gap:0;line-height:0.9;">
+      <span style="font-size:28px;font-weight:900;color:#1A1A1A;letter-spacing:-1.2px;font-family:'Outfit',sans-serif;text-transform:uppercase;">MUEVELO</span>
+      <span style="font-size:28px;font-weight:900;color:#D32F2F;letter-spacing:-1.2px;font-family:'Outfit',sans-serif;text-transform:uppercase;">EXPRESS</span>
     </div>
   </a>
   <div class="nav-links">
@@ -308,23 +308,23 @@ footer{background:#080F19;padding:56px 60px 32px;}
     <a href="#reviews">Reseñas</a>
   </div>
   <div class="nav-right">
-    <span class="nav-phone">+56 9 8334 2334</span>
+    <span class="nav-phone">+569 34050395</span>
     <button class="nav-cta" onclick="openWizard()">Cotizar gratis</button>
   </div>
 </nav>
 <section class="hero">
   <div class="hero-inner">
     <div>
-      <div class="hero-eyebrow"><span class="dot"></span>Empresa de Mudanzas &middot; Todo Chile</div>
-      <h1>Tu mudanza,<br>sin el <em>estrés.</em></h1>
+      <div class="hero-eyebrow"><span class="dot"></span>Mudanzas y Fletes &middot; Todo Chile</div>
+      <h1>Tu mudanza,<br>a un <em>precio justo.</em></h1>
       <p class="hero-sub">Cotiza en 2 minutos, recibe precio exacto y nosotros nos encargamos de todo. Más de 1.200 familias ya confiaron en nosotros.</p>
       <div class="hero-actions">
         <button class="btn-primary" onclick="openWizard()">&#128667; Cotizar mi mudanza gratis</button>
-        <a href="https://wa.me/56983342334?text=Hola!+Quiero+cotizar+una+mudanza." target="_blank" class="btn-ghost">Hablar por WhatsApp</a>
+        <a href="https://wa.me/56934050395?text=Hola!+Quiero+cotizar+una+mudanza." target="_blank" class="btn-ghost">Hablar por WhatsApp</a>
       </div>
       <div class="hero-pills">
-        <div class="hero-pill"><div class="pill-check">&#10003;</div>Sin pago anticipado</div>
-        <div class="hero-pill"><div class="pill-check">&#10003;</div>Seguro incluido</div>
+        <div class="hero-pill"><div class="pill-check">&#10003;</div>Fecha garantizada con reserva</div>
+        <div class="hero-pill"><div class="pill-check">&#10003;</div>Equipo capacitado</div>
         <div class="hero-pill"><div class="pill-check">&#10003;</div>Precio transparente</div>
       </div>
     </div>
@@ -360,24 +360,61 @@ footer{background:#080F19;padding:56px 60px 32px;}
 <div class="trust-bar">
   <div class="trust-bar-inner">
     <div class="trust-item">&#10003; Sin pago por adelantado</div>
-    <div class="trust-item">&#128737; Seguro de traslado incluido</div>
     <div class="trust-item">&#128221; Presupuesto sin letra chica</div>
-    <div class="trust-item">&#128295; Desmontaje y armado gratis</div>
+    <div class="trust-item">&#127919; Nos adaptamos a tu necesidad</div>
     <div class="trust-item">&#9200; Puntualidad garantizada</div>
   </div>
 </div>
 <section class="services" id="servicios">
   <div class="section-inner">
     <div class="section-label">Nuestros Servicios</div>
-    <h2 class="section-title">Todo lo que necesitas<br>para tu mudanza</h2>
-    <p class="section-sub">Desde el embalaje hasta la instalación en tu nuevo hogar. Nuestro equipo se encarga de todo.</p>
-    <div class="services-grid">
-      <div class="service-card"><div class="sc-icon">&#127968;</div><div class="sc-title">Mudanzas de Hogar</div><div class="sc-desc">Movemos casas y departamentos con el mayor cuidado. Desmontamos, embalamos y armamos cada mueble en destino.</div><div class="sc-tags"><span class="sc-tag">Casa</span><span class="sc-tag">Departamento</span><span class="sc-tag">Embalaje</span></div></div>
-      <div class="service-card"><div class="sc-icon">&#127970;</div><div class="sc-title">Mudanzas de Oficina</div><div class="sc-desc">Trasladamos tu empresa minimizando el tiempo de inactividad. Trabajamos fines de semana y fuera de horario laboral.</div><div class="sc-tags"><span class="sc-tag">Oficinas</span><span class="sc-tag">Corporativo</span><span class="sc-tag">Industrial</span></div></div>
-      <div class="service-card"><div class="sc-icon">&#128666;</div><div class="sc-title">Fletes Express</div><div class="sc-desc">¿Solo necesitas mover algunos ítems? Nuestro servicio de flete rápido es ideal para traslados pequeños y urgentes.</div><div class="sc-tags"><span class="sc-tag">Flete</span><span class="sc-tag">Rápido</span><span class="sc-tag">Flexible</span></div></div>
-      <div class="service-card"><div class="sc-icon">&#128230;</div><div class="sc-title">Embalaje Profesional</div><div class="sc-desc">Materiales de primera calidad para proteger tus pertenencias. Vidrios, espejos y electrónica con cuidado especial.</div><div class="sc-tags"><span class="sc-tag">Cajas</span><span class="sc-tag">Protección</span><span class="sc-tag">Vidrios</span></div></div>
-      <div class="service-card"><div class="sc-icon">&#128452;</div><div class="sc-title">Bodegas y Almacenaje</div><div class="sc-desc">¿Necesitas guardar cosas temporalmente? Bodegas seguras en Santiago y regiones por períodos flexibles.</div><div class="sc-tags"><span class="sc-tag">Bodega</span><span class="sc-tag">Mensual</span><span class="sc-tag">Seguro</span></div></div>
-      <div class="service-card"><div class="sc-icon">&#127758;</div><div class="sc-title">Mudanzas Regionales</div><div class="sc-desc">Trasladamos tus cosas a cualquier región de Chile. Valparaíso, Concepción, La Serena, Temuco y más ciudades.</div><div class="sc-tags"><span class="sc-tag">Nacional</span><span class="sc-tag">Regiones</span><span class="sc-tag">Interurbano</span></div></div>
+    <h2 class="section-title">Elige el plan que<br>se adapta a ti</h2>
+    <p class="section-sub">Tres tipos de servicios diseñados para cubrir cada necesidad. Tú eliges el nivel de ayuda que necesitas.</p>
+    <div class="services-grid" style="grid-template-columns:repeat(3,1fr);">
+
+      <div class="service-card" style="display:flex;flex-direction:column;">
+        <div class="sc-icon">&#128666;</div>
+        <div style="display:inline-block;background:#F8FAFC;color:#64748B;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;align-self:flex-start;margin-bottom:12px;">Básico</div>
+        <div class="sc-title" style="font-size:22px;">Muévelo Lite</div>
+        <div class="sc-desc" style="margin-top:8px;"><strong>Carga + Traslado + Descarga</strong></div>
+        <div class="sc-desc" style="margin-top:8px;font-style:italic;color:var(--gray);">Rápido y directo, tú dejas todo listo.</div>
+        <div class="sc-tags" style="margin-top:auto;padding-top:18px;">
+          <span class="sc-tag">&#10003; Carga</span>
+          <span class="sc-tag">&#10003; Traslado</span>
+          <span class="sc-tag">&#10003; Descarga</span>
+        </div>
+      </div>
+
+      <div class="service-card" style="display:flex;flex-direction:column;border-color:var(--red);box-shadow:0 12px 40px rgba(211,47,47,.12);position:relative;">
+        <div style="position:absolute;top:-12px;right:20px;background:var(--red);color:white;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;">Más popular</div>
+        <div class="sc-icon">&#128230;</div>
+        <div style="display:inline-block;background:var(--red-light);color:var(--red);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;align-self:flex-start;margin-bottom:12px;">Recomendado</div>
+        <div class="sc-title" style="font-size:22px;">Muévelo Smart</div>
+        <div class="sc-desc" style="margin-top:8px;"><strong>Carga + Traslado + Descarga + Embalaje</strong></div>
+        <div class="sc-desc" style="margin-top:8px;font-style:italic;color:var(--gray);">Protegemos lo más importante sin complicarte, tú dejas el empaque listo.</div>
+        <div class="sc-tags" style="margin-top:auto;padding-top:18px;">
+          <span class="sc-tag">&#10003; Todo Lite</span>
+          <span class="sc-tag">&#10003; Embalaje pro</span>
+          <span class="sc-tag">&#10003; Protección</span>
+        </div>
+      </div>
+
+      <div class="service-card" style="display:flex;flex-direction:column;">
+        <div class="sc-icon">&#127942;</div>
+        <div style="display:inline-block;background:#1A1A1A;color:white;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;align-self:flex-start;margin-bottom:12px;">Premium</div>
+        <div class="sc-title" style="font-size:22px;">Muévelo Pro</div>
+        <div class="sc-desc" style="margin-top:8px;"><strong>Carga + Traslado + Descarga + Embalaje + Empaque en cajas</strong></div>
+        <div class="sc-desc" style="margin-top:8px;font-style:italic;color:var(--gray);">Nos encargamos de todo, de inicio a fin.</div>
+        <div class="sc-tags" style="margin-top:auto;padding-top:18px;">
+          <span class="sc-tag">&#10003; Todo Smart</span>
+          <span class="sc-tag">&#10003; Empaque en cajas</span>
+          <span class="sc-tag">&#10003; Full service</span>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:48px;">
+      <button class="btn-primary" onclick="openWizard()">Cotizar mi plan &rarr;</button>
     </div>
   </div>
 </section>
@@ -400,12 +437,12 @@ footer{background:#080F19;padding:56px 60px 32px;}
     <h2 class="section-title">Mudanzas con garantía real</h2>
     <p class="section-sub" style="margin-bottom:48px;">No solo movemos tus cosas. Nos comprometemos con tu tranquilidad en cada etapa.</p>
     <div class="why-grid">
-      <div class="why-card"><div class="why-icon">&#9200;</div><div class="why-title">Puntualidad garantizada</div><div class="why-desc">Llegamos en el horario acordado o te compensamos. El tiempo de nuestros clientes es sagrado.</div></div>
-      <div class="why-card"><div class="why-icon">&#128737;</div><div class="why-title">Seguro de traslado incluido</div><div class="why-desc">Todos nuestros traslados incluyen seguro básico. Tus pertenencias están protegidas de inicio a fin.</div></div>
+      <div class="why-card"><div class="why-icon">&#9200;</div><div class="why-title">Puntualidad garantizada</div><div class="why-desc">Llegamos en el horario acordado. El tiempo de nuestros clientes es sagrado.</div></div>
       <div class="why-card"><div class="why-icon">&#128176;</div><div class="why-title">Precio justo y transparente</div><div class="why-desc">Sin costos ocultos. El precio que cotizas es el que pagas. Garantizado por escrito.</div></div>
       <div class="why-card"><div class="why-icon">&#128119;</div><div class="why-title">Equipo profesional</div><div class="why-desc">Personal entrenado, uniformado y con antecedentes verificados. Tu hogar en las mejores manos.</div></div>
       <div class="why-card"><div class="why-icon">&#128241;</div><div class="why-title">Seguimiento en tiempo real</div><div class="why-desc">Sigue tu mudanza en todo momento. Te mantenemos informado paso a paso por WhatsApp.</div></div>
-      <div class="why-card"><div class="why-icon">&#128295;</div><div class="why-title">Desmontaje y armado incluido</div><div class="why-desc">Desmontamos y armamos todos tus muebles sin costo adicional. Tú solo descansas.</div></div>
+      <div class="why-card"><div class="why-icon">&#127919;</div><div class="why-title">Nos adaptamos a tu necesidad real</div><div class="why-desc">No pagas por lo que no necesitas. Cada mudanza es distinta y nosotros nos ajustamos a ti.</div></div>
+      <div class="why-card"><div class="why-icon">&#128230;</div><div class="why-title">Tres tipos de servicios</div><div class="why-desc">Contamos con tres planes: Lite, Smart y Pro. Elige el nivel de ayuda que necesitas.</div></div>
     </div>
   </div>
 </section>
@@ -468,7 +505,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
     <p>Cotiza gratis en 2 minutos y recibe tu presupuesto exacto. Sin compromisos, sin letra chica.</p>
     <div class="contact-cta-btns">
       <button class="btn-red-solid" onclick="openWizard()">&#128667; Cotizar mi mudanza gratis</button>
-      <a href="https://wa.me/56983342334?text=Hola!+Quiero+cotizar+una+mudanza." target="_blank" class="btn-outline-white">Hablar por WhatsApp</a>
+      <a href="https://wa.me/56934050395?text=Hola!+Quiero+cotizar+una+mudanza." target="_blank" class="btn-outline-white">Hablar por WhatsApp</a>
     </div>
   </div>
 </section>
@@ -495,8 +532,8 @@ footer{background:#080F19;padding:56px 60px 32px;}
       </div>
       <div class="footer-col">
         <h4>Contacto</h4>
-        <a href="tel:+56983342334">+56 9 8334 2334</a>
-        <a href="https://wa.me/56983342334" target="_blank" class="footer-wa-link">&#128172; WhatsApp directo</a>
+        <a href="tel:+56934050395">+569 34050395</a>
+        <a href="https://wa.me/56934050395" target="_blank" class="footer-wa-link">&#128172; WhatsApp directo</a>
         <a href="https://instagram.com/mueveloexpress" target="_blank">@mueveloexpress</a>
       </div>
     </div>
@@ -523,13 +560,24 @@ footer{background:#080F19;padding:56px 60px 32px;}
     </div>
     <!-- STEP 1 -->
     <div class="wizard-step active" id="step-1">
-      <p class="wiz-question">¡Hola! Soy Sofía. Vamos a conseguir<br>un buen precio para tu mudanza 😊</p>
+      <p class="wiz-question">¡Hola! Soy Sofía. Vamos a conseguir<br>un buen precio para tu servicio 😊</p>
       <p class="wiz-sub">¿Cuál es tu nombre?</p>
       <div class="wiz-input-row">
         <div><label class="wiz-label">Nombre</label><input class="wiz-input" id="inp-nombre" type="text" placeholder="Tu nombre" oninput="checkStep1()"></div>
         <div><label class="wiz-label">Apellido</label><input class="wiz-input" id="inp-apellido" type="text" placeholder="Tu apellido" oninput="checkStep1()"></div>
       </div>
-      <div class="wiz-error" id="err-1">Por favor ingresa tu nombre y apellido.</div>
+      <p class="wiz-sub" style="margin-top:18px;margin-bottom:12px;">¿Qué tipo de servicio necesitas?</p>
+      <div class="wiz-choices" id="choices-tipo-servicio">
+        <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','mudanza');checkStep1()"><div class="choice-check"></div>&#128666; <strong>Mudanza</strong> — Cambio de hogar u oficina (varios muebles)</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','flete');checkStep1()"><div class="choice-check"></div>&#128230; <strong>Flete</strong> — Traslado puntual de pocos ítems</div>
+      </div>
+      <p class="wiz-sub" style="margin-top:18px;margin-bottom:12px;" id="plan-label">¿Qué plan prefieres?</p>
+      <div class="wiz-choices" id="choices-plan">
+        <div class="wiz-choice" onclick="selectChoice(this,'plan','lite');checkStep1()"><div class="choice-check"></div><strong>Muévelo Lite</strong> — Carga + traslado + descarga</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'plan','smart');checkStep1()"><div class="choice-check"></div><strong>Muévelo Smart</strong> — Lite + embalaje</div>
+        <div class="wiz-choice" onclick="selectChoice(this,'plan','pro');checkStep1()"><div class="choice-check"></div><strong>Muévelo Pro</strong> — Smart + empaque en cajas</div>
+      </div>
+      <div class="wiz-error" id="err-1">Por favor completa nombre, tipo de servicio y plan.</div>
     </div>
     <!-- STEP 2 -->
     <div class="wizard-step" id="step-2">
@@ -811,7 +859,7 @@ function validateStep(step){
   const hideErr = id=>{ const e=document.getElementById(id); if(e) e.classList.remove('show'); };
   const showErr = id=>{ const e=document.getElementById(id); if(e) e.classList.add('show'); };
   hideErr('err-'+step);
-  if(step===1){ const n=document.getElementById('inp-nombre').value.trim(); const a=document.getElementById('inp-apellido').value.trim(); if(!n||!a){showErr('err-1');return false;} return true; }
+  if(step===1){ const n=document.getElementById('inp-nombre').value.trim(); const a=document.getElementById('inp-apellido').value.trim(); if(!n||!a||!choices['tipo-servicio']||!choices['plan']){showErr('err-1');return false;} return true; }
   if(step===2){ const f=document.getElementById('inp-fecha').value; if(!f){showErr('err-2');return false;} return true; }
   if(step===3){ const t=document.getElementById('sel-origen-tipo').value; const d=document.getElementById('inp-origen-dir').value.trim(); if(!t||!d){showErr('err-3');return false;} return true; }
   if(step===4){ const t=document.getElementById('sel-destino-tipo').value; const d=document.getElementById('inp-destino-dir').value.trim(); if(!t||!d){showErr('err-4');return false;} return true; }
@@ -870,6 +918,8 @@ async function buildFinalStep(){
 
   const formData = {
     nombre,
+    tipoServicio: choices['tipo-servicio'] || 'mudanza',
+    plan: choices['plan'] || 'lite',
     fecha,
     origen: { tipo: origenTipo, direccion: origenDir, numero: origenNum, piso: origenPiso, ascensor: origenAsc, ascSeleccionado: ascOrigSelected?.textContent || 'no' },
     destino: { tipo: destinoTipo, direccion: destinoDir, numero: destinoNum, piso: destinoPiso, ascensor: destinoAsc, ascSeleccionado: ascDestSelected?.textContent || 'no' },
@@ -895,8 +945,10 @@ async function buildFinalStep(){
     if(response.ok) {
       const result = await response.json();
       document.getElementById('final-msg').textContent = `✅ ¡Excelente! Te enviaremos el presupuesto a ${email} y al +56${tel} en menos de 1 hora.`;
-      const msg = `Hola Mueveloexpress! Quiero cotizar una mudanza:\n\n👤 Nombre: ${nombre}\n📅 Fecha estimada: ${fecha}\n📍 Origen: ${origenTipo} · ${origenDir}\n📦 Destino: ${destinoTipo} · ${destinoDir}\n📊 Volumen estimado: ${totalVol.toFixed(1)} m³ (${totalItems} ítems)\n✉️ Email: ${email}\n📱 Teléfono: +56${tel}`;
-      document.getElementById('final-wa-link').href = `https://wa.me/56983342334?text=${encodeURIComponent(msg)}`;
+      const tipoServ = (choices['tipo-servicio']||'mudanza').toUpperCase();
+      const planTxt = { lite:'Muévelo Lite', smart:'Muévelo Smart', pro:'Muévelo Pro' }[choices['plan']||'lite'];
+      const msg = `Hola Mueveloexpress! Quiero cotizar un servicio:\n\n👤 Nombre: ${nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan: ${planTxt}\n📅 Fecha estimada: ${fecha}\n📍 Origen: ${origenTipo} · ${origenDir}\n📦 Destino: ${destinoTipo} · ${destinoDir}\n📊 Volumen estimado: ${totalVol.toFixed(1)} m³ (${totalItems} ítems)\n✉️ Email: ${email}\n📱 Teléfono: +56${tel}`;
+      document.getElementById('final-wa-link').href = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
     } else {
       document.getElementById('final-msg').textContent = `❌ Error procesando la cotización. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
     }
