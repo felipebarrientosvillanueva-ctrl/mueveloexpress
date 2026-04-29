@@ -5,6 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mueveloexpress — Mudanzas en Todo Chile</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- GOOGLE MAPS — Distance Matrix API                                    -->
+<!-- Para activar: 1) Crear API key en console.cloud.google.com           -->
+<!--               2) Habilitar "Distance Matrix API" + "Maps JS API"     -->
+<!--               3) Restringir la key a tu dominio (HTTP referrer)      -->
+<!--               4) Reemplazar TU_API_KEY_AQUI abajo                    -->
+<!-- Si no se configura, cae automáticamente al estimador heurístico.     -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- CONFIGURACIÓN — reemplaza estos valores con los de tu deployment   -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<script>
+  // URL del backend en Render (sin slash final). Dejar vacío para usar misma URL.
+  window.MUEVELO_API_URL = 'https://mueveloexpress-backend.onrender.com';
+  // País actual del sitio (CL = Chile, BR = Brasil)
+  window.MUEVELO_COUNTRY = 'CL';
+  // API key de Google Maps (placeholder — configurar después)
+  window.GOOGLE_MAPS_API_KEY = 'TU_API_KEY_AQUI';
+</script>
+<script>
+(function loadGoogleMaps(){
+  if(!window.GOOGLE_MAPS_API_KEY || window.GOOGLE_MAPS_API_KEY === 'TU_API_KEY_AQUI') return;
+  const s = document.createElement('script');
+  s.src = 'https://maps.googleapis.com/maps/api/js?key=' + window.GOOGLE_MAPS_API_KEY + '&libraries=places&loading=async';
+  s.async = true; s.defer = true;
+  document.head.appendChild(s);
+})();
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -290,6 +318,40 @@ footer{background:#080F19;padding:56px 60px 32px;}
 .photo-result-name{color:var(--text);font-weight:500;}
 .photo-result-badge{background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
 .photo-error{background:#FFF5F5;border:1px solid #FCA5A5;border-radius:8px;padding:10px 14px;font-size:13px;color:#DC2626;margin-top:10px;display:none;}
+
+/* ── Form único (paso 1) ── */
+.form-section{background:var(--gray-light);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;}
+.form-section h3{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.form-group{margin-bottom:14px;}
+.wiz-choices-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.wiz-choices-row .wiz-choice{padding:14px;text-align:center;border:1.5px solid var(--border);border-radius:12px;font-weight:600;cursor:pointer;font-size:14px;transition:all .2s;}
+.wiz-choices-row .wiz-choice:hover{border-color:var(--red);}
+.wiz-choices-row .wiz-choice.selected{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
+
+/* ── Plan cards (paso final) ── */
+.plan-cards{display:grid;grid-template-columns:1fr;gap:14px;margin:24px 0;}
+@media(min-width:640px){.plan-cards{grid-template-columns:1fr 1fr 1fr;}}
+.plan-card{background:white;border:2px solid var(--border);border-radius:18px;padding:24px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;display:flex;flex-direction:column;}
+.plan-card:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 12px 32px rgba(211,47,47,.12);}
+.plan-card.selected{border-color:var(--red);background:var(--red-light);}
+.plan-card.popular{border-color:var(--red);box-shadow:0 8px 28px rgba(211,47,47,.18);}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--red);color:white;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;text-transform:uppercase;}
+.plan-name{font-size:17px;font-weight:900;color:var(--navy);margin-bottom:6px;letter-spacing:-.3px;}
+.plan-desc{font-size:12px;color:var(--gray);margin-bottom:16px;line-height:1.5;min-height:32px;}
+.plan-price{font-size:28px;font-weight:900;color:var(--red);letter-spacing:-1px;margin-bottom:14px;line-height:1;}
+.plan-includes{font-size:11px;color:var(--gray);margin-bottom:16px;text-align:left;flex:1;}
+.plan-includes li{padding:3px 0;display:flex;align-items:flex-start;gap:6px;}
+.plan-includes li::before{content:"✓";color:var(--red);font-weight:900;flex-shrink:0;}
+.plan-btn{background:white;color:var(--navy);padding:10px 16px;border:1.5px solid var(--navy);border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;width:100%;}
+.plan-card.popular .plan-btn{background:var(--red);color:white;border-color:var(--red);}
+.plan-card:hover .plan-btn{background:var(--navy);color:white;}
+.plan-card.popular:hover .plan-btn{background:var(--red-dark);}
+
+/* ── Estado de envío en final ── */
+.wiz-final-summary{background:var(--gray-light);border-radius:12px;padding:16px;margin:16px 0;font-size:13px;color:var(--gray);}
+.wiz-final-summary strong{color:var(--navy);}
+
+
 </style>
 </head>
 <body>
@@ -552,114 +614,101 @@ footer{background:#080F19;padding:56px 60px 32px;}
       <button class="wizard-close" onclick="closeWizard()">×</button>
     </div>
     <div class="wizard-progress">
-      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:8%"></div></div>
-      <div class="progress-text" id="progressText">Paso 1 de 12</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+      <div class="progress-text" id="progressText">Paso 1 de 3</div>
     </div>
     <div class="sofia-row">
-      <div class="sofia-avatar-placeholder">👩‍💼</div>
+      <div class="sofia-avatar-placeholder">👨‍💼</div>
     </div>
-    <!-- STEP 1 -->
+        <!-- ════════ STEP 1: Datos del viaje (TODO EN UNA PÁGINA) ════════ -->
     <div class="wizard-step active" id="step-1">
-      <p class="wiz-question">¡Hola! Soy Sofía. Vamos a conseguir<br>un buen precio para tu servicio 😊</p>
-      <p class="wiz-sub">¿Cuál es tu nombre?</p>
-      <div class="wiz-input-row">
-        <div><label class="wiz-label">Nombre</label><input class="wiz-input" id="inp-nombre" type="text" placeholder="Tu nombre" oninput="checkStep1()"></div>
-        <div><label class="wiz-label">Apellido</label><input class="wiz-input" id="inp-apellido" type="text" placeholder="Tu apellido" oninput="checkStep1()"></div>
+      <p class="wiz-question">¡Hola! Soy Felipe.<br>Cuéntame de tu mudanza 👋</p>
+
+      <div class="form-group">
+        <label class="wiz-label">Tu nombre</label>
+        <div class="wiz-input-row">
+          <input class="wiz-input" id="inp-nombre" type="text" placeholder="Nombre">
+          <input class="wiz-input" id="inp-apellido" type="text" placeholder="Apellido">
+        </div>
       </div>
-      <p class="wiz-sub" style="margin-top:18px;margin-bottom:12px;">¿Qué tipo de servicio necesitas?</p>
-      <div class="wiz-choices" id="choices-tipo-servicio">
-        <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','mudanza');checkStep1()"><div class="choice-check"></div>&#128666; <strong>Mudanza</strong> — Cambio de hogar u oficina (varios muebles)</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','flete');checkStep1()"><div class="choice-check"></div>&#128230; <strong>Flete</strong> — Traslado puntual de pocos ítems</div>
+
+      <div class="form-group">
+        <label class="wiz-label">¿Qué necesitas?</label>
+        <div class="wiz-choices wiz-choices-row" id="choices-tipo-servicio">
+          <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','mudanza')">🚚 Mudanza</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','flete')">📦 Flete</div>
+        </div>
       </div>
-      <p class="wiz-sub" style="margin-top:18px;margin-bottom:12px;" id="plan-label">¿Qué plan prefieres?</p>
-      <div class="wiz-choices" id="choices-plan">
-        <div class="wiz-choice" onclick="selectChoice(this,'plan','lite');checkStep1()"><div class="choice-check"></div><strong>Muévelo Lite</strong> — Carga + traslado + descarga</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'plan','smart');checkStep1()"><div class="choice-check"></div><strong>Muévelo Smart</strong> — Lite + embalaje</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'plan','pro');checkStep1()"><div class="choice-check"></div><strong>Muévelo Pro</strong> — Smart + empaque en cajas</div>
+
+      <div class="form-group">
+        <label class="wiz-label">Fecha estimada</label>
+        <input class="wiz-input" id="inp-fecha" type="date">
       </div>
-      <div class="wiz-error" id="err-1">Por favor completa nombre, tipo de servicio y plan.</div>
+
+      <div class="form-section">
+        <h3>📍 Origen</h3>
+        <div class="wiz-addr-row">
+          <select class="wiz-select" id="sel-origen-tipo">
+            <option value="">Tipo de inmueble...</option>
+            <option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option>
+          </select>
+          <input class="wiz-input" id="inp-origen-dir" type="text" placeholder="Dirección completa, comuna">
+        </div>
+        <div class="wiz-subrow" id="subrow-origen" style="display:none;margin-top:10px;">
+          <input class="wiz-input" id="inp-origen-num" placeholder="N° depto/oficina">
+          <input class="wiz-input" id="inp-origen-piso" type="number" placeholder="Piso" min="1">
+          <select class="wiz-select" id="sel-origen-asc">
+            <option value="">¿Ascensor?</option>
+            <option>Sí, hay ascensor</option><option>No hay ascensor</option>
+          </select>
+          <select class="wiz-select" id="sel-origen-estac">
+            <option value="">Estacionamiento</option>
+            <option value="cerca">A menos de 40m</option>
+            <option value="lejos">A más de 40m</option>
+            <option value="subterraneo">Por subterráneo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>🎯 Destino</h3>
+        <div class="wiz-addr-row">
+          <select class="wiz-select" id="sel-destino-tipo">
+            <option value="">Tipo de inmueble...</option>
+            <option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option>
+          </select>
+          <input class="wiz-input" id="inp-destino-dir" type="text" placeholder="Dirección completa, comuna">
+        </div>
+        <div class="wiz-subrow" id="subrow-destino" style="display:none;margin-top:10px;">
+          <input class="wiz-input" id="inp-destino-num" placeholder="N° depto/oficina">
+          <input class="wiz-input" id="inp-destino-piso" type="number" placeholder="Piso" min="1">
+          <select class="wiz-select" id="sel-destino-asc">
+            <option value="">¿Ascensor?</option>
+            <option>Sí, hay ascensor</option><option>No hay ascensor</option>
+          </select>
+          <select class="wiz-select" id="sel-destino-estac">
+            <option value="">Estacionamiento</option>
+            <option value="cerca">A menos de 40m</option>
+            <option value="lejos">A más de 40m</option>
+            <option value="subterraneo">Por subterráneo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="wiz-label">¿Tienes muebles delicados (vidrio, antigüedades, alto valor)?</label>
+        <div class="wiz-choices wiz-choices-row" id="choices-delicado">
+          <div class="wiz-choice" onclick="selectChoice(this,'delicado','no')">No, todo estándar</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'delicado','si')">Sí, algunos</div>
+        </div>
+      </div>
+
+      <div class="wiz-error" id="err-1">Por favor completa todos los campos requeridos.</div>
     </div>
-    <!-- STEP 2 -->
+
+    <!-- ════════ STEP 2: Inventario (con foto IA) ════════ -->
     <div class="wizard-step" id="step-2">
-      <p class="wiz-question" id="q-step2">¡Gracias! ¿Para cuándo necesitas la mudanza?</p>
-      <p class="wiz-sub">Ingresa una fecha estimada — puede ser aproximada.</p>
-      <label class="wiz-label">Fecha estimada</label>
-      <input class="wiz-input" id="inp-fecha" type="date" style="margin-bottom:14px;">
-      <div class="wiz-error" id="err-2">Por favor ingresa una fecha estimada.</div>
-    </div>
-    <!-- STEP 3 -->
-    <div class="wizard-step" id="step-3">
-      <p class="wiz-question">¿Cuál es la <strong>dirección de inicio</strong>?</p>
-      <p class="wiz-sub">De dónde vamos a recoger tus cosas.</p>
-      <div class="wiz-error" id="err-3">Por favor completa los datos de la dirección de origen.</div>
-      <div class="wiz-addr-row">
-        <div><label class="wiz-label">Tipo</label><select class="wiz-select" id="sel-origen-tipo"><option value="">Selecciona...</option><option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option></select></div>
-        <div><label class="wiz-label">Dirección</label><input class="wiz-input" id="inp-origen-dir" type="text" placeholder="Ej: Av. Providencia 1234, Santiago"></div>
-      </div>
-      <div class="wiz-subrow" id="subrow-origen" style="display:none;">
-        <div><label class="wiz-label">N° Depto / Oficina</label><input class="wiz-input" id="inp-origen-num" type="text" placeholder="Ej: 305"></div>
-        <div><label class="wiz-label">Piso</label><input class="wiz-input" id="inp-origen-piso" type="number" placeholder="Ej: 3" min="1"></div>
-        <div><label class="wiz-label">¿Hay ascensor?</label><select class="wiz-select" id="sel-origen-asc"><option value="">Selecciona...</option><option>Sí, hay ascensor</option><option>No hay ascensor</option></select></div>
-      </div>
-    </div>
-    <!-- STEP 4 -->
-    <div class="wizard-step" id="step-4">
-      <p class="wiz-question">¿Y cuál es tu <strong>dirección de destino</strong>?</p>
-      <p class="wiz-sub">Adónde vamos a llevar tus cosas.</p>
-      <div class="wiz-error" id="err-4">Por favor completa los datos de la dirección de destino.</div>
-      <div class="wiz-addr-row">
-        <div><label class="wiz-label">Tipo</label><select class="wiz-select" id="sel-destino-tipo"><option value="">Selecciona...</option><option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option></select></div>
-        <div><label class="wiz-label">Dirección</label><input class="wiz-input" id="inp-destino-dir" type="text" placeholder="Ej: Las Condes 5678, Santiago"></div>
-      </div>
-      <div class="wiz-subrow" id="subrow-destino" style="display:none;">
-        <div><label class="wiz-label">N° Depto / Oficina</label><input class="wiz-input" id="inp-destino-num" type="text" placeholder="Ej: 102"></div>
-        <div><label class="wiz-label">Piso</label><input class="wiz-input" id="inp-destino-piso" type="number" placeholder="Ej: 1" min="1"></div>
-        <div><label class="wiz-label">¿Hay ascensor?</label><select class="wiz-select" id="sel-destino-asc"><option value="">Selecciona...</option><option>Sí, hay ascensor</option><option>No hay ascensor</option></select></div>
-      </div>
-    </div>
-    <!-- STEP 5 -->
-    <div class="wizard-step" id="step-5">
-      <p class="wiz-question">En tu dirección de inicio,<br>¿<strong>cabe todo en el ascensor</strong>?</p>
-      <div class="wiz-choices" id="choices-asc-orig">
-        <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','todo')"><div class="choice-check"></div>Cabe todo en el ascensor</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','algunas')"><div class="choice-check"></div>Algunas cosas no caben</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','noaplica')"><div class="choice-check"></div>No aplica (no hay ascensor / es casa)</div>
-      </div>
-      <div class="wiz-error" id="err-5">Por favor selecciona una opción.</div>
-    </div>
-    <!-- STEP 6 -->
-    <div class="wizard-step" id="step-6">
-      <p class="wiz-question">¿Tienes algún mueble <strong>muy delicado</strong><br>con el que tengamos que tener más cuidado?</p>
-      <p class="wiz-sub">Por ejemplo, de cristal, vidrio grueso o de alto valor.</p>
-      <div class="wiz-choices" id="choices-delicado">
-        <div class="wiz-choice" onclick="selectChoice(this,'delicado','si')"><div class="choice-check"></div>Sí, tengo muebles delicados</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'delicado','no')"><div class="choice-check"></div>No, todo es estándar</div>
-      </div>
-      <div class="wiz-error" id="err-6">Por favor selecciona una opción.</div>
-    </div>
-    <!-- STEP 7 -->
-    <div class="wizard-step" id="step-7">
-      <p class="wiz-question">En tu dirección de <strong>inicio</strong>,<br>¿el camión puede estacionarse cerca?</p>
-      <div class="wiz-choices" id="choices-estac-orig">
-        <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','menos40')"><div class="choice-check"></div>Sí, a menos de 40 metros</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','mas40')"><div class="choice-check"></div>No, a más de 40 metros</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','subterraneo')"><div class="choice-check"></div>La entrada es por subterráneo</div>
-      </div>
-      <div class="wiz-error" id="err-7">Por favor selecciona una opción.</div>
-    </div>
-    <!-- STEP 8 -->
-    <div class="wizard-step" id="step-8">
-      <p class="wiz-question">¿Y en la dirección de <strong>destino</strong>?</p>
-      <div class="wiz-choices" id="choices-estac-dest">
-        <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','menos40')"><div class="choice-check"></div>Sí, a menos de 40 metros</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','mas40')"><div class="choice-check"></div>No, a más de 40 metros</div>
-        <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','subterraneo')"><div class="choice-check"></div>La entrada es por subterráneo</div>
-      </div>
-      <div class="wiz-error" id="err-8">Por favor selecciona una opción.</div>
-    </div>
-    <!-- STEP 9: Inventario + Fotos -->
-    <div class="wizard-step" id="step-9">
-      <p class="wiz-question">¡Ya estamos casi listos!<br>Agrega los ítems de tu inventario</p>
+<p class="wiz-question">¡Ya estamos casi listos!<br>Agrega los ítems de tu inventario</p>
       <!-- FOTO SCAN -->
       <div class="photo-scan-panel" id="photoScanPanel">
         <div class="photo-scan-header" onclick="togglePhotoPanel()">
@@ -697,112 +746,261 @@ footer{background:#080F19;padding:56px 60px 32px;}
         <span>Ítems: <strong id="items-total">0</strong></span>
       </div>
       <div class="inv-categories">
-        <div class="inv-cat" id="cat-camas">
-          <div class="inv-cat-header" onclick="toggleCat('camas')"><div class="inv-cat-title"><span class="inv-cat-icon">🛏️</span>Camas</div><span class="inv-arrow">▼</span></div>
+        <div class="inv-cat" id="cat-dormitorio">
+          <div class="inv-cat-header" onclick="toggleCat('dormitorio')"><div class="inv-cat-title"><span class="inv-cat-icon">🛏️</span>Dormitorio</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Cama King (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cama 2 Plazas (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cama 1½ Plaza (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cama 1 Plaza (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Camarote (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cuna desarmable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-          </div>
-        </div>
-        <div class="inv-cat" id="cat-comodas">
-          <div class="inv-cat-header" onclick="toggleCat('comodas')"><div class="inv-cat-title"><span class="inv-cat-icon">🗄️</span>Cómodas, Veladores y Otros</div><span class="inv-arrow">▼</span></div>
-          <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Velador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama King + colchón</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Camarote + colchones</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 2 plazas + colchón</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Ropero / Closet grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cuna no desarmable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 1½ plaza + colchón</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama clínica</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Camarote desarmado</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 1 plaza + colchón</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Colchón King / 2 plazas suelto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama nido</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Tocador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
             <div class="inv-item"><span class="inv-item-name">Cómoda</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estante / Repisa</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Colchón 1 / 1½ plaza suelto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cuna desarmable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Respaldo de cama grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Velador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Respaldo de cama mediano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Respaldo de cama pequeño</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.08)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.08)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lámpara de noche</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-living">
+          <div class="inv-cat-header" onclick="toggleCat('living')"><div class="inv-cat-title"><span class="inv-cat-icon">🛋️</span>Living / Estar</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Sillón en L</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sofá 4 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Futón / Sofá cama 2 plazas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sofá 3 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Rack TV grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Vitrina o buffet</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
             <div class="inv-item"><span class="inv-item-name">Biblioteca</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Rack TV</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Ropero / Closet</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Zapatera</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sofá 2 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Futón / Sofá cama 1 plaza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Bergère</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.9)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.9)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Bar</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Rack TV mediano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estante</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sillón / Sitial</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Repisa escalera</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sitial pequeño</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Rack TV pequeño</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de centro</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa lateral / Nido</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Puf</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lámpara de pie</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lámpara colgante</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
           </div>
         </div>
-        <div class="inv-cat" id="cat-mesas">
-          <div class="inv-cat-header" onclick="toggleCat('mesas')"><div class="inv-cat-title"><span class="inv-cat-icon">🪑</span>Mesas</div><span class="inv-arrow">▼</span></div>
+        <div class="inv-cat" id="cat-comedor">
+          <div class="inv-cat-header" onclick="toggleCat('comedor')"><div class="inv-cat-title"><span class="inv-cat-icon">🍽️</span>Comedor</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Mesa de Centro</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 8+ personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa Plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-          </div>
-        </div>
-        <div class="inv-cat" id="cat-sofas">
-          <div class="inv-cat-header" onclick="toggleCat('sofas')"><div class="inv-cat-title"><span class="inv-cat-icon">🛋️</span>Sofás</div><span class="inv-arrow">▼</span></div>
-          <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Sillón / Sitial</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sofá 2 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sofá 3 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sillón en L</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Futón / Sofá Cama</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
-          </div>
-        </div>
-        <div class="inv-cat" id="cat-sillas">
-          <div class="inv-cat-header" onclick="toggleCat('sillas')"><div class="inv-cat-title"><span class="inv-cat-icon">🪑</span>Sillas</div><span class="inv-arrow">▼</span></div>
-          <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Silla de Comedor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla de Escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.25)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.25)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla Reclinable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla Plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.08)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.08)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa comedor 10 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.9)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.9)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa comedor 8 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa comedor 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa comedor 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Banqueta de comedor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Arrimo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla mecedora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.75)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.75)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla reclinable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla de comedor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.25)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.25)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Piso alto / Taburete</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla de cocina</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Piso bajo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
           </div>
         </div>
         <div class="inv-cat" id="cat-cocina">
-          <div class="inv-cat-header" onclick="toggleCat('cocina')"><div class="inv-cat-title"><span class="inv-cat-icon">🍳</span>Cocina</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-cat-header" onclick="toggleCat('cocina')"><div class="inv-cat-title"><span class="inv-cat-icon">🍳</span>Cocina y Lavandería</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Refrigerador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Lavadora / Secadora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Lavavajillas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cocina / Horno</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Microondas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.12)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.12)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Refrigerador 2 puertas (side by side)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Congelador / Freezer</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Refrigerador 1 puerta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lavadora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Secadora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lavavajillas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cocina (gas o eléctrica)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cava de vinos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Frigobar</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Microondas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Horno eléctrico</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Artefactos pequeños (juguera, tostador, etc.)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-oficina">
+          <div class="inv-cat-header" onclick="toggleCat('oficina')"><div class="inv-cat-title"><span class="inv-cat-icon">💼</span>Oficina</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 12 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 10 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.9)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.9)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 8 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estación trabajo no desarmable 4 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estación trabajo no desarmable 3 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estación trabajo no desarmable 2 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Escritorio grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Escritorio mediano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estación trabajo desarmable 4 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.55)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.55)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estación trabajo desarmable 3 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.425)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.425)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Combo PC sin monitor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Fotocopiadora grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estación trabajo desarmable 2 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla de escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Archivador grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.22)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.22)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Impresora mediana</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estación trabajo desarmable 1 puesto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.175)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.175)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Archivador mediano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.17)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.17)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Archivador pequeño</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.12)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.12)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Pizarra</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Impresora pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Monitor 25-30&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.09)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.09)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Monitor 20-25&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.08)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.08)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Monitor 15-20&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.07)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.07)">+</button></div></div>
           </div>
         </div>
         <div class="inv-cat" id="cat-electronica">
           <div class="inv-cat-header" onclick="toggleCat('electronica')"><div class="inv-cat-title"><span class="inv-cat-icon">📺</span>Electrónica</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">TV hasta 50"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">TV 55"-65"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">TV 70"+"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Computador de escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Equipo de música / Parlantes</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Equipo de música / Parlantes</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Computador de escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">AC portátil</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">TV 70&quot; o más</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Aspiradora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">TV 55&quot;-65&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Impresora mediana (hogar)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">TV hasta 50&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Impresora pequeña (hogar)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
           </div>
         </div>
-        <div class="inv-cat" id="cat-otros">
-          <div class="inv-cat-header" onclick="toggleCat('otros')"><div class="inv-cat-title"><span class="inv-cat-icon">💡</span>Lámparas, Terraza y Otros</div><span class="inv-arrow">▼</span></div>
+        <div class="inv-cat" id="cat-terraza">
+          <div class="inv-cat-header" onclick="toggleCat('terraza')"><div class="inv-cat-title"><span class="inv-cat-icon">🌿</span>Terraza y Exterior</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Lámpara de pie</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Bicicleta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Planta grande (macetero)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Caja / Maleta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Macetero grande pesado (sobre 50kg)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sillón 3 cuerpos terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla colgante</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sillón 2 cuerpos terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Escultura pesada</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Banca de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa comedor terraza 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa comedor terraza 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Parrilla</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Macetero grande pesado</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Casa de perro grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sofá terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla acapulco</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Reposera</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de centro terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Macetero pequeño liviano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.25)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.25)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Casa de perro pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Toldo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-fitness">
+          <div class="inv-cat-header" onclick="toggleCat('fitness')"><div class="inv-cat-title"><span class="inv-cat-icon">💪</span>Deportes y Fitness</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Cama elástica</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Casa de niños plástica</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,3.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,3.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Jaula de pesas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Trotadora / Elíptica / Máquina</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Banco de pesas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de ping pong</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de taca taca</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Bolso de golf y palos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Tabla de surf</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Tabla de snowboard</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Bicicleta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Pelota de pilates</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Piso goma eva (por unidad)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Disco de pesa</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-musica">
+          <div class="inv-cat-header" onclick="toggleCat('musica')"><div class="inv-cat-title"><span class="inv-cat-icon">🎹</span>Instrumentos Musicales</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Piano de cola</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,3.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,3.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Piano vertical</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Órgano eléctrico horizontal</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Guitarra / Bajo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-misc">
+          <div class="inv-cat-header" onclick="toggleCat('misc')"><div class="inv-cat-title"><span class="inv-cat-icon">📦</span>Cajas, Maletas y Otros</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Caja fuerte vertical</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Alfombra grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Plancha de ropa con pedestal</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Contenedor plástico (100L)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Maleta grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Espejo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cuadro grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estufa eléctrica grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estufa a gas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Baúl</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estufa eléctrica pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Biombo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Contenedor plástico (50L)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cajas de r
+              opa</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cooler</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Caja de cocina</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.07)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.07)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Caja de adornos / libros</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Maleta pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Bolsa o bulto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Caja de herramientas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Caja fuerte de closet</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Canasto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Alfombra pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cuadros pequeños</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Almohada</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cojín</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Bidón (20L)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.04)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.04)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Dispensador de agua</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.02)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.02)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Árbol de navidad</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.75)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.75)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de planchado</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Perchero</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Ventilador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Rascador de gatos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
           </div>
         </div>
       </div>
     </div>
-    <!-- STEP 10 -->
-    <div class="wizard-step" id="step-10">
-      <p class="wiz-question">Ingresa tu correo y celular.<br>Así te enviamos tu presupuesto 😉</p>
-      <div style="margin-bottom:14px;"><label class="wiz-label">Correo electrónico</label><input class="wiz-input" id="inp-email" type="email" placeholder="tu@correo.com"></div>
-      <div style="margin-bottom:14px;"><label class="wiz-label">Teléfono / WhatsApp</label><div class="phone-row"><div class="phone-prefix">🇨🇱 +56</div><input class="phone-input" id="inp-telefono" type="tel" placeholder="9 XXXX XXXX" maxlength="9"></div></div>
-      <label class="wiz-check-row"><input type="checkbox" class="wiz-checkbox" id="chk-terms" checked><span class="wiz-check-label">Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de privacidad</a></span></label>
-      <div class="wiz-error" id="err-10">Por favor completa tu correo y teléfono.</div>
-    </div>
-    <!-- STEP FINAL -->
-    <div class="wizard-step" id="step-final">
-      <div class="wiz-final">
-        <div class="wiz-final-icon">🎉</div>
-        <h2 id="final-title">¡Listo!</h2>
-        <p id="final-msg">Recibimos tu solicitud. Nuestro equipo te enviará el presupuesto al WhatsApp y correo que nos dejaste en menos de 1 hora.</p>
-        <a id="final-wa-link" href="#" target="_blank" class="wiz-final-wa">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          Hablar por WhatsApp ahora
-        </a>
+
+    <!-- ════════ STEP 3: Datos de contacto ════════ -->
+    <div class="wizard-step" id="step-3">
+      <p class="wiz-question">Último paso: tus datos 📩</p>
+      <p class="wiz-sub">Para enviarte tu cotización y coordinar la mudanza.</p>
+
+      <div class="form-group">
+        <label class="wiz-label">Correo electrónico</label>
+        <input class="wiz-input" id="inp-email" type="email" placeholder="tu@correo.com">
       </div>
+      <div class="form-group">
+        <label class="wiz-label">Teléfono / WhatsApp</label>
+        <div class="phone-row">
+          <div class="phone-prefix">🇨🇱 +56</div>
+          <input class="phone-input" id="inp-telefono" type="tel" placeholder="9 XXXX XXXX" maxlength="9">
+        </div>
+      </div>
+      <label class="wiz-check-row">
+        <input type="checkbox" class="wiz-checkbox" id="chk-terms" checked>
+        <span class="wiz-check-label">Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de privacidad</a></span>
+      </label>
+      <div class="wiz-error" id="err-3">Por favor completa correo y teléfono.</div>
     </div>
+
+    <!-- ════════ STEP FINAL: 3 planes con precios ════════ -->
+    <div class="wizard-step" id="step-final">
+      <div class="wiz-final" id="finalContent"></div>
+    </div>
+
     <div class="wiz-footer" id="wizFooter">
       <button class="wiz-btn wiz-btn-back" id="btnBack" onclick="wizBack()" style="display:none;">← Atrás</button>
       <button class="wiz-btn wiz-btn-next" id="btnNext" onclick="wizNext()">Comencemos →</button>
@@ -811,19 +1009,232 @@ footer{background:#080F19;padding:56px 60px 32px;}
 </div>
 <script>
 let currentStep = 1;
-const totalSteps = 12;
+const totalSteps = 4;
 let totalVol = 0;
 let totalItems = 0;
 const choices = {};
+
+// ════════════════════════════════════════════════════════
+// MOTOR DE CÁLCULO DE PRECIO
+// Basado en lógica de calculadora interna.
+// Tarifas editables desde el panel admin (?admin=1).
+// Persiste en localStorage para que se mantengan entre sesiones.
+// ════════════════════════════════════════════════════════
+// Calibrado a abril 2026 vs mercado chileno (Mudango, Cronoshare, 2x3.cl, Habitissimo).
+// Estrategia: quedar 10-15% bajo Mudango (penetración).
+// Calibrado a -10% (o más) vs Mudango — bajadas adicionales para garantizar margen.
+// Modelo: base baja por tipo de camión + precio por m³ alto (escala lineal).
+const TARIFAS_DEFAULT = {
+  baseChico:   20000,   // furgón hasta 10 m³ (-$10K para asegurar margen)
+  baseMedio:   15000,   // camión mediano hasta 24 m³ (-$10K idem)
+  baseGrande:  10000,   // camión grande sobre 24 m³ (-$10K idem)
+  precioM3:    10000,   // CLP por m³ (matchea slope real de Mudango)
+  m3Min:           3,   // m³ mínimo cobrable
+  precioKm:      500,   // CLP por km
+  kmGratis:       15,   // km incluidos en tarifa base
+  bajadaPiso:   3000,   // CLP por piso de bajada (bajo para mantener -10% con escaleras)
+  subidaPiso:   3000,   // CLP por piso de subida (idem)
+  recargoDelicado: 0.05, // 5% extra si declara muebles delicados
+  recargoEstacionamientoLejos: 10000,    // si camión > 40m
+  recargoEstacionamientoSubterraneo: 15000, // si entrada por subterráneo
+  // Factor por tramo desactivado (todo en 0) — la escala ya la da precioM3.
+  tramos: [
+    { desde: 0,  hasta: 10,   factor: 0 },
+    { desde: 10, hasta: 20,   factor: 0 },
+    { desde: 20, hasta: 30,   factor: 0 },
+    { desde: 30, hasta: 40,   factor: 0 },
+    { desde: 40, hasta: null, factor: 0 }
+  ]
+};
+
+function loadTarifas(){
+  try {
+    const t = localStorage.getItem('mvx_tarifas');
+    if(t) return Object.assign({}, TARIFAS_DEFAULT, JSON.parse(t));
+  } catch(e){}
+  return TARIFAS_DEFAULT;
+}
+function saveTarifas(t){ localStorage.setItem('mvx_tarifas', JSON.stringify(t)); }
+
+let TARIFAS = loadTarifas();
+
+// Estimación rápida de km entre dos direcciones de Chile.
+// Si origen y destino son la misma comuna/ciudad → urbano (8 km).
+// Si son distintas pero en RM → 25 km. Otros casos → 50 km.
+// (Aproximación heurística; reemplazar con Google Maps API si se necesita exactitud)
+function estimarKm(origenDir, destinoDir){
+  const norm = s => (s||'').toLowerCase().replace(/[^a-záéíóúñ\s]/g,'').trim();
+  const o = norm(origenDir), d = norm(destinoDir);
+  if(!o || !d) return 8;
+  const sharedComuna = o.split(/\s+/).some(w => w.length > 4 && d.includes(w));
+  if(sharedComuna) return 8;
+  // Heurística simple: si menciona Santiago, Providencia, Las Condes, Ñuñoa... = RM
+  const rmKeywords = ['santiago','providencia','las condes','ñuñoa','vitacura','la reina','macul','maipú','puente alto','la florida','peñalolén','san miguel','quilicura','independencia','recoleta','colina','lo barnechea','huechuraba'];
+  const oRM = rmKeywords.some(k=>o.includes(k));
+  const dRM = rmKeywords.some(k=>d.includes(k));
+  if(oRM && dRM) return 25;
+  if(oRM !== dRM) return 80; // RM a otra región
+  return 50; // ambas fuera de RM
+}
+// ── Distancia REAL via Google Maps Distance Matrix (con fallback a heurística) ──
+async function estimarKmGoogle(origenDir, destinoDir){
+  // Si Google Maps no está cargado, usar heurística
+  if(!window.google || !window.google.maps || !window.google.maps.DistanceMatrixService){
+    return estimarKm(origenDir, destinoDir);
+  }
+  try {
+    const service = new google.maps.DistanceMatrixService();
+    const result = await new Promise((resolve, reject) => {
+      service.getDistanceMatrix({
+        origins: [origenDir + ', Chile'],
+        destinations: [destinoDir + ', Chile'],
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC
+      }, (response, status) => {
+        if(status === 'OK' && response.rows[0].elements[0].status === 'OK'){
+          const meters = response.rows[0].elements[0].distance.value;
+          resolve(Math.round(meters / 1000));
+        } else {
+          reject(status);
+        }
+      });
+    });
+    return result;
+  } catch(err){
+    console.warn('Google Maps falló, usando heurística:', err);
+    return estimarKm(origenDir, destinoDir);
+  }
+}
+
+function getPisos(tipoUbicacion, pisoVal, ascensorVal, ascSeleccionado){
+  // Pisos cuentan solo si NO hay ascensor o si "no cabe todo" en el ascensor
+  const piso = parseInt(pisoVal) || 0;
+  if(piso === 0) return 0;
+  if(tipoUbicacion === 'Casa') return 0;
+  const sinAscensor = (ascensorVal||'').toLowerCase().includes('no');
+  if(sinAscensor) return piso;
+  // Si tiene ascensor pero no cabe todo, contamos la mitad
+  if(ascSeleccionado && ascSeleccionado.toLowerCase().includes('algunas')) return Math.ceil(piso/2);
+  return 0;
+}
+
+function calcularPrecio(opts){
+  const T = TARIFAS;
+  const m3 = Math.max(0, opts.m3 || 0);
+  const km = opts.km || 8;
+  const pisosOrigen = opts.pisosOrigen || 0;
+  const pisosDestino = opts.pisosDestino || 0;
+  const efectivoM3 = Math.max(m3, T.m3Min);
+
+  // Base por tipo de camión
+  let baseCamion, camionLabel;
+  if(m3 <= 10){ baseCamion = T.baseChico; camionLabel = 'Furgón chico'; }
+  else if(m3 <= 24){ baseCamion = T.baseMedio; camionLabel = 'Camión mediano'; }
+  else { baseCamion = T.baseGrande; camionLabel = 'Camión grande'; }
+
+  // Factor incremental por tramo de volumen
+  const tramo = T.tramos.find(t => t.hasta === null || m3 <= t.hasta) || T.tramos[T.tramos.length-1];
+  const factorTramo = tramo.factor;
+
+  const costoVolumen = efectivoM3 * T.precioM3;
+  const kmExcedente = Math.max(0, km - T.kmGratis);
+  const costoDistancia = kmExcedente * T.precioKm;
+  const costoBajada = pisosOrigen * T.bajadaPiso;
+  const costoSubida = pisosDestino * T.subidaPiso;
+
+  // Recargos
+  let recargoDelicado = 0;
+  if(opts.delicado === 'si'){
+    recargoDelicado = Math.round((baseCamion + factorTramo + costoVolumen) * T.recargoDelicado);
+  }
+  let recargoEstac = 0;
+  if((opts.estacOrigen||'').includes('mas40') || (opts.estacDestino||'').includes('mas40')){
+    recargoEstac += T.recargoEstacionamientoLejos;
+  }
+  if((opts.estacOrigen||'').includes('subterraneo') || (opts.estacDestino||'').includes('subterraneo')){
+    recargoEstac += T.recargoEstacionamientoSubterraneo;
+  }
+
+  // Recargo por plan
+  const PLAN_MULT = { lite: 1.0, smart: 1.45, pro: 2.0 };
+  const planMult = PLAN_MULT[opts.plan] || 1.0;
+
+  const subtotal = baseCamion + factorTramo + costoVolumen + costoDistancia + costoBajada + costoSubida + recargoDelicado + recargoEstac;
+  const total = Math.round(subtotal * planMult);
+  const recargoPlan = total - subtotal;
+
+  return {
+    camionLabel, baseCamion, factorTramo, costoVolumen, costoDistancia,
+    costoBajada, costoSubida, recargoDelicado, recargoEstac, recargoPlan,
+    subtotal, total, m3, efectivoM3, km
+  };
+}
+
+function fmtCLP(n){ return '$' + Math.round(n).toLocaleString('es-CL'); }
+
+// ════════════════════════════════════════════════════════
+// PANEL ADMIN OCULTO — accede con ?admin=1 al final de la URL
+// ════════════════════════════════════════════════════════
+function showAdminPanel(){
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const fields = [
+    ['baseChico','Base furgón chico (≤10 m³)'],
+    ['baseMedio','Base camión mediano (≤24 m³)'],
+    ['baseGrande','Base camión grande (>24 m³)'],
+    ['precioM3','Precio por m³'],
+    ['m3Min','M³ mínimo cobrable'],
+    ['precioKm','Precio por km'],
+    ['kmGratis','Km gratis incluidos'],
+    ['bajadaPiso','Bajada por piso (origen)'],
+    ['subidaPiso','Subida por piso (destino)'],
+    ['recargoEstacionamientoLejos','Recargo estac. > 40m'],
+    ['recargoEstacionamientoSubterraneo','Recargo estac. subterráneo']
+  ];
+  let html = '<div style="background:white;border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:28px;font-family:Outfit,sans-serif;">';
+  html += '<h2 style="font-size:22px;font-weight:900;color:#0F1C2E;margin-bottom:8px;">Ajustar tarifas</h2>';
+  html += '<p style="font-size:13px;color:#64748B;margin-bottom:20px;">Cambios se guardan en este navegador. Para sincronizar a producción, contactar dev.</p>';
+  fields.forEach(([k,label])=>{
+    html += `<div style="margin-bottom:12px;"><label style="display:block;font-size:12px;font-weight:700;color:#0F1C2E;margin-bottom:4px;">${label}</label><input type="number" id="adm-${k}" value="${TARIFAS[k]}" style="width:100%;padding:8px 12px;border:1px solid #E2E8F0;border-radius:8px;font-size:14px;"></div>`;
+  });
+  html += '<h3 style="font-size:14px;font-weight:700;color:#0F1C2E;margin:18px 0 8px;">Recargo por plan</h3>';
+  html += '<p style="font-size:12px;color:#64748B;margin-bottom:8px;">Lite: 1.00 (sin recargo) · Smart: 1.45 · Pro: 2.00</p>';
+  html += '<div style="display:flex;gap:10px;margin-top:20px;">';
+  html += '<button onclick="saveAdminTarifas()" style="flex:1;background:#D32F2F;color:white;padding:12px;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Guardar</button>';
+  html += '<button onclick="this.closest(\'div\').parentElement.remove()" style="flex:1;background:white;color:#0F1C2E;padding:12px;border:1.5px solid #E2E8F0;border-radius:8px;font-weight:700;cursor:pointer;">Cerrar</button>';
+  html += '<button onclick="if(confirm(\'Restablecer tarifas por defecto?\')){localStorage.removeItem(\'mvx_tarifas\');location.reload();}" style="flex:1;background:#FAEEDA;color:#854F0B;padding:12px;border:1.5px solid #BA7517;border-radius:8px;font-weight:700;cursor:pointer;">Reset</button>';
+  html += '</div></div>';
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay);
+}
+function saveAdminTarifas(){
+  const T = Object.assign({}, TARIFAS);
+  ['baseChico','baseMedio','baseGrande','precioM3','m3Min','precioKm','kmGratis','bajadaPiso','subidaPiso','recargoEstacionamientoLejos','recargoEstacionamientoSubterraneo'].forEach(k=>{
+    const el = document.getElementById('adm-'+k);
+    if(el) T[k] = parseFloat(el.value) || 0;
+  });
+  saveTarifas(T);
+  TARIFAS = T;
+  alert('Tarifas guardadas. Las próximas cotizaciones usarán los nuevos valores.');
+  document.querySelector('div[style*="z-index:9999"]').remove();
+}
+
+// Si la URL tiene ?admin=1, abrir panel admin al cargar
+if(new URLSearchParams(window.location.search).get('admin') === '1'){
+  setTimeout(showAdminPanel, 500);
+}
+
 
 function openWizard(){ document.getElementById('wizardOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
 function closeWizard(){ document.getElementById('wizardOverlay').classList.remove('open'); document.body.style.overflow=''; }
 document.getElementById('wizardOverlay').addEventListener('click',function(e){ if(e.target===this) closeWizard(); });
 
 function updateProgress(){
-  const pct = Math.round((currentStep/totalSteps)*100);
+  const pasos = 3;
+  const visibleStep = Math.min(currentStep, pasos);
+  const pct = Math.round((visibleStep/pasos)*100);
   document.getElementById('progressFill').style.width = pct+'%';
-  document.getElementById('progressText').textContent = `Paso ${currentStep} de ${totalSteps}`;
+  document.getElementById('progressText').textContent = currentStep > pasos ? 'Tu cotización' : `Paso ${visibleStep} de ${pasos}`;
 }
 function selectChoice(el, group, val){
   const parent = el.closest('.wiz-choices');
@@ -859,27 +1270,44 @@ function validateStep(step){
   const hideErr = id=>{ const e=document.getElementById(id); if(e) e.classList.remove('show'); };
   const showErr = id=>{ const e=document.getElementById(id); if(e) e.classList.add('show'); };
   hideErr('err-'+step);
-  if(step===1){ const n=document.getElementById('inp-nombre').value.trim(); const a=document.getElementById('inp-apellido').value.trim(); if(!n||!a||!choices['tipo-servicio']||!choices['plan']){showErr('err-1');return false;} return true; }
-  if(step===2){ const f=document.getElementById('inp-fecha').value; if(!f){showErr('err-2');return false;} return true; }
-  if(step===3){ const t=document.getElementById('sel-origen-tipo').value; const d=document.getElementById('inp-origen-dir').value.trim(); if(!t||!d){showErr('err-3');return false;} return true; }
-  if(step===4){ const t=document.getElementById('sel-destino-tipo').value; const d=document.getElementById('inp-destino-dir').value.trim(); if(!t||!d){showErr('err-4');return false;} return true; }
-  if(step===5){ if(!choices['asc-orig']){showErr('err-5');return false;} return true; }
-  if(step===6){ if(!choices['delicado']){showErr('err-6');return false;} return true; }
-  if(step===7){ if(!choices['estac-orig']){showErr('err-7');return false;} return true; }
-  if(step===8){ if(!choices['estac-dest']){showErr('err-8');return false;} return true; }
-  if(step===9){ return true; }
-  if(step===10){ const e=document.getElementById('inp-email').value.trim(); const t=document.getElementById('inp-telefono').value.trim(); if(!e||!t||t.length<8){showErr('err-10');return false;} return true; }
+  if(step===1){
+    const n=document.getElementById('inp-nombre').value.trim();
+    const a=document.getElementById('inp-apellido').value.trim();
+    const f=document.getElementById('inp-fecha').value;
+    const ot=document.getElementById('sel-origen-tipo').value;
+    const od=document.getElementById('inp-origen-dir').value.trim();
+    const dt=document.getElementById('sel-destino-tipo').value;
+    const dd=document.getElementById('inp-destino-dir').value.trim();
+    if(!n||!a||!choices['tipo-servicio']||!f||!ot||!od||!dt||!dd||!choices['delicado']){
+      showErr('err-1'); return false;
+    }
+    return true;
+  }
+  if(step===2){ return true; } // inventario opcional, validamos en step 3
+  if(step===3){
+    const e=document.getElementById('inp-email').value.trim();
+    const t=document.getElementById('inp-telefono').value.trim();
+    if(!e||!t||t.length<8){ showErr('err-3'); return false; }
+    return true;
+  }
   return true;
 }
 function wizNext(){
-  if(currentStep<=10 && !validateStep(currentStep)) return;
-  if(currentStep===10){ buildFinalStep(); showStep('final'); document.getElementById('wizFooter').style.display='none'; return; }
+  if(currentStep<=3 && !validateStep(currentStep)) return;
+  if(currentStep===3){
+    buildFinalStep();
+    showStep('final');
+    document.getElementById('wizFooter').style.display='none';
+    currentStep = 4;
+    updateProgress();
+    return;
+  }
   const nextStep = currentStep+1;
   showStep(nextStep);
   currentStep = nextStep;
   updateProgress();
   if(currentStep>1) document.getElementById('btnBack').style.display='';
-  if(currentStep===10) document.getElementById('btnNext').textContent='Recibir presupuesto →';
+  document.getElementById('btnNext').textContent = currentStep===3 ? 'Ver mi cotización →' : 'Siguiente →';
 }
 function wizBack(){
   if(currentStep<=1) return;
@@ -887,7 +1315,8 @@ function wizBack(){
   showStep(currentStep);
   updateProgress();
   if(currentStep===1) document.getElementById('btnBack').style.display='none';
-  document.getElementById('btnNext').textContent = currentStep<10 ? 'Siguiente →' : 'Recibir presupuesto →';
+  document.getElementById('btnNext').textContent = currentStep===3 ? 'Ver mi cotización →' : 'Siguiente →';
+  document.getElementById('wizFooter').style.display='';
 }
 function showStep(s){
   document.querySelectorAll('.wizard-step').forEach(el=>el.classList.remove('active'));
@@ -899,64 +1328,154 @@ async function buildFinalStep(){
   const fecha = document.getElementById('inp-fecha').value;
   const origenTipo = document.getElementById('sel-origen-tipo').value;
   const origenDir = document.getElementById('inp-origen-dir').value;
-  const origenNum = document.getElementById('inp-origen-num').value;
-  const origenPiso = document.getElementById('inp-origen-piso').value;
-  const origenAsc = document.getElementById('sel-origen-asc').value;
+  const origenNum = (document.getElementById('inp-origen-num')||{}).value || '';
+  const origenPiso = (document.getElementById('inp-origen-piso')||{}).value || '';
+  const origenAsc = (document.getElementById('sel-origen-asc')||{}).value || '';
+  const origenEstac = (document.getElementById('sel-origen-estac')||{}).value || '';
   const destinoTipo = document.getElementById('sel-destino-tipo').value;
   const destinoDir = document.getElementById('inp-destino-dir').value;
-  const destinoNum = document.getElementById('inp-destino-num').value;
-  const destinoPiso = document.getElementById('inp-destino-piso').value;
-  const destinoAsc = document.getElementById('sel-destino-asc').value;
+  const destinoNum = (document.getElementById('inp-destino-num')||{}).value || '';
+  const destinoPiso = (document.getElementById('inp-destino-piso')||{}).value || '';
+  const destinoAsc = (document.getElementById('sel-destino-asc')||{}).value || '';
+  const destinoEstac = (document.getElementById('sel-destino-estac')||{}).value || '';
   const email = document.getElementById('inp-email').value;
   const tel = document.getElementById('inp-telefono').value;
+  const tipoServVal = choices['tipo-servicio'] || 'mudanza';
+  const delicadoVal = choices['delicado'] || 'no';
 
-  const ascOrigSelected = document.querySelector('[onclick*="asc-orig"][onclick*="selectChoice"].wiz-choice.selected');
-  const ascDestSelected = document.querySelector('[onclick*="asc-dest"][onclick*="selectChoice"].wiz-choice.selected');
-  const delicadoSelected = document.querySelector('[onclick*="delicado"][onclick*="selectChoice"].wiz-choice.selected');
-  const estacOrigSelected = document.querySelector('[onclick*="estac-orig"][onclick*="selectChoice"].wiz-choice.selected');
-  const estacDestSelected = document.querySelector('[onclick*="estac-dest"][onclick*="selectChoice"].wiz-choice.selected');
+  const km = await estimarKmGoogle(origenDir, destinoDir);
+  const pisosOrigen = getPisos(origenTipo, origenPiso, origenAsc, '');
+  const pisosDestino = getPisos(destinoTipo, destinoPiso, destinoAsc, '');
 
-  const formData = {
-    nombre,
-    tipoServicio: choices['tipo-servicio'] || 'mudanza',
-    plan: choices['plan'] || 'lite',
-    fecha,
-    origen: { tipo: origenTipo, direccion: origenDir, numero: origenNum, piso: origenPiso, ascensor: origenAsc, ascSeleccionado: ascOrigSelected?.textContent || 'no' },
-    destino: { tipo: destinoTipo, direccion: destinoDir, numero: destinoNum, piso: destinoPiso, ascensor: destinoAsc, ascSeleccionado: ascDestSelected?.textContent || 'no' },
-    delicado: delicadoSelected?.textContent.includes('Sí') ? 'si' : 'no',
-    estacionamiento: { origen: estacOrigSelected?.textContent || 'no', destino: estacDestSelected?.textContent || 'no' },
-    email,
-    telefono: tel,
-    inventario: getInventoryData(),
-    volumenTotal: totalVol,
-    itemsTotal: totalItems
+  // Calcular precios para los 3 planes
+  const baseOpts = {
+    m3: totalVol, km, pisosOrigen, pisosDestino,
+    delicado: delicadoVal,
+    estacOrigen: origenEstac,
+    estacDestino: destinoEstac
+  };
+  const precios = {
+    lite:  calcularPrecio(Object.assign({}, baseOpts, {plan:'lite'})),
+    smart: calcularPrecio(Object.assign({}, baseOpts, {plan:'smart'})),
+    pro:   calcularPrecio(Object.assign({}, baseOpts, {plan:'pro'}))
   };
 
-  document.getElementById('final-title').textContent = `¡Listo, ${nombre.split(' ')[0]}! 🎉`;
-  document.getElementById('final-msg').textContent = `Procesando tu cotización...`;
+  // Guardar en variable global para usar después al elegir plan
+  window._cotizacionData = {
+    nombre, tipoServicio: tipoServVal, fecha,
+    origen: { tipo: origenTipo, direccion: origenDir, numero: origenNum, piso: origenPiso, ascensor: origenAsc, estacionamiento: origenEstac },
+    destino: { tipo: destinoTipo, direccion: destinoDir, numero: destinoNum, piso: destinoPiso, ascensor: destinoAsc, estacionamiento: destinoEstac },
+    delicado: delicadoVal,
+    email, telefono: tel,
+    inventario: getInventoryData(),
+    volumenTotal: totalVol, itemsTotal: totalItems,
+    km, pisosOrigen, pisosDestino,
+    precios
+  };
 
-  try {
-    const response = await fetch('/api/cotizar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+  const finalContainer = document.getElementById('finalContent');
+  finalContainer.innerHTML = `
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="font-size:42px;margin-bottom:4px;">🎉</div>
+      <h2 style="font-size:24px;font-weight:900;color:#0F1C2E;letter-spacing:-.5px;">¡Listo, ${nombre.split(' ')[0]}!</h2>
+      <p style="font-size:14px;color:#64748B;margin-top:4px;">Elige el plan que mejor se ajusta a ti</p>
+    </div>
+    <div class="plan-cards">
+      <div class="plan-card" onclick="selectPlan('lite')">
+        <div class="plan-name">Muévelo Lite</div>
+        <div class="plan-desc">Lo esencial para mover tus cosas</div>
+        <div class="plan-price">${fmtCLP(precios.lite.total)}</div>
+        <ul class="plan-includes" style="list-style:none;padding:0;">
+          <li>Carga de muebles</li>
+          <li>Traslado seguro</li>
+          <li>Descarga en destino</li>
+        </ul>
+        <button class="plan-btn">Elegir Lite</button>
+      </div>
+      <div class="plan-card popular" onclick="selectPlan('smart')">
+        <div class="plan-badge">Más popular</div>
+        <div class="plan-name">Muévelo Smart</div>
+        <div class="plan-desc">Lo más elegido por nuestros clientes</div>
+        <div class="plan-price">${fmtCLP(precios.smart.total)}</div>
+        <ul class="plan-includes" style="list-style:none;padding:0;">
+          <li>Todo lo de Lite</li>
+          <li>Embalaje básico de muebles</li>
+          <li>Materiales incluidos</li>
+        </ul>
+        <button class="plan-btn">Elegir Smart</button>
+      </div>
+      <div class="plan-card" onclick="selectPlan('pro')">
+        <div class="plan-name">Muévelo Pro</div>
+        <div class="plan-desc">Servicio completo, tú no haces nada</div>
+        <div class="plan-price">${fmtCLP(precios.pro.total)}</div>
+        <ul class="plan-includes" style="list-style:none;padding:0;">
+          <li>Todo lo de Smart</li>
+          <li>Empaque en cajas</li>
+          <li>Cuidado premium muebles</li>
+        </ul>
+        <button class="plan-btn">Elegir Pro</button>
+      </div>
+    </div>
+    <div class="wiz-final-summary">
+      <strong>Resumen:</strong> ${totalVol.toFixed(1)} m³ · ${totalItems} ítems · ${km} km estimados<br>
+      <strong>${origenTipo} en ${origenDir.split(',')[0]}</strong> → <strong>${destinoTipo} en ${destinoDir.split(',')[0]}</strong>
+    </div>
+    <p id="final-status" style="font-size:11px;color:#94a3b8;text-align:center;font-style:italic;">Estos son precios estimados. El precio final se confirma con un asesor antes del servicio.</p>
+  `;
+
+  // Enviar al backend (sí esperamos para mostrar feedback al usuario)
+  const apiUrl = (window.MUEVELO_API_URL || '') + '/api/cotizar';
+  fetch(apiUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...window._cotizacionData, country: window.MUEVELO_COUNTRY || 'CL', source: 'web' })
+  }).then(r => r.ok ? r.json() : Promise.reject(r))
+    .then(json => {
+      if(json.quoteId) window._cotizacionData.quoteId = json.quoteId;
+      const status = document.getElementById('final-status');
+      if(status) status.textContent = `✓ Cotización enviada a tu correo (${data.email}). Te contactaremos pronto.`;
+    })
+    .catch(err => {
+      console.error('Error enviando cotización:', err);
+      const status = document.getElementById('final-status');
+      if(status) status.textContent = '⚠️ La cotización se generó localmente pero no pudimos enviarla por correo. Por favor confirma por WhatsApp.';
     });
-
-    if(response.ok) {
-      const result = await response.json();
-      document.getElementById('final-msg').textContent = `✅ ¡Excelente! Te enviaremos el presupuesto a ${email} y al +56${tel} en menos de 1 hora.`;
-      const tipoServ = (choices['tipo-servicio']||'mudanza').toUpperCase();
-      const planTxt = { lite:'Muévelo Lite', smart:'Muévelo Smart', pro:'Muévelo Pro' }[choices['plan']||'lite'];
-      const msg = `Hola Mueveloexpress! Quiero cotizar un servicio:\n\n👤 Nombre: ${nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan: ${planTxt}\n📅 Fecha estimada: ${fecha}\n📍 Origen: ${origenTipo} · ${origenDir}\n📦 Destino: ${destinoTipo} · ${destinoDir}\n📊 Volumen estimado: ${totalVol.toFixed(1)} m³ (${totalItems} ítems)\n✉️ Email: ${email}\n📱 Teléfono: +56${tel}`;
-      document.getElementById('final-wa-link').href = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
-    } else {
-      document.getElementById('final-msg').textContent = `❌ Error procesando la cotización. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
-    }
-  } catch(err) {
-    console.error('Error enviando cotización:', err);
-    document.getElementById('final-msg').textContent = `❌ No pudimos conectar con nuestro servidor. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
-  }
 }
+
+function selectPlan(planKey){
+  const data = window._cotizacionData;
+  if(!data) return;
+  const planTxt = { lite:'Muévelo Lite', smart:'Muévelo Smart', pro:'Muévelo Pro' }[planKey];
+  const precio = data.precios[planKey];
+  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+
+  // Construir mensaje WhatsApp
+  const tipoServ = (data.tipoServicio||'mudanza').toUpperCase();
+  const msg = `Hola Mueveloexpress! Quiero confirmar mi cotización:\n\n👤 ${data.nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan elegido: *${planTxt}*\n💰 *Total: ${fmtCLP(precio.total)}*\n📅 Fecha: ${data.fecha}\n📍 ${data.origen.tipo} · ${data.origen.direccion}\n🎯 ${data.destino.tipo} · ${data.destino.direccion}\n📊 ${data.volumenTotal.toFixed(1)} m³ · ${data.itemsTotal} ítems\n✉️ ${data.email}\n📱 +56${data.telefono}`;
+  const waUrl = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
+
+  // Reemplazar contenido con confirmación + botón WhatsApp
+  document.getElementById('finalContent').innerHTML = `
+    <div style="text-align:center;padding:20px 0;">
+      <div style="font-size:56px;margin-bottom:12px;">✅</div>
+      <h2 style="font-size:24px;font-weight:900;color:#0F1C2E;letter-spacing:-.5px;margin-bottom:8px;">¡Plan ${planTxt} elegido!</h2>
+      <p style="font-size:14px;color:#64748B;margin-bottom:24px;">Confirma con un asesor y agenda tu mudanza por WhatsApp.</p>
+      <div style="background:linear-gradient(135deg,#D32F2F,#B71C1C);color:white;border-radius:18px;padding:24px;margin-bottom:20px;box-shadow:0 12px 32px rgba(211,47,47,.25);">
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85;margin-bottom:6px;">Tu cotización</div>
+        <div style="font-size:36px;font-weight:900;letter-spacing:-1.5px;line-height:1;">${fmtCLP(precio.total)}</div>
+        <div style="font-size:13px;margin-top:8px;opacity:.9;">${planTxt}</div>
+      </div>
+      <a href="${waUrl}" target="_blank" class="wiz-final-wa" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:white;padding:16px 28px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:currentColor;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Confirmar por WhatsApp
+      </a>
+      <p style="font-size:11px;color:#94a3b8;margin-top:14px;font-style:italic;">Te contactaremos también por correo a ${data.email}</p>
+    </div>
+  `;
+}
+
+
 
 function getInventoryData() {
   const inventory = {};
@@ -1015,25 +1534,11 @@ async function analyzePhotos(){
       type: 'image',
       source: { type: 'base64', media_type: p.type || 'image/jpeg', data: p.data }
     }));
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    // Llama a nuestro backend (que esconde la API key del lado servidor)
+    const response = await fetch((window.MUEVELO_API_URL || '') + '/api/analyze-photos', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-opus-4-6',
-        max_tokens: 1024,
-        messages: [{
-          role: 'user',
-          content: [
-            ...imageContent,
-            { type: 'text', text: 'Eres un asistente especializado en mudanzas. Analiza estas fotos y lista todos los muebles y electrodomésticos que puedas ver. Responde ÚNICAMENTE con un JSON válido con este formato exacto, sin texto adicional:\n{"items": [{"nombre": "nombre del mueble en español de Chile", "cantidad": número}]}\n\nReglas:\n- Solo muebles y objetos grandes que se mueven en mudanzas\n- NO incluyas paredes, ventanas, pisos ni objetos pequeños\n- Usa nombres en español de Chile (Cama 2 Plazas, Ropero, Velador, Sillón, Refrigerador, etc.)' }
-          ]
-        }]
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ images: imageContent })
     });
     if(!response.ok) throw new Error('API error');
     const apiData = await response.json();
