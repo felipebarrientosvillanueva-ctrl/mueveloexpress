@@ -14,15 +14,25 @@
 <!-- Si no se configura, cae automáticamente al estimador heurístico.     -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- CONFIGURACIÓN — reemplaza estos valores con los de tu deployment   -->
+<!-- CONFIGURACIÓN — credenciales y settings del sitio                   -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 <script>
-  // URL del backend en Render (sin slash final). Dejar vacío para usar misma URL.
-  window.MUEVELO_API_URL = 'https://mueveloexpress-backend.onrender.com';
   // País actual del sitio (CL = Chile, BR = Brasil)
   window.MUEVELO_COUNTRY = 'CL';
   // API key de Google Maps (placeholder — configurar después)
   window.GOOGLE_MAPS_API_KEY = 'TU_API_KEY_AQUI';
+  // EmailJS — credenciales del servicio de envío de correos
+  window.EMAILJS_PUBLIC_KEY    = 'FtOrMqehgYbWvNCRR';
+  window.EMAILJS_SERVICE_ID    = 'service_91g9gos';
+  window.EMAILJS_TPL_CLIENTE   = 'template_j7jzanp';
+  window.EMAILJS_TPL_ADMIN     = 'template_975jzsa';
+</script>
+<!-- EmailJS SDK + inicialización -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  if(typeof emailjs !== 'undefined'){
+    emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
+  }
 </script>
 <script>
 (function loadGoogleMaps(){
@@ -709,38 +719,6 @@ footer{background:#080F19;padding:56px 60px 32px;}
     <!-- ════════ STEP 2: Inventario (con foto IA) ════════ -->
     <div class="wizard-step" id="step-2">
 <p class="wiz-question">¡Ya estamos casi listos!<br>Agrega los ítems de tu inventario</p>
-      <!-- FOTO SCAN -->
-      <div class="photo-scan-panel" id="photoScanPanel">
-        <div class="photo-scan-header" onclick="togglePhotoPanel()">
-          <span style="font-size:28px;">&#128247;</span>
-          <div>
-            <div style="font-size:14px;font-weight:700;color:var(--navy);">¿Prefieres subir fotos?</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:2px;">Nuestra IA detecta tus muebles automáticamente</div>
-          </div>
-          <button class="photo-scan-toggle" id="photoToggleBtn">Probar IA &#8595;</button>
-        </div>
-        <div class="photo-scan-body" id="photoScanBody" style="display:none;">
-          <div class="photo-drop-zone" id="photoDropZone" onclick="document.getElementById('photoFileInput').click()">
-            <input type="file" id="photoFileInput" accept="image/*" multiple style="display:none;">
-            <div style="font-size:32px;margin-bottom:8px;">&#128444;</div>
-            <div style="font-size:14px;font-weight:600;color:var(--navy);">Haz clic o arrastra fotos aquí</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:6px;">Hasta 5 fotos &middot; JPG o PNG &middot; Una habitación por foto</div>
-          </div>
-          <div class="photo-previews" id="photoPreviews"></div>
-          <button class="photo-analyze-btn" id="photoAnalyzeBtn" onclick="analyzePhotos()" disabled>&#10024; Analizar fotos con IA</button>
-          <div class="photo-loading" id="photoLoading">
-            <div class="photo-spinner"></div>
-            <div style="font-size:14px;font-weight:700;color:var(--navy);">Analizando tus fotos...</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:4px;">Identificando muebles y objetos</div>
-          </div>
-          <div class="photo-results" id="photoResults">
-            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;">&#9989; Detectamos estos muebles:</div>
-            <div id="photoResultsList"></div>
-            <div style="font-size:12px;color:var(--gray);margin-top:10px;font-style:italic;">Revisa y ajusta las cantidades abajo si es necesario.</div>
-          </div>
-          <div class="photo-error" id="photoError">No pudimos analizar las fotos. Por favor agrega los muebles manualmente abajo.</div>
-        </div>
-      </div>
       <div class="inventory-header">
         <span>Volumen total: <strong id="vol-total">0 m³</strong></span>
         <span>Ítems: <strong id="items-total">0</strong></span>
@@ -1423,23 +1401,50 @@ async function buildFinalStep(){
     <p id="final-status" style="font-size:11px;color:#94a3b8;text-align:center;font-style:italic;">Estos son precios estimados. El precio final se confirma con un asesor antes del servicio.</p>
   `;
 
-  // Enviar al backend (sí esperamos para mostrar feedback al usuario)
-  const apiUrl = (window.MUEVELO_API_URL || '') + '/api/cotizar';
-  fetch(apiUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...window._cotizacionData, country: window.MUEVELO_COUNTRY || 'CL', source: 'web' })
-  }).then(r => r.ok ? r.json() : Promise.reject(r))
-    .then(json => {
-      if(json.quoteId) window._cotizacionData.quoteId = json.quoteId;
-      const status = document.getElementById('final-status');
-      if(status) status.textContent = `✓ Cotización enviada a tu correo (${data.email}). Te contactaremos pronto.`;
-    })
-    .catch(err => {
-      console.error('Error enviando cotización:', err);
-      const status = document.getElementById('final-status');
-      if(status) status.textContent = '⚠️ La cotización se generó localmente pero no pudimos enviarla por correo. Por favor confirma por WhatsApp.';
-    });
+  // Enviar correos vía EmailJS (cliente + admin) en paralelo
+  enviarCorreosCotizacion(window._cotizacionData);
+}
+
+// ════════════════════════════════════════════════════════
+// EmailJS — envío de correos cliente + admin
+// ════════════════════════════════════════════════════════
+function enviarCorreosCotizacion(d){
+  if(typeof emailjs === 'undefined' || !window.EMAILJS_PUBLIC_KEY){
+    console.warn('EmailJS no disponible — saltando envío');
+    return;
+  }
+  // Construir inventario detallado en texto plano
+  const invList = Object.entries(d.inventario || {})
+    .map(([item, qty]) => qty + '× ' + item)
+    .join('\n') || '(sin ítems)';
+
+  // Variables compartidas para ambos templates
+  const params = {
+    customer_name:  d.nombre,
+    customer_email: d.email,
+    customer_phone: '+56' + (d.telefono || ''),
+    fecha:    d.fecha || 'A coordinar',
+    origen:   (d.origen?.tipo || '') + ' · ' + (d.origen?.direccion || ''),
+    destino:  (d.destino?.tipo || '') + ' · ' + (d.destino?.direccion || ''),
+    volumen:  (d.volumenTotal || 0).toFixed(1),
+    items:    d.itemsTotal || 0,
+    precio_lite:  fmtCLP(d.precios?.lite?.total  || 0),
+    precio_smart: fmtCLP(d.precios?.smart?.total || 0),
+    precio_pro:   fmtCLP(d.precios?.pro?.total   || 0),
+    inventario_detallado: invList
+  };
+
+  const status = document.getElementById('final-status');
+  // Enviar ambos correos en paralelo
+  Promise.all([
+    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_CLIENTE, params),
+    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_ADMIN,   params)
+  ]).then(() => {
+    if(status) status.textContent = '✓ Cotización enviada a ' + d.email + '. Revisa tu correo.';
+  }).catch(err => {
+    console.error('Error EmailJS:', err);
+    if(status) status.textContent = '⚠️ No pudimos enviar el correo automático. Por favor confirma por WhatsApp.';
+  });
 }
 
 function selectPlan(planKey){
@@ -1488,101 +1493,6 @@ function getInventoryData() {
 }
 window.addEventListener('scroll', function(){ document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20); });
 
-// ── PHOTO UPLOAD & AI ──
-let uploadedPhotos = [];
-function togglePhotoPanel(){
-  const body = document.getElementById('photoScanBody');
-  const btn = document.getElementById('photoToggleBtn');
-  const isOpen = body.style.display === 'block';
-  body.style.display = isOpen ? 'none' : 'block';
-  btn.textContent = isOpen ? 'Probar IA ↓' : 'Cerrar ↑';
-}
-document.getElementById('photoFileInput').addEventListener('change', function(e){ handlePhotoFiles(e.target.files); });
-const dropZone = document.getElementById('photoDropZone');
-dropZone.addEventListener('dragover', e=>{e.preventDefault();dropZone.classList.add('drag-over');});
-dropZone.addEventListener('dragleave', ()=>dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', e=>{ e.preventDefault(); dropZone.classList.remove('drag-over'); handlePhotoFiles(e.dataTransfer.files); });
-function handlePhotoFiles(files){
-  const allowed = [...files].filter(f=>f.type.startsWith('image/')).slice(0, 5 - uploadedPhotos.length);
-  allowed.forEach(file=>{
-    if(uploadedPhotos.length >= 5) return;
-    const reader = new FileReader();
-    reader.onload = e=>{ uploadedPhotos.push({data: e.target.result.split(',')[1], type: file.type, url: e.target.result}); renderPhotoPreviews(); };
-    reader.readAsDataURL(file);
-  });
-}
-function renderPhotoPreviews(){
-  const container = document.getElementById('photoPreviews');
-  container.innerHTML = uploadedPhotos.map((p,i)=>
-    '<div class="photo-preview"><img src="'+p.url+'" alt="Foto '+(i+1)+'"><button class="photo-preview-remove" onclick="removePhoto('+i+')">&#215;</button></div>'
-  ).join('');
-  document.getElementById('photoAnalyzeBtn').disabled = uploadedPhotos.length === 0;
-}
-function removePhoto(i){ uploadedPhotos.splice(i,1); renderPhotoPreviews(); }
-async function analyzePhotos(){
-  if(uploadedPhotos.length === 0) return;
-  const analyzeBtn = document.getElementById('photoAnalyzeBtn');
-  const loading = document.getElementById('photoLoading');
-  const results = document.getElementById('photoResults');
-  const errorDiv = document.getElementById('photoError');
-  analyzeBtn.style.display = 'none';
-  loading.style.display = 'block';
-  results.style.display = 'none';
-  errorDiv.style.display = 'none';
-  try{
-    const imageContent = uploadedPhotos.map(p => ({
-      type: 'image',
-      source: { type: 'base64', media_type: p.type || 'image/jpeg', data: p.data }
-    }));
-    // Llama a nuestro backend (que esconde la API key del lado servidor)
-    const response = await fetch((window.MUEVELO_API_URL || '') + '/api/analyze-photos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ images: imageContent })
-    });
-    if(!response.ok) throw new Error('API error');
-    const apiData = await response.json();
-    const responseText = apiData.content?.[0]?.text || '';
-    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-    if(!jsonMatch) throw new Error('No JSON found');
-    const parsed = JSON.parse(jsonMatch[0]);
-    if(parsed.items && parsed.items.length > 0){ populateInventoryFromAI(parsed.items); }
-    else { errorDiv.style.display = 'block'; }
-  } catch(err){ console.error(err); errorDiv.style.display = 'block'; }
-  loading.style.display = 'none';
-  analyzeBtn.style.display = 'block';
-}
-function populateInventoryFromAI(items){
-  const resultsList = document.getElementById('photoResultsList');
-  resultsList.innerHTML = items.map(item=>'<div class="photo-result-item"><span class="photo-result-name">'+item.nombre+'</span><span class="photo-result-badge">'+item.cantidad+'x</span></div>').join('');
-  document.getElementById('photoResults').style.display = 'block';
-  items.forEach(item=>{ autoFillInventoryItem(item.nombre.toLowerCase(), Math.max(1, parseInt(item.cantidad)||1)); });
-}
-function autoFillInventoryItem(nombre, cantidad){
-  const allItems = document.querySelectorAll('.inv-item');
-  let bestMatch = null;
-  let bestScore = 0;
-  allItems.forEach(item=>{
-    const itemName = item.querySelector('.inv-item-name').textContent.toLowerCase();
-    const score = textSimilarity(nombre, itemName);
-    if(score > bestScore && score > 0.35){ bestScore = score; bestMatch = item; }
-  });
-  if(bestMatch){
-    const cat = bestMatch.closest('.inv-cat');
-    if(cat && !cat.classList.contains('open')) toggleCat(cat.id.replace('cat-',''));
-    const plusBtn = bestMatch.querySelector('.inv-btn.plus');
-    for(let i = 0; i < cantidad; i++) plusBtn.click();
-  }
-}
-function textSimilarity(str1, str2){
-  const normalize = s => s.toLowerCase().replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i').replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/[^a-z0-9\s]/g,'');
-  const words1 = normalize(str1).split(/\s+/).filter(w=>w.length > 2);
-  const words2 = normalize(str2).split(/\s+/).filter(w=>w.length > 2);
-  if(!words1.length || !words2.length) return 0;
-  let matches = 0;
-  words1.forEach(w1=>{ if(words2.some(w2=> w2.includes(w1) || w1.includes(w2))) matches++; });
-  return matches / Math.max(words1.length, words2.length);
-}
 
 // Init
 updateProgress();
