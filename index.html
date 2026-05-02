@@ -362,6 +362,18 @@ footer{background:#080F19;padding:56px 60px 32px;}
 .wiz-final-summary strong{color:var(--navy);}
 
 
+
+/* ── Map preview para autocompletar direcciones ── */
+.address-map{height:180px;border-radius:14px;margin-top:12px;background:#F1F5F9;display:none;overflow:hidden;border:1px solid var(--border);}
+.address-map.visible{display:block;animation:mapFadeIn .35s ease-out;}
+@keyframes mapFadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.pac-container{border-radius:12px;border:1px solid #E2E8F0;box-shadow:0 8px 24px rgba(0,0,0,.08);font-family:'Outfit',sans-serif;margin-top:4px;}
+.pac-item{padding:10px 14px;border-top:1px solid #F1F5F9;font-size:13px;cursor:pointer;}
+.pac-item:hover,.pac-item-selected{background:rgba(211,47,47,.05);}
+.pac-icon{display:none;}
+.pac-item-query{color:var(--navy);font-weight:600;font-size:14px;}
+.pac-matched{color:var(--red);font-weight:700;}
+
 </style>
 </head>
 <body>
@@ -663,6 +675,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
             <option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option>
           </select>
           <input class="wiz-input" id="inp-origen-dir" type="text" placeholder="Dirección completa, comuna">
+          <div id="map-origen" class="address-map"></div>
         </div>
         <div class="wiz-subrow" id="subrow-origen" style="display:none;margin-top:10px;">
           <input class="wiz-input" id="inp-origen-num" placeholder="N° depto/oficina">
@@ -688,6 +701,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
             <option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option>
           </select>
           <input class="wiz-input" id="inp-destino-dir" type="text" placeholder="Dirección completa, comuna">
+          <div id="map-destino" class="address-map"></div>
         </div>
         <div class="wiz-subrow" id="subrow-destino" style="display:none;margin-top:10px;">
           <input class="wiz-input" id="inp-destino-num" placeholder="N° depto/oficina">
@@ -1498,6 +1512,91 @@ window.addEventListener('scroll', function(){ document.getElementById('mainNav')
 updateProgress();
 document.getElementById('btnBack').style.display='none';
 document.getElementById('btnNext').textContent = 'Comencemos →';
+
+// ════════════════════════════════════════════════════════
+// GOOGLE PLACES AUTOCOMPLETE + MAPS PREVIEW
+// Agrega autocompletar de direcciones (restringido a Chile) y
+// muestra un mapita con pin arrastrable bajo cada campo de dirección.
+// ════════════════════════════════════════════════════════
+const _addressMaps = {};
+
+function initAddressAutocomplete(){
+  if(!window.google || !window.google.maps || !window.google.maps.places){
+    // Reintentar cuando Google Maps termine de cargar
+    setTimeout(initAddressAutocomplete, 500);
+    return;
+  }
+  ['origen','destino'].forEach(tipo => {
+    const input  = document.getElementById('inp-' + tipo + '-dir');
+    const mapDiv = document.getElementById('map-' + tipo);
+    if(!input || !mapDiv || _addressMaps[tipo]) return;
+
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+      componentRestrictions: { country: 'cl' },
+      fields: ['geometry', 'formatted_address', 'name'],
+      types: ['address']
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if(!place.geometry || !place.geometry.location) return;
+      const loc = place.geometry.location;
+      mapDiv.classList.add('visible');
+
+      let map = _addressMaps[tipo]?.map;
+      let marker = _addressMaps[tipo]?.marker;
+
+      if(!map){
+        map = new google.maps.Map(mapDiv, {
+          center: loc,
+          zoom: 16,
+          disableDefaultUI: true,
+          zoomControl: true,
+          gestureHandling: 'cooperative',
+          styles: [
+            { featureType:'poi', stylers:[{visibility:'simplified'}] },
+            { featureType:'transit', stylers:[{visibility:'off'}] }
+          ]
+        });
+        marker = new google.maps.Marker({
+          position: loc,
+          map: map,
+          draggable: true,
+          animation: google.maps.Animation.DROP
+        });
+        // Si arrastra el pin, actualizar el campo con la nueva dirección
+        marker.addListener('dragend', () => {
+          const pos = marker.getPosition();
+          const geocoder = new google.maps.Geocoder();
+          geocoder.geocode({ location: pos }, (results, status) => {
+            if(status === 'OK' && results[0]){
+              input.value = results[0].formatted_address;
+            }
+          });
+        });
+        _addressMaps[tipo] = { map, marker };
+      } else {
+        map.setCenter(loc);
+        map.setZoom(16);
+        marker.setPosition(loc);
+        marker.setAnimation(google.maps.Animation.DROP);
+      }
+    });
+  });
+}
+
+// Inicializar cuando el wizard se abra (los inputs ya están en el DOM)
+const _origOpenWizard = window.openWizard;
+window.openWizard = function(){
+  if(typeof _origOpenWizard === 'function') _origOpenWizard();
+  setTimeout(initAddressAutocomplete, 200);
+};
+
+// También intentar al cargar la página por si Maps llega antes
+window.addEventListener('load', () => {
+  setTimeout(initAddressAutocomplete, 800);
+});
+
 </script>
 </body>
 </html>
