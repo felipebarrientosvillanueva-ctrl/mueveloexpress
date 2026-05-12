@@ -451,6 +451,37 @@ footer{background:#080F19;padding:56px 60px 32px;}
 .fleet-feat{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text);font-weight:500;}
 .fleet-feat-icon{width:28px;height:28px;background:var(--red-light);color:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;}
 @media(max-width:960px){.fleet-inner{grid-template-columns:1fr;gap:32px;}.fleet-strip{padding:48px 24px;}}
+
+/* ── SECCIÓN ÚNETE A LA FLOTA (conductores tercerizados) ── */
+.partners{background:linear-gradient(135deg,#FFF5F5 0%,#FFFFFF 50%,#F8FAFC 100%);position:relative;overflow:hidden;}
+.partners::before{content:"";position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(211,47,47,.08) 0%,transparent 65%);border-radius:50%;}
+.partners-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1;}
+.partners-content .section-label{color:var(--red);}
+.partners-content h2{font-size:clamp(28px,3.8vw,44px);font-weight:900;color:var(--navy);line-height:1.15;margin-bottom:18px;letter-spacing:-1.2px;}
+.partners-content h2 em{font-style:normal;color:var(--red);}
+.partners-content p{font-size:15px;color:var(--gray);line-height:1.75;margin-bottom:24px;}
+.partners-benefits{display:flex;flex-direction:column;gap:14px;margin-bottom:32px;}
+.partner-benefit{display:flex;align-items:flex-start;gap:14px;}
+.partner-benefit-icon{width:42px;height:42px;background:var(--red);color:white;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 4px 12px rgba(211,47,47,.25);}
+.partner-benefit-text{font-size:14px;color:var(--text);line-height:1.55;}
+.partner-benefit-text strong{display:block;color:var(--navy);font-weight:800;margin-bottom:2px;font-size:15px;}
+.partners-cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--red),var(--red-dark));color:white;padding:16px 32px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;cursor:pointer;border:none;font-family:'Outfit',sans-serif;box-shadow:0 8px 24px rgba(211,47,47,.3);transition:all .2s;}
+.partners-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(211,47,47,.4);}
+.partners-visual{position:relative;}
+.partners-card{background:white;border-radius:24px;padding:32px;box-shadow:0 24px 64px rgba(0,0,0,.08);border:1px solid rgba(0,0,0,.04);position:relative;}
+.partners-card::before{content:"";position:absolute;top:0;left:32px;right:32px;height:3px;background:var(--red);border-radius:0 0 3px 3px;}
+.partners-card-tag{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.partners-card-title{font-size:22px;font-weight:900;color:var(--navy);margin-bottom:8px;letter-spacing:-.5px;}
+.partners-card-sub{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:22px;}
+.partners-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.partners-stat{text-align:center;padding:16px 8px;background:var(--gray-light);border-radius:12px;}
+.partners-stat-num{font-size:22px;font-weight:900;color:var(--red);letter-spacing:-.5px;line-height:1;}
+.partners-stat-lbl{font-size:10px;color:var(--gray);margin-top:5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+@media(max-width:960px){.partners-inner{grid-template-columns:1fr;gap:40px;}}
+
+/* ── Wizard partners ── */
+.partner-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+@media(max-width:600px){.partner-form-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -468,6 +499,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
     <a href="#equipo">Equipo</a>
     <a href="#cobertura">Cobertura</a>
     <a href="#reviews">Reseñas</a>
+    <a href="#partners" style="color:var(--red);font-weight:700;">Conductores</a>
   </div>
   <div class="nav-right">
     <span class="nav-phone">+569 34050395</span>
@@ -716,6 +748,77 @@ footer{background:#080F19;padding:56px 60px 32px;}
         <div class="fleet-feat"><div class="fleet-feat-icon">✓</div>Cinturones, mantas y huinchas profesionales</div>
         <div class="fleet-feat"><div class="fleet-feat-icon">✓</div>Seguimiento GPS en tiempo real</div>
         <div class="fleet-feat"><div class="fleet-feat-icon">✓</div>Mantención al día y revisión técnica</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ SECCIÓN ÚNETE A LA FLOTA ════ -->
+<section class="partners" id="partners">
+  <div class="section-inner">
+    <div class="partners-inner">
+      <div class="partners-content">
+        <div class="section-label">Para Conductores</div>
+        <h2>¿Tienes un camión? <em>Únete a Mueveloexpress</em></h2>
+        <p>Si eres conductor independiente con tu propio camión, te conectamos con clientes que necesitan tus servicios. Tú eliges cuándo trabajar.</p>
+        <div class="partners-benefits">
+          <div class="partner-benefit">
+            <div class="partner-benefit-icon">💼</div>
+            <div class="partner-benefit-text">
+              <strong>Trabajo constante</strong>
+              Recibe mudanzas en tu zona automáticamente vía WhatsApp.
+            </div>
+          </div>
+          <div class="partner-benefit">
+            <div class="partner-benefit-icon">💰</div>
+            <div class="partner-benefit-text">
+              <strong>Pago rápido y seguro</strong>
+              Cobras directo cuando completas el servicio. Sin esperas largas.
+            </div>
+          </div>
+          <div class="partner-benefit">
+            <div class="partner-benefit-icon">📅</div>
+            <div class="partner-benefit-text">
+              <strong>Tú eliges tu horario</strong>
+              Trabajas los días y horas que tú decidas. Total flexibilidad.
+            </div>
+          </div>
+          <div class="partner-benefit">
+            <div class="partner-benefit-icon">🛡️</div>
+            <div class="partner-benefit-text">
+              <strong>Respaldo de marca</strong>
+              Operas bajo el respaldo de Mueveloexpress, con clientes verificados.
+            </div>
+          </div>
+        </div>
+        <button class="partners-cta" onclick="openPartnerWizard()">Registrar mi camión &rarr;</button>
+      </div>
+      <div class="partners-visual">
+        <div class="partners-card">
+          <div class="partners-card-tag">REGISTRO RÁPIDO</div>
+          <div class="partners-card-title">3 pasos para empezar</div>
+          <div class="partners-card-sub">Completa el formulario, te contactamos en 24 hrs y empiezas a recibir trabajos.</div>
+          <div class="partners-stats">
+            <div class="partners-stat">
+              <div class="partners-stat-num">+50</div>
+              <div class="partners-stat-lbl">Conductores activos</div>
+            </div>
+            <div class="partners-stat">
+              <div class="partners-stat-num">24h</div>
+              <div class="partners-stat-lbl">Respuesta</div>
+            </div>
+            <div class="partners-stat">
+              <div class="partners-stat-num">$0</div>
+              <div class="partners-stat-lbl">Costo registro</div>
+            </div>
+          </div>
+          <div class="hc-steps">
+            <div class="hc-step"><div class="hc-step-num">1</div>Completa el formulario <span class="hc-step-time">~3 min</span></div>
+            <div class="hc-step"><div class="hc-step-num">2</div>Verificamos tus documentos <span class="hc-step-time">~24 hrs</span></div>
+            <div class="hc-step"><div class="hc-step-num">3</div>Empiezas a recibir mudanzas <span class="hc-step-time">¡a trabajar!</span></div>
+          </div>
+          <button class="hc-btn" onclick="openPartnerWizard()" style="margin-top:18px;">Registrar mi camión &rarr;</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1105,6 +1208,126 @@ footer{background:#080F19;padding:56px 60px 32px;}
     </div>
   </div>
 </div>
+
+<!-- ════ MODAL REGISTRO CONDUCTORES ════ -->
+<div class="wizard-overlay" id="partnerOverlay">
+  <div class="wizard-box">
+    <div class="wizard-header">
+      <div>
+        <div class="wizard-logo">Muevelo<span> Express</span></div>
+        <div class="wizard-tag" style="margin-top:4px;">Registro de conductores</div>
+      </div>
+      <button class="wizard-close" onclick="closePartnerWizard()">×</button>
+    </div>
+    <div class="wizard-progress">
+      <div class="progress-steps">
+        <div class="progress-step-dot current" id="pp-dot1"></div>
+        <div class="progress-step-dot" id="pp-dot2"></div>
+      </div>
+      <div class="progress-meta">
+        <span class="meta-step" id="partnerProgressText">Paso 1 de 2 · Tus datos</span>
+        <span class="meta-time">⏱ ~3 min</span>
+      </div>
+    </div>
+    <div class="wizard-content">
+      <!-- STEP 1: Datos del conductor -->
+      <div class="wizard-step active" id="partner-step-1">
+        <div class="wiz-step-badge"><span class="badge-icon">1</span> Conductor</div>
+        <p class="wiz-question">Cuéntanos sobre <strong>ti</strong></p>
+        <p class="wiz-sub">Datos personales del conductor. Te contactaremos por estos medios.</p>
+
+        <div class="wiz-section">
+          <div class="wiz-section-title"><span class="wiz-section-num">1</span>Datos personales</div>
+          <div class="partner-form-grid">
+            <div><label class="wiz-label">Nombre completo</label><input class="wiz-input" id="p-nombre" type="text" placeholder="Juan Pérez"></div>
+            <div><label class="wiz-label">RUT</label><input class="wiz-input" id="p-rut" type="text" placeholder="12.345.678-9"></div>
+          </div>
+          <div class="partner-form-grid">
+            <div><label class="wiz-label">Correo electrónico</label><input class="wiz-input" id="p-email" type="email" placeholder="tu@correo.com"></div>
+            <div><label class="wiz-label">Teléfono / WhatsApp</label><div class="phone-row"><div class="phone-prefix">🇨🇱 +56</div><input class="phone-input" id="p-telefono" type="tel" placeholder="9 XXXX XXXX" maxlength="9"></div></div>
+          </div>
+          <div><label class="wiz-label">Ciudad / Comuna donde resides</label><input class="wiz-input" id="p-ciudad" type="text" placeholder="Ej: Maipú, Santiago"></div>
+        </div>
+
+        <div class="wiz-section">
+          <div class="wiz-section-title"><span class="wiz-section-num">2</span>Experiencia</div>
+          <div><label class="wiz-label">¿Tienes experiencia en mudanzas?</label></div>
+          <div class="wiz-choices-compact" id="p-exp">
+            <div class="wiz-choice" onclick="selectChoice(this,'p-experiencia','si')"><div class="choice-check"></div>✓ Sí, ya hago mudanzas</div>
+            <div class="wiz-choice" onclick="selectChoice(this,'p-experiencia','no')"><div class="choice-check"></div>○ No, recién empezando</div>
+          </div>
+          <div style="margin-top:12px;"><label class="wiz-label">Años de experiencia conduciendo (opcional)</label><input class="wiz-input" id="p-anos" type="number" placeholder="Ej: 5" min="0" max="60"></div>
+        </div>
+
+        <div class="wiz-error" id="err-p1">Por favor completa nombre, RUT, email, teléfono y ciudad.</div>
+      </div>
+
+      <!-- STEP 2: Datos del camión -->
+      <div class="wizard-step" id="partner-step-2">
+        <div class="wiz-step-badge"><span class="badge-icon">2</span> Camión</div>
+        <p class="wiz-question">Sobre tu <strong>camión</strong></p>
+        <p class="wiz-sub">Estos datos son importantes para asignarte mudanzas según el tamaño y capacidad.</p>
+
+        <div class="wiz-section">
+          <div class="wiz-section-title"><span class="wiz-section-num">1</span>Tipo de camión</div>
+          <div class="wiz-choices" id="p-tipo">
+            <div class="wiz-choice" onclick="selectChoice(this,'p-tipocamion','furgon')"><div class="choice-check"></div>🚐 <strong>Furgón chico</strong> — Hasta 10 m³ (mudanzas pequeñas)</div>
+            <div class="wiz-choice" onclick="selectChoice(this,'p-tipocamion','mediano')"><div class="choice-check"></div>🚚 <strong>Camión mediano</strong> — 10 a 24 m³ (mudanzas medianas)</div>
+            <div class="wiz-choice" onclick="selectChoice(this,'p-tipocamion','grande')"><div class="choice-check"></div>🚛 <strong>Camión grande</strong> — Más de 24 m³ (mudanzas grandes)</div>
+          </div>
+        </div>
+
+        <div class="wiz-section">
+          <div class="wiz-section-title"><span class="wiz-section-num">2</span>Datos del vehículo</div>
+          <div class="partner-form-grid">
+            <div><label class="wiz-label">Marca</label><input class="wiz-input" id="p-marca" type="text" placeholder="Ej: JAC, Hyundai"></div>
+            <div><label class="wiz-label">Modelo</label><input class="wiz-input" id="p-modelo" type="text" placeholder="Ej: 1040, HD-65"></div>
+          </div>
+          <div class="partner-form-grid">
+            <div><label class="wiz-label">Año</label><input class="wiz-input" id="p-ano" type="number" placeholder="2020" min="1990" max="2030"></div>
+            <div><label class="wiz-label">Patente</label><input class="wiz-input" id="p-patente" type="text" placeholder="Ej: AABB-12" maxlength="8" style="text-transform:uppercase;"></div>
+          </div>
+          <div><label class="wiz-label">Capacidad de carga (m³ aprox.)</label><input class="wiz-input" id="p-m3" type="number" placeholder="Ej: 18" min="1" max="100"></div>
+        </div>
+
+        <div class="wiz-section">
+          <div class="wiz-section-title"><span class="wiz-section-num">3</span>Documentación al día</div>
+          <p class="wiz-section-sub">Marca los documentos que tienes vigentes.</p>
+          <div class="wiz-choices" id="p-docs">
+            <label class="wiz-choice" style="cursor:pointer;"><input type="checkbox" id="p-doc-revision" style="margin-right:4px;accent-color:var(--red);"> 📋 Revisión técnica vigente</label>
+            <label class="wiz-choice" style="cursor:pointer;"><input type="checkbox" id="p-doc-permiso" style="margin-right:4px;accent-color:var(--red);"> 📜 Permiso de circulación al día</label>
+            <label class="wiz-choice" style="cursor:pointer;"><input type="checkbox" id="p-doc-seguro" style="margin-right:4px;accent-color:var(--red);"> 🛡️ Seguro obligatorio vigente</label>
+            <label class="wiz-choice" style="cursor:pointer;"><input type="checkbox" id="p-doc-licencia" style="margin-right:4px;accent-color:var(--red);"> 🪪 Licencia clase B/C según corresponda</label>
+          </div>
+        </div>
+
+        <div class="wiz-section">
+          <div class="wiz-section-title"><span class="wiz-section-num">4</span>Disponibilidad</div>
+          <div><label class="wiz-label">¿Qué días puedes trabajar?</label></div>
+          <div class="wiz-choices-compact">
+            <div class="wiz-choice" onclick="selectChoice(this,'p-dias','semana')"><div class="choice-check"></div>📅 Lunes a Viernes</div>
+            <div class="wiz-choice" onclick="selectChoice(this,'p-dias','findesemana')"><div class="choice-check"></div>🌅 Fines de semana</div>
+            <div class="wiz-choice" onclick="selectChoice(this,'p-dias','full')" style="grid-column:span 2;"><div class="choice-check"></div>♾️ Todos los días (flexible)</div>
+          </div>
+          <div style="margin-top:12px;"><label class="wiz-label">¿En qué zonas/comunas trabajas?</label><input class="wiz-input" id="p-zonas" type="text" placeholder="Ej: RM, Las Condes, Providencia, Maipú"></div>
+          <div style="margin-top:12px;"><label class="wiz-label">Comentarios adicionales (opcional)</label><textarea class="wiz-input" id="p-comentarios" rows="3" placeholder="Cuéntanos algo más sobre ti o tu camión..." style="resize:vertical;font-family:'Outfit',sans-serif;"></textarea></div>
+        </div>
+
+        <div class="wiz-error" id="err-p2">Por favor completa el tipo de camión, marca, modelo, año, patente y al menos 1 documento.</div>
+      </div>
+
+      <!-- STEP FINAL: Confirmación -->
+      <div class="wizard-step" id="partner-step-final">
+        <div class="wiz-final" id="partnerFinalContent"></div>
+      </div>
+    </div>
+    <div class="wiz-footer" id="partnerFooter">
+      <button class="wiz-btn wiz-btn-back" id="partnerBtnBack" onclick="partnerBack()" style="display:none;">← Atrás</button>
+      <button class="wiz-btn wiz-btn-next" id="partnerBtnNext" onclick="partnerNext()">Continuar →</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let currentStep = 1;
 const totalSteps = 2;
@@ -1817,6 +2040,160 @@ function textSimilarity(str1, str2){
   let matches = 0;
   words1.forEach(w1=>{ if(words2.some(w2=> w2.includes(w1) || w1.includes(w2))) matches++; });
   return matches / Math.max(words1.length, words2.length);
+}
+
+// ════════════════════════════════════════════════════════
+// WIZARD CONDUCTORES TERCERIZADOS
+// ════════════════════════════════════════════════════════
+let partnerStep = 1;
+const partnerTotal = 2;
+function openPartnerWizard(){ document.getElementById('partnerOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closePartnerWizard(){ document.getElementById('partnerOverlay').classList.remove('open'); document.body.style.overflow=''; }
+document.getElementById('partnerOverlay').addEventListener('click', function(e){ if(e.target===this) closePartnerWizard(); });
+
+function partnerUpdateProgress(){
+  document.getElementById('pp-dot1').classList.toggle('current', partnerStep===1);
+  document.getElementById('pp-dot1').classList.toggle('done', partnerStep>1);
+  document.getElementById('pp-dot2').classList.toggle('current', partnerStep===2);
+  document.getElementById('pp-dot2').classList.toggle('done', partnerStep>2);
+  const labels = {1:'Tus datos', 2:'Tu camión'};
+  document.getElementById('partnerProgressText').textContent = `Paso ${partnerStep} de ${partnerTotal} · ${labels[partnerStep]||''}`;
+}
+function partnerShowStep(s){
+  document.querySelectorAll('#partnerOverlay .wizard-step').forEach(el=>el.classList.remove('active'));
+  const id = (s==='final') ? 'partner-step-final' : 'partner-step-'+s;
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+function partnerValidate(step){
+  const hideErr = id=>{ const e=document.getElementById(id); if(e) e.classList.remove('show'); };
+  const showErr = id=>{ const e=document.getElementById(id); if(e) e.classList.add('show'); };
+  hideErr('err-p'+step);
+  if(step===1){
+    const n = document.getElementById('p-nombre').value.trim();
+    const r = document.getElementById('p-rut').value.trim();
+    const e = document.getElementById('p-email').value.trim();
+    const t = document.getElementById('p-telefono').value.trim();
+    const c = document.getElementById('p-ciudad').value.trim();
+    if(!n || !r || !e || !t || t.length < 8 || !c){ showErr('err-p1'); return false; }
+    return true;
+  }
+  if(step===2){
+    const tipo = choices['p-tipocamion'];
+    const marca = document.getElementById('p-marca').value.trim();
+    const modelo = document.getElementById('p-modelo').value.trim();
+    const ano = document.getElementById('p-ano').value.trim();
+    const patente = document.getElementById('p-patente').value.trim();
+    const docCount = ['p-doc-revision','p-doc-permiso','p-doc-seguro','p-doc-licencia'].filter(id=>document.getElementById(id).checked).length;
+    if(!tipo || !marca || !modelo || !ano || !patente || docCount === 0){ showErr('err-p2'); return false; }
+    return true;
+  }
+  return true;
+}
+function partnerNext(){
+  if(!partnerValidate(partnerStep)) return;
+  if(partnerStep === partnerTotal){ partnerSubmit(); return; }
+  partnerStep++;
+  partnerShowStep(partnerStep);
+  partnerUpdateProgress();
+  document.getElementById('partnerBtnBack').style.display = '';
+  document.getElementById('partnerBtnNext').textContent = partnerStep === partnerTotal ? 'Enviar registro →' : 'Continuar →';
+}
+function partnerBack(){
+  if(partnerStep <= 1) return;
+  partnerStep--;
+  partnerShowStep(partnerStep);
+  partnerUpdateProgress();
+  if(partnerStep === 1) document.getElementById('partnerBtnBack').style.display = 'none';
+  document.getElementById('partnerBtnNext').textContent = partnerStep === partnerTotal ? 'Enviar registro →' : 'Continuar →';
+}
+function partnerSubmit(){
+  const docs = [];
+  if(document.getElementById('p-doc-revision').checked) docs.push('Revisión técnica');
+  if(document.getElementById('p-doc-permiso').checked) docs.push('Permiso circulación');
+  if(document.getElementById('p-doc-seguro').checked) docs.push('Seguro obligatorio');
+  if(document.getElementById('p-doc-licencia').checked) docs.push('Licencia');
+
+  const d = {
+    nombre: document.getElementById('p-nombre').value.trim(),
+    rut: document.getElementById('p-rut').value.trim(),
+    email: document.getElementById('p-email').value.trim(),
+    telefono: document.getElementById('p-telefono').value.trim(),
+    ciudad: document.getElementById('p-ciudad').value.trim(),
+    experiencia: choices['p-experiencia'] || 'no',
+    anos: document.getElementById('p-anos').value.trim() || 'No especificado',
+    tipoCamion: { furgon:'Furgón chico (≤10 m³)', mediano:'Camión mediano (10-24 m³)', grande:'Camión grande (>24 m³)' }[choices['p-tipocamion']] || '—',
+    marca: document.getElementById('p-marca').value.trim(),
+    modelo: document.getElementById('p-modelo').value.trim(),
+    ano: document.getElementById('p-ano').value.trim(),
+    patente: document.getElementById('p-patente').value.trim().toUpperCase(),
+    m3: document.getElementById('p-m3').value.trim() || 'No especificado',
+    documentos: docs.join(', ') || 'Ninguno indicado',
+    dias: { semana:'Lunes a Viernes', findesemana:'Fines de semana', full:'Todos los días' }[choices['p-dias']] || 'No especificado',
+    zonas: document.getElementById('p-zonas').value.trim() || 'No especificado',
+    comentarios: document.getElementById('p-comentarios').value.trim() || '—'
+  };
+
+  // Mensaje para WhatsApp
+  const msg = `🚛 *NUEVO REGISTRO DE CONDUCTOR*\n\n👤 *Datos personales*\nNombre: ${d.nombre}\nRUT: ${d.rut}\nEmail: ${d.email}\nTeléfono: +56${d.telefono}\nCiudad: ${d.ciudad}\nExperiencia: ${d.experiencia==='si'?'Sí':'No'} (${d.anos} años)\n\n🚚 *Camión*\nTipo: ${d.tipoCamion}\nMarca/Modelo: ${d.marca} ${d.modelo} (${d.ano})\nPatente: ${d.patente}\nCapacidad: ${d.m3} m³\n\n📋 *Documentos*: ${d.documentos}\n\n📅 *Disponibilidad*\nDías: ${d.dias}\nZonas: ${d.zonas}\n\n💬 ${d.comentarios}`;
+  const waUrl = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
+
+  // Mostrar pantalla final
+  document.getElementById('partnerFinalContent').innerHTML = `
+    <div style="text-align:center;padding:20px 0;">
+      <div style="font-size:56px;margin-bottom:12px;">✅</div>
+      <h2 style="font-size:24px;font-weight:900;color:#0F1C2E;letter-spacing:-.5px;margin-bottom:8px;">¡Registro recibido, ${d.nombre.split(' ')[0]}!</h2>
+      <p style="font-size:14px;color:#64748B;margin-bottom:20px;line-height:1.6;">Gracias por querer unirte a la flota Muevelo Express. Revisaremos tus datos y te contactaremos en <strong style="color:#0F1C2E;">menos de 24 horas</strong>.</p>
+      <div style="background:var(--gray-light);border-radius:14px;padding:18px;margin-bottom:20px;text-align:left;font-size:13px;color:var(--gray);">
+        <strong style="color:var(--navy);">Resumen del registro:</strong><br>
+        ${d.nombre} · ${d.tipoCamion}<br>
+        ${d.marca} ${d.modelo} (${d.ano}) · ${d.patente}
+      </div>
+      <a href="${waUrl}" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:white;padding:14px 24px;border-radius:12px;font-size:14.5px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:currentColor;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Confirmar por WhatsApp
+      </a>
+      <p id="partner-final-status" style="font-size:11px;color:#94a3b8;margin-top:14px;font-style:italic;">Enviando notificación...</p>
+    </div>
+  `;
+  partnerShowStep('final');
+  document.getElementById('partnerFooter').style.display = 'none';
+
+  // Enviar email (usa EmailJS si configurado)
+  if(typeof emailjs !== 'undefined' && window.EMAILJS_PUBLIC_KEY){
+    const params = {
+      tipo_solicitud: 'REGISTRO_CONDUCTOR',
+      customer_name: d.nombre,
+      customer_email: d.email,
+      customer_phone: '+56' + d.telefono,
+      rut: d.rut,
+      ciudad: d.ciudad,
+      experiencia: d.experiencia === 'si' ? 'Sí' : 'No',
+      anos_experiencia: d.anos,
+      tipo_camion: d.tipoCamion,
+      marca_modelo: d.marca + ' ' + d.modelo + ' (' + d.ano + ')',
+      patente: d.patente,
+      capacidad_m3: d.m3,
+      documentos: d.documentos,
+      disponibilidad: d.dias,
+      zonas: d.zonas,
+      comentarios: d.comentarios
+    };
+    // Solo envía al admin (no al conductor para evitar spam)
+    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_ADMIN, params)
+      .then(()=>{
+        const s = document.getElementById('partner-final-status');
+        if(s) s.textContent = '✓ Notificación enviada. Te contactaremos pronto.';
+      })
+      .catch(err=>{
+        console.warn('Email fallido (conductor):', err);
+        const s = document.getElementById('partner-final-status');
+        if(s) s.textContent = '✓ Registro recibido. Te contactaremos por WhatsApp pronto.';
+      });
+  } else {
+    const s = document.getElementById('partner-final-status');
+    if(s) s.textContent = '✓ Registro recibido. Confirma por WhatsApp para asegurar tu cupo.';
+  }
 }
 
 // Init
