@@ -3,8 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mueveloexpress — Mudanzas en Todo Chile</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- ════════ GOOGLE ANALYTICS 4 ════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2MVCETV0DB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2MVCETV0DB');
+</script>
+
+<!-- ════════ SEO ════════ -->
+<title>Mueveloexpress — Mudanzas y Fletes en Santiago | Cotiza Online</title>
+<meta name="description" content="Empresa de mudanzas en Santiago. Cotiza online en 2 minutos y recibe precio exacto. Sin pago anticipado. +1.200 familias confían en nosotros. Mudanzas, fletes y bodega.">
+<meta name="keywords" content="mudanzas santiago, mudanza chile, flete santiago, empresa de mudanzas, cotizar mudanza, mudanza barata, mudanza precio, mudanza con embalaje">
+<meta name="author" content="Mueveloexpress">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.mueveloexpress.cl/">
+<link rel="icon" type="image/png" href="logo.png">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.mueveloexpress.cl/">
+<meta property="og:title" content="Mueveloexpress — Mudanzas en Santiago a Precio Justo">
+<meta property="og:description" content="Cotiza tu mudanza online en 2 minutos. Sin pago anticipado. Equipo profesional. +1.200 familias confían.">
+<meta property="og:image" content="https://www.mueveloexpress.cl/logo.png">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mueveloexpress — Mudanzas en Santiago">
+<meta name="twitter:description" content="Cotiza tu mudanza online en 2 minutos. Sin pago anticipado. Precio justo garantizado.">
+<meta name="twitter:image" content="https://www.mueveloexpress.cl/logo.png">
+
+<!-- Schema.org para SEO local -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MovingCompany",
+  "name": "Mueveloexpress",
+  "image": "https://www.mueveloexpress.cl/logo.png",
+  "url": "https://www.mueveloexpress.cl",
+  "telephone": "+56934050395",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Santiago",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "98"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Chile"
+  }
+}
+</script>
+
+<!-- Preconnect a CDNs (mejora velocidad de carga) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://maps.googleapis.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+<!-- Fuentes (solo pesos necesarios para reducir peso) -->
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Orbitron:wght@800&display=swap" rel="stylesheet">
 <!-- ═══════════════════════════════════════════════════════════════════ -->
 <!-- CONFIGURACIÓN — credenciales y settings del sitio                   -->
 <!-- ═══════════════════════════════════════════════════════════════════ -->
@@ -23,8 +90,8 @@
 </script>
 <!-- EmailJS SDK + inicialización -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<!-- jsPDF para generar PDF de cotización -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- jsPDF para generar PDF de cotización (defer = no bloquea carga inicial) -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   if(typeof emailjs !== 'undefined'){
     emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
@@ -489,7 +556,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
 <body>
 <nav id="mainNav">
   <a href="#" class="logo" style="display:flex;align-items:center;gap:14px;margin-left:30px;">
-    <img src="logo.png" alt="Mueveloexpress" style="height:115px;object-fit:contain;">
+    <img src="logo.png" alt="Mueveloexpress logo" width="115" height="115" fetchpriority="high" style="height:115px;width:auto;object-fit:contain;">
     <div style="display:flex;flex-direction:column;gap:0;line-height:0.9;">
       <span style="font-size:30px;font-weight:900;color:#1A1A1A;letter-spacing:-1.2px;font-family:'Outfit',sans-serif;text-transform:uppercase;">MUEVELO</span>
       <span style="font-size:30px;font-weight:900;color:#D32F2F;letter-spacing:-1.2px;font-family:'Outfit',sans-serif;text-transform:uppercase;">EXPRESS</span>
@@ -714,7 +781,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
         </div>
       </div>
       <div class="team-image">
-        <img src="equipo.jpg" alt="Equipo Mueveloexpress" onerror="this.style.display='none';this.parentElement.querySelector('.team-image-placeholder').style.display='block';">
+        <img src="equipo.jpg" alt="Equipo profesional de mudanzas Mueveloexpress en Santiago" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.querySelector('.team-image-placeholder').style.display='block';">
         <div class="team-image-placeholder" style="display:none;">
           📷 Coloca tu foto del equipo aquí<br>
           <span style="font-size:11px;opacity:.7;">(equipo.jpg en /public)</span>
@@ -735,7 +802,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
 <section class="fleet-strip">
   <div class="fleet-inner">
     <div class="fleet-img">
-      <img src="camiones.jpg" alt="Flota Mueveloexpress" onerror="this.style.display='none';this.parentElement.querySelector('.fleet-img-placeholder').style.display='block';">
+      <img src="camiones.jpg" alt="Flota de camiones de mudanza Mueveloexpress" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.querySelector('.fleet-img-placeholder').style.display='block';">
       <div class="fleet-img-placeholder" style="display:none;">
         🚚 Coloca tu foto de la flota aquí<br>
         <span style="font-size:11px;opacity:.7;">(camiones.jpg en /public)</span>
@@ -1338,7 +1405,12 @@ let totalVol = 0;
 let totalItems = 0;
 const choices = {};
 
-function openWizard(){ document.getElementById('wizardOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function openWizard(){
+  document.getElementById('wizardOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  // 📊 GA4: cliente abrió el cotizador
+  if(typeof gtag === 'function') gtag('event', 'cotizar_inicio', { event_category: 'engagement', event_label: 'abrir_cotizador' });
+}
 function closeWizard(){ document.getElementById('wizardOverlay').classList.remove('open'); document.body.style.overflow=''; }
 document.getElementById('wizardOverlay').addEventListener('click',function(e){ if(e.target===this) closeWizard(); });
 
@@ -1432,7 +1504,18 @@ function validateStep(step){
 }
 function wizNext(){
   if(!validateStep(currentStep)) return;
-  if(currentStep===totalSteps){ buildFinalStep(); showStep('final'); document.getElementById('wizFooter').style.display='none'; return; }
+  if(currentStep===totalSteps){
+    buildFinalStep();
+    showStep('final');
+    document.getElementById('wizFooter').style.display='none';
+    // 📊 GA4: cliente vio los precios
+    if(typeof gtag === 'function') gtag('event', 'ver_precios', { event_category: 'engagement', event_label: 'precios_mostrados', value: 5000 });
+    return;
+  }
+  // 📊 GA4: cliente completó el cuestionario (paso 1 → 2)
+  if(currentStep === 1 && typeof gtag === 'function'){
+    gtag('event', 'cuestionario_completo', { event_category: 'engagement', event_label: 'paso_1_a_2' });
+  }
   const nextStep = currentStep+1;
   showStep(nextStep);
   currentStep = nextStep;
@@ -1700,6 +1783,21 @@ function selectPlan(planKey){
   data._planElegido = planKey;
   const planTxt = { lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planKey];
   const precio = data.precios[planKey];
+  // 📊 GA4: CONVERSIÓN PRINCIPAL — cliente eligió plan
+  if(typeof gtag === 'function'){
+    gtag('event', 'elegir_plan', {
+      event_category: 'conversion',
+      event_label: planKey,
+      plan_nombre: planTxt,
+      value: precio.total,
+      currency: 'CLP'
+    });
+    gtag('event', 'generate_lead', {
+      event_category: 'conversion',
+      value: precio.total,
+      currency: 'CLP'
+    });
+  }
   const tipoServ = (data.tipoServicio||'mudanza').toUpperCase();
   const msg = `Hola Mueveloexpress! Quiero confirmar mi cotización:\n\n👤 ${data.nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan elegido: *${planTxt}*\n💰 *Total: ${fmtCLP(precio.total)}*\n📅 Fecha: ${data.fecha}\n📍 ${data.origen.tipo} · ${data.origen.direccion}\n🎯 ${data.destino.tipo} · ${data.destino.direccion}\n📊 ${data.volumenTotal.toFixed(1)} m³ · ${data.itemsTotal} ítems\n✉️ ${data.email}\n📱 +56${data.telefono}`;
   const waUrl = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
@@ -2049,7 +2147,12 @@ function textSimilarity(str1, str2){
 // ════════════════════════════════════════════════════════
 let partnerStep = 1;
 const partnerTotal = 2;
-function openPartnerWizard(){ document.getElementById('partnerOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function openPartnerWizard(){
+  document.getElementById('partnerOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  // 📊 GA4: conductor abrió el formulario
+  if(typeof gtag === 'function') gtag('event', 'conductor_inicio', { event_category: 'engagement', event_label: 'abrir_formulario_conductor' });
+}
 function closePartnerWizard(){ document.getElementById('partnerOverlay').classList.remove('open'); document.body.style.overflow=''; }
 document.getElementById('partnerOverlay').addEventListener('click', function(e){ if(e.target===this) closePartnerWizard(); });
 
@@ -2161,6 +2264,11 @@ function partnerSubmit(){
   `;
   partnerShowStep('final');
   document.getElementById('partnerFooter').style.display = 'none';
+
+  // 📊 GA4: CONVERSIÓN — conductor completó registro
+  if(typeof gtag === 'function'){
+    gtag('event', 'registro_conductor', { event_category: 'conversion', event_label: d.tipoCamion });
+  }
 
   // Abrir WhatsApp automáticamente después de un breve momento (para que el usuario vea el resumen)
   setTimeout(()=>{
