@@ -1505,16 +1505,29 @@ function selectPlan(planKey){
 // ════════════════════════════════════════════════════════
 // GENERAR PDF DE COTIZACIÓN
 // ════════════════════════════════════════════════════════
-function descargarPDF(){
-  const data = window._cotizacionData;
-  if(!data) return alert('No hay cotización para descargar.');
-  if(typeof window.jspdf === 'undefined') return alert('PDF no disponible. Recarga la página.');
+window.descargarPDF = function(){
+  try {
+    const data = window._cotizacionData;
+    if(!data){ alert('No hay cotización para descargar.'); return; }
+    // jsPDF UMD expone tanto window.jspdf como window.jsPDF
+    const jsPDFConstructor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+    if(!jsPDFConstructor){
+      console.error('jsPDF no disponible. window.jspdf=', window.jspdf, 'window.jsPDF=', window.jsPDF);
+      alert('La librería de PDF no se cargó. Verifica tu conexión y recarga la página (Cmd+Shift+R).');
+      return;
+    }
+    generarPDF(data, jsPDFConstructor);
+  } catch(err){
+    console.error('Error al generar PDF:', err);
+    alert('Error al generar el PDF: ' + err.message + '\n\nRevisa la consola del navegador (F12) para más detalles.');
+  }
+};
 
+function generarPDF(data, jsPDF){
   const planKey = data._planElegido || 'smart';
   const planTxt = { lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planKey];
   const precio = data.precios[planKey];
 
-  const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
   const W = doc.internal.pageSize.getWidth();
   const RED = [211, 47, 47];
