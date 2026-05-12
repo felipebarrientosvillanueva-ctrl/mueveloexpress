@@ -5,6 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mueveloexpress — Mudanzas en Todo Chile</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- CONFIGURACIÓN — credenciales y settings del sitio                   -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<script>
+  // País actual del sitio (CL = Chile)
+  window.MUEVELO_COUNTRY = 'CL';
+  // API key de Google Maps — Distance Matrix + Places Autocomplete
+  window.GOOGLE_MAPS_API_KEY = 'AIzaSyC2ishtb5-FQEjMegq841hRsvoF3j1az-I';
+  // EmailJS — credenciales del servicio de envío de correos
+  window.EMAILJS_PUBLIC_KEY    = 'FtOrMqehgYbWvNCRR';
+  window.EMAILJS_SERVICE_ID    = 'service_91g9gos';
+  window.EMAILJS_TPL_CLIENTE   = 'template_j7jzanp';
+  window.EMAILJS_TPL_ADMIN     = 'template_975jzsa';
+</script>
+<!-- EmailJS SDK + inicialización -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  if(typeof emailjs !== 'undefined'){
+    emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
+  }
+</script>
+<!-- Google Maps API (con Places + Distance Matrix) -->
+<script>
+(function loadGoogleMaps(){
+  if(!window.GOOGLE_MAPS_API_KEY || window.GOOGLE_MAPS_API_KEY === 'TU_API_KEY_AQUI'){
+    console.warn('[Mueveloexpress] Google Maps API key no configurada — usando heurística para distancias.');
+    return;
+  }
+  // Handler global para errores de Google Maps (API key inválida, sin facturación, etc.)
+  window.gm_authFailure = function(){
+    console.error('[Mueveloexpress] Google Maps authentication failed. Revisar API key en console.cloud.google.com');
+    window._gmapsFailed = true;
+  };
+  const s = document.createElement('script');
+  s.src = 'https://maps.googleapis.com/maps/api/js?key=' + window.GOOGLE_MAPS_API_KEY + '&libraries=places&loading=async&callback=onGoogleMapsLoaded';
+  s.async = true; s.defer = true;
+  s.onerror = function(){
+    console.error('[Mueveloexpress] No se pudo cargar Google Maps script (error de red o bloqueo).');
+    window._gmapsFailed = true;
+  };
+  document.head.appendChild(s);
+})();
+window.onGoogleMapsLoaded = function(){
+  console.log('[Mueveloexpress] Google Maps cargado correctamente ✓');
+  if(typeof initAddressAutocomplete === 'function') initAddressAutocomplete();
+};
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -79,8 +126,10 @@ h2.section-title{font-size:clamp(30px,4vw,48px);font-weight:900;color:var(--navy
 .services{background:var(--gray-light);}
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
 .services-plans{grid-template-columns:repeat(3,1fr);}
-@media(max-width:960px){.services-plans{grid-template-columns:1fr;gap:24px;}}
-@media(max-width:600px){.services-plans{grid-template-columns:1fr;gap:20px;}.services-plans .service-card{min-height:auto;padding:28px 24px;}}
+.services-plans{padding-top:14px;}
+.services-plans .service-card{overflow:visible;}
+@media(max-width:960px){.services-plans{grid-template-columns:1fr;gap:32px;padding-top:14px;}}
+@media(max-width:600px){.services-plans{grid-template-columns:1fr;gap:28px;padding-top:14px;}.services-plans .service-card{min-height:auto;padding:28px 24px;}}
 .service-card{background:white;border-radius:18px;padding:32px;border:1.5px solid var(--border);transition:all .3s;position:relative;overflow:hidden;}
 .service-card::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform .3s;transform-origin:left;}
 .service-card:hover{border-color:transparent;box-shadow:0 12px 40px rgba(0,0,0,.09);transform:translateY(-4px);}
@@ -211,6 +260,37 @@ footer{background:#080F19;padding:56px 60px 32px;}
 .inventory-search-input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(211,47,47,.08);}
 .inv-no-results{padding:24px;text-align:center;font-size:14px;color:var(--gray);font-style:italic;display:none;}
 .inv-no-results.show{display:block;}
+
+/* ── Plan cards (paso final con precios) ── */
+.plan-cards{display:grid;grid-template-columns:1fr;gap:14px;margin:24px 0;}
+@media(min-width:640px){.plan-cards{grid-template-columns:1fr 1fr 1fr;}}
+.plan-card{background:white;border:2px solid var(--border);border-radius:18px;padding:24px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;display:flex;flex-direction:column;}
+.plan-card:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 12px 32px rgba(211,47,47,.12);}
+.plan-card.selected{border-color:var(--red);background:var(--red-light);}
+.plan-card.popular{border-color:var(--red);box-shadow:0 8px 28px rgba(211,47,47,.18);}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--red);color:white;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;text-transform:uppercase;}
+.plan-name{font-size:17px;font-weight:900;color:var(--navy);margin-bottom:6px;letter-spacing:-.3px;}
+.plan-desc{font-size:12px;color:var(--gray);margin-bottom:16px;line-height:1.5;min-height:32px;}
+.plan-price{font-size:28px;font-weight:900;color:var(--red);letter-spacing:-1px;margin-bottom:14px;line-height:1;}
+.plan-includes{font-size:11px;color:var(--gray);margin-bottom:16px;text-align:left;flex:1;list-style:none;padding:0;}
+.plan-includes li{padding:3px 0;display:flex;align-items:flex-start;gap:6px;}
+.plan-includes li::before{content:"✓";color:var(--red);font-weight:900;flex-shrink:0;}
+.plan-btn{background:white;color:var(--navy);padding:10px 16px;border:1.5px solid var(--navy);border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;width:100%;font-family:'Outfit',sans-serif;}
+.plan-card.popular .plan-btn{background:var(--red);color:white;border-color:var(--red);}
+.plan-card:hover .plan-btn{background:var(--navy);color:white;}
+.plan-card.popular:hover .plan-btn{background:var(--red-dark);}
+.wiz-final-summary{background:var(--gray-light);border-radius:12px;padding:16px;margin:16px 0;font-size:13px;color:var(--gray);}
+.wiz-final-summary strong{color:var(--navy);}
+
+/* ── Map preview para autocompletar direcciones ── */
+.address-map{height:180px;border-radius:14px;margin-top:12px;background:#F1F5F9;display:none;overflow:hidden;border:1px solid var(--border);}
+.address-map.visible{display:block;animation:mapFadeIn .35s ease-out;}
+@keyframes mapFadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.pac-container{border-radius:12px;border:1px solid #E2E8F0;box-shadow:0 8px 24px rgba(0,0,0,.08);font-family:'Outfit',sans-serif;margin-top:4px;}
+.pac-item{padding:10px 14px;border-top:1px solid #F1F5F9;font-size:13px;cursor:pointer;}
+.pac-item:hover,.pac-item-selected{background:rgba(211,47,47,.05);}
+.pac-icon{display:none;}
+.pac-item-query{color:var(--navy);font-weight:600;font-size:14px;}
 .wiz-choices{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
 .wiz-choice{border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:14px;font-size:14.5px;font-weight:500;color:var(--text);transition:all .2s;background:white;box-shadow:0 1px 2px rgba(0,0,0,.02);position:relative;}
 .wiz-choice:hover{border-color:var(--red);transform:translateX(4px);box-shadow:0 4px 14px rgba(211,47,47,.08);}
@@ -399,6 +479,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
   <div class="nav-links">
     <a href="#servicios">Servicios</a>
     <a href="#como-funciona">Como funciona</a>
+    <a href="#equipo">Equipo</a>
     <a href="#cobertura">Cobertura</a>
     <a href="#reviews">Reseñas</a>
   </div>
@@ -444,22 +525,6 @@ footer{background:#080F19;padding:56px 60px 32px;}
     </div>
   </div>
 </section>
-<div class="stats-strip">
-  <div class="stats-inner">
-    <div class="stat-box"><div class="num">96<span>%</span></div><div class="lbl">Clientes satisfechos</div></div>
-    <div class="stat-box"><div class="num">1.200<span>+</span></div><div class="lbl">Mudanzas realizadas</div></div>
-    <div class="stat-box"><div class="num">15<span>+</span></div><div class="lbl">Ciudades en Chile</div></div>
-    <div class="stat-box"><div class="num">2<span>min</span></div><div class="lbl">Para recibir cotización</div></div>
-  </div>
-</div>
-<div class="trust-bar">
-  <div class="trust-bar-inner">
-    <div class="trust-item">&#10003; Sin pago por adelantado</div>
-    <div class="trust-item">&#128221; Presupuesto sin letra chica</div>
-    <div class="trust-item">&#127919; Nos adaptamos a tu necesidad</div>
-    <div class="trust-item">&#9200; Puntualidad garantizada</div>
-  </div>
-</div>
 
 <!-- ════ BANNER ANIMADO CAMIÓN + BANDERA ════ -->
 <div class="truck-banner">
@@ -506,6 +571,24 @@ footer{background:#080F19;padding:56px 60px 32px;}
     </div>
   </div>
 </div>
+
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-box"><div class="num">96<span>%</span></div><div class="lbl">Clientes satisfechos</div></div>
+    <div class="stat-box"><div class="num">1.200<span>+</span></div><div class="lbl">Mudanzas realizadas</div></div>
+    <div class="stat-box"><div class="num">15<span>+</span></div><div class="lbl">Ciudades en Chile</div></div>
+    <div class="stat-box"><div class="num">2<span>min</span></div><div class="lbl">Para recibir cotización</div></div>
+  </div>
+</div>
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item">&#10003; Sin pago por adelantado</div>
+    <div class="trust-item">&#128221; Presupuesto sin letra chica</div>
+    <div class="trust-item">&#127919; Nos adaptamos a tu necesidad</div>
+    <div class="trust-item">&#9200; Puntualidad garantizada</div>
+  </div>
+</div>
+
 <section class="services" id="servicios">
   <div class="section-inner">
     <div class="section-label">Nuestros Servicios</div>
@@ -526,8 +609,8 @@ footer{background:#080F19;padding:56px 60px 32px;}
         </div>
       </div>
 
-      <div class="service-card" style="display:flex;flex-direction:column;border-color:var(--red);box-shadow:0 12px 40px rgba(211,47,47,.12);position:relative;">
-        <div style="position:absolute;top:-12px;right:20px;background:var(--red);color:white;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;">Más popular</div>
+      <div class="service-card" style="display:flex;flex-direction:column;border-color:var(--red);box-shadow:0 12px 40px rgba(211,47,47,.12);position:relative;overflow:visible;">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--red);color:white;font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 12px rgba(211,47,47,.35);z-index:5;">Más popular</div>
         <div class="sc-icon">&#128230;</div>
         <div style="display:inline-block;background:var(--red-light);color:var(--red);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;align-self:flex-start;margin-bottom:12px;">Recomendado</div>
         <div class="sc-title" style="font-size:22px;">Muevelo Smart</div>
@@ -588,7 +671,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
   </div>
 </section>
 <!-- ════ SECCIÓN EQUIPO ════ -->
-<section class="team">
+<section class="team" id="equipo">
   <div class="section-inner">
     <div class="team-inner">
       <div class="team-content">
@@ -611,7 +694,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
         </div>
       </div>
       <div class="team-image">
-        <img src="/equipo.jpg" alt="Equipo Mueveloexpress" onerror="this.style.display='none';this.parentElement.querySelector('.team-image-placeholder').style.display='block';">
+        <img src="equipo.jpg" alt="Equipo Mueveloexpress" onerror="this.style.display='none';this.parentElement.querySelector('.team-image-placeholder').style.display='block';">
         <div class="team-image-placeholder" style="display:none;">
           📷 Coloca tu foto del equipo aquí<br>
           <span style="font-size:11px;opacity:.7;">(equipo.jpg en /public)</span>
@@ -632,7 +715,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
 <section class="fleet-strip">
   <div class="fleet-inner">
     <div class="fleet-img">
-      <img src="/camiones.jpg" alt="Flota Mueveloexpress" onerror="this.style.display='none';this.parentElement.querySelector('.fleet-img-placeholder').style.display='block';">
+      <img src="camiones.jpg" alt="Flota Mueveloexpress" onerror="this.style.display='none';this.parentElement.querySelector('.fleet-img-placeholder').style.display='block';">
       <div class="fleet-img-placeholder" style="display:none;">
         🚚 Coloca tu foto de la flota aquí<br>
         <span style="font-size:11px;opacity:.7;">(camiones.jpg en /public)</span>
@@ -824,6 +907,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
           <div><label class="wiz-label">Tipo</label><select class="wiz-select" id="sel-origen-tipo"><option value="">Selecciona...</option><option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option></select></div>
           <div><label class="wiz-label">Dirección</label><input class="wiz-input" id="inp-origen-dir" type="text" placeholder="Ej: Av. Providencia 1234, Santiago"></div>
         </div>
+        <div class="address-map" id="map-origen"></div>
         <div class="wiz-subrow" id="subrow-origen" style="display:none;margin-top:12px;">
           <div><label class="wiz-label">N° Depto / Oficina</label><input class="wiz-input" id="inp-origen-num" type="text" placeholder="Ej: 305"></div>
           <div><label class="wiz-label">Piso</label><input class="wiz-input" id="inp-origen-piso" type="number" placeholder="Ej: 3" min="1"></div>
@@ -839,6 +923,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
           <div><label class="wiz-label">Tipo</label><select class="wiz-select" id="sel-destino-tipo"><option value="">Selecciona...</option><option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option></select></div>
           <div><label class="wiz-label">Dirección</label><input class="wiz-input" id="inp-destino-dir" type="text" placeholder="Ej: Las Condes 5678, Santiago"></div>
         </div>
+        <div class="address-map" id="map-destino"></div>
         <div class="wiz-subrow" id="subrow-destino" style="display:none;margin-top:12px;">
           <div><label class="wiz-label">N° Depto / Oficina</label><input class="wiz-input" id="inp-destino-num" type="text" placeholder="Ej: 102"></div>
           <div><label class="wiz-label">Piso</label><input class="wiz-input" id="inp-destino-piso" type="number" placeholder="Ej: 1" min="1"></div>
@@ -1023,17 +1108,9 @@ footer{background:#080F19;padding:56px 60px 32px;}
         </div>
       </div>
     </div>
-    <!-- STEP FINAL -->
+    <!-- STEP FINAL: 3 planes con precios -->
     <div class="wizard-step" id="step-final">
-      <div class="wiz-final">
-        <div class="wiz-final-icon">🎉</div>
-        <h2 id="final-title">¡Listo!</h2>
-        <p id="final-msg">Recibimos tu solicitud. Nuestro equipo te enviará el presupuesto al WhatsApp y correo que nos dejaste en menos de 1 hora.</p>
-        <a id="final-wa-link" href="#" target="_blank" class="wiz-final-wa">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-          Hablar por WhatsApp ahora
-        </a>
-      </div>
+      <div class="wiz-final" id="finalContent"></div>
     </div>
     </div><!-- /wizard-content -->
     <div class="wiz-footer" id="wizFooter">
@@ -1165,68 +1242,265 @@ function showStep(s){
   const target = s==='final' ? document.getElementById('step-final') : document.getElementById('step-'+s);
   if(target) target.classList.add('active');
 }
+// ════════════════════════════════════════════════════════
+// MOTOR DE CÁLCULO DE PRECIO (frontend, sin servidor)
+// Tarifas persistidas en localStorage. Panel admin con ?admin=1.
+// ════════════════════════════════════════════════════════
+const TARIFAS_DEFAULT = {
+  baseChico:   20000, baseMedio:   15000, baseGrande:  10000,
+  precioM3:    10000, m3Min: 3, precioKm: 500, kmGratis: 15,
+  bajadaPiso:   3000, subidaPiso:   3000,
+  recargoDelicado: 0.05,
+  recargoEstacionamientoLejos: 10000,
+  recargoEstacionamientoSubterraneo: 15000,
+  tramos: [
+    { desde: 0,  hasta: 10,   factor: 0 },
+    { desde: 10, hasta: 20,   factor: 0 },
+    { desde: 20, hasta: 30,   factor: 0 },
+    { desde: 30, hasta: 40,   factor: 0 },
+    { desde: 40, hasta: null, factor: 0 }
+  ]
+};
+function loadTarifas(){
+  try { const t = localStorage.getItem('mvx_tarifas'); if(t) return Object.assign({}, TARIFAS_DEFAULT, JSON.parse(t)); } catch(e){}
+  return TARIFAS_DEFAULT;
+}
+function saveTarifas(t){ localStorage.setItem('mvx_tarifas', JSON.stringify(t)); }
+let TARIFAS = loadTarifas();
+
+// Heurística simple para distancia (fallback si Google Maps no carga)
+function estimarKm(origenDir, destinoDir){
+  const norm = s => (s||'').toLowerCase().replace(/[^a-záéíóúñ\s]/g,'').trim();
+  const o = norm(origenDir), d = norm(destinoDir);
+  if(!o || !d) return 8;
+  const sharedComuna = o.split(/\s+/).some(w => w.length > 4 && d.includes(w));
+  if(sharedComuna) return 8;
+  const rmKeywords = ['santiago','providencia','las condes','ñuñoa','vitacura','la reina','macul','maipú','puente alto','la florida','peñalolén','san miguel','quilicura','independencia','recoleta','colina','lo barnechea','huechuraba'];
+  const oRM = rmKeywords.some(k=>o.includes(k));
+  const dRM = rmKeywords.some(k=>d.includes(k));
+  if(oRM && dRM) return 25;
+  if(oRM !== dRM) return 80;
+  return 50;
+}
+// Distancia REAL via Google Maps Distance Matrix
+async function estimarKmGoogle(origenDir, destinoDir){
+  if(!window.google || !window.google.maps || !window.google.maps.DistanceMatrixService){
+    return estimarKm(origenDir, destinoDir);
+  }
+  try {
+    const service = new google.maps.DistanceMatrixService();
+    const result = await new Promise((resolve, reject) => {
+      service.getDistanceMatrix({
+        origins: [origenDir + ', Chile'],
+        destinations: [destinoDir + ', Chile'],
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC
+      }, (response, status) => {
+        if(status === 'OK' && response.rows[0].elements[0].status === 'OK'){
+          resolve(Math.round(response.rows[0].elements[0].distance.value / 1000));
+        } else { reject(status); }
+      });
+    });
+    return result;
+  } catch(err){ console.warn('Google Maps falló, usando heurística:', err); return estimarKm(origenDir, destinoDir); }
+}
+
+function getPisos(tipoUbicacion, pisoVal, ascensorVal, ascSeleccionado){
+  const piso = parseInt(pisoVal) || 0;
+  if(piso === 0) return 0;
+  if(tipoUbicacion === 'Casa') return 0;
+  const sinAscensor = (ascensorVal||'').toLowerCase().includes('no');
+  if(sinAscensor) return piso;
+  if(ascSeleccionado && ascSeleccionado.toLowerCase().includes('algunas')) return Math.ceil(piso/2);
+  return 0;
+}
+
+function calcularPrecio(opts){
+  const T = TARIFAS;
+  const m3 = Math.max(0, opts.m3 || 0);
+  const km = opts.km || 8;
+  const pisosOrigen = opts.pisosOrigen || 0;
+  const pisosDestino = opts.pisosDestino || 0;
+  const efectivoM3 = Math.max(m3, T.m3Min);
+  let baseCamion, camionLabel;
+  if(m3 <= 10){ baseCamion = T.baseChico; camionLabel = 'Furgón chico'; }
+  else if(m3 <= 24){ baseCamion = T.baseMedio; camionLabel = 'Camión mediano'; }
+  else { baseCamion = T.baseGrande; camionLabel = 'Camión grande'; }
+  const tramo = T.tramos.find(t => t.hasta === null || m3 <= t.hasta) || T.tramos[T.tramos.length-1];
+  const factorTramo = tramo.factor;
+  const costoVolumen = efectivoM3 * T.precioM3;
+  const kmExcedente = Math.max(0, km - T.kmGratis);
+  const costoDistancia = kmExcedente * T.precioKm;
+  const costoBajada = pisosOrigen * T.bajadaPiso;
+  const costoSubida = pisosDestino * T.subidaPiso;
+  let recargoDelicado = 0;
+  if(opts.delicado === 'si'){ recargoDelicado = Math.round((baseCamion + factorTramo + costoVolumen) * T.recargoDelicado); }
+  let recargoEstac = 0;
+  if((opts.estacOrigen||'').includes('mas40') || (opts.estacDestino||'').includes('mas40')){ recargoEstac += T.recargoEstacionamientoLejos; }
+  if((opts.estacOrigen||'').includes('subterraneo') || (opts.estacDestino||'').includes('subterraneo')){ recargoEstac += T.recargoEstacionamientoSubterraneo; }
+  const PLAN_MULT = { lite: 1.0, smart: 1.45, pro: 2.0 };
+  const planMult = PLAN_MULT[opts.plan] || 1.0;
+  const subtotal = baseCamion + factorTramo + costoVolumen + costoDistancia + costoBajada + costoSubida + recargoDelicado + recargoEstac;
+  const total = Math.round(subtotal * planMult);
+  return { camionLabel, baseCamion, factorTramo, costoVolumen, costoDistancia, costoBajada, costoSubida, recargoDelicado, recargoEstac, subtotal, total, m3, efectivoM3, km };
+}
+function fmtCLP(n){ return '$' + Math.round(n).toLocaleString('es-CL'); }
+
+// EmailJS — envío de correos cliente + admin
+function enviarCorreosCotizacion(d){
+  if(typeof emailjs === 'undefined' || !window.EMAILJS_PUBLIC_KEY){
+    console.warn('EmailJS no disponible — saltando envío'); return;
+  }
+  const invList = Object.entries(d.inventario || {}).map(([item, qty]) => qty + '× ' + item).join('\n') || '(sin ítems)';
+  const params = {
+    customer_name:  d.nombre,
+    customer_email: d.email,
+    customer_phone: '+56' + (d.telefono || ''),
+    fecha:    d.fecha || 'A coordinar',
+    origen:   (d.origen?.tipo || '') + ' · ' + (d.origen?.direccion || ''),
+    destino:  (d.destino?.tipo || '') + ' · ' + (d.destino?.direccion || ''),
+    volumen:  (d.volumenTotal || 0).toFixed(1),
+    items:    d.itemsTotal || 0,
+    precio_lite:  fmtCLP(d.precios?.lite?.total  || 0),
+    precio_smart: fmtCLP(d.precios?.smart?.total || 0),
+    precio_pro:   fmtCLP(d.precios?.pro?.total   || 0),
+    inventario_detallado: invList
+  };
+  const status = document.getElementById('final-status');
+  Promise.all([
+    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_CLIENTE, params),
+    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_ADMIN,   params)
+  ]).then(() => {
+    if(status) status.textContent = '✓ Cotización enviada a ' + d.email + '. Revisa tu correo.';
+  }).catch(err => {
+    console.error('Error EmailJS:', err);
+    if(status) status.textContent = '⚠️ No pudimos enviar el correo automático. Por favor confirma por WhatsApp.';
+  });
+}
+
 async function buildFinalStep(){
   const nombre = document.getElementById('inp-nombre').value+' '+document.getElementById('inp-apellido').value;
   const fecha = document.getElementById('inp-fecha').value;
   const origenTipo = document.getElementById('sel-origen-tipo').value;
   const origenDir = document.getElementById('inp-origen-dir').value;
-  const origenNum = document.getElementById('inp-origen-num').value;
-  const origenPiso = document.getElementById('inp-origen-piso').value;
-  const origenAsc = document.getElementById('sel-origen-asc').value;
+  const origenNum = (document.getElementById('inp-origen-num')||{}).value || '';
+  const origenPiso = (document.getElementById('inp-origen-piso')||{}).value || '';
+  const origenAsc = (document.getElementById('sel-origen-asc')||{}).value || '';
   const destinoTipo = document.getElementById('sel-destino-tipo').value;
   const destinoDir = document.getElementById('inp-destino-dir').value;
-  const destinoNum = document.getElementById('inp-destino-num').value;
-  const destinoPiso = document.getElementById('inp-destino-piso').value;
-  const destinoAsc = document.getElementById('sel-destino-asc').value;
+  const destinoNum = (document.getElementById('inp-destino-num')||{}).value || '';
+  const destinoPiso = (document.getElementById('inp-destino-piso')||{}).value || '';
+  const destinoAsc = (document.getElementById('sel-destino-asc')||{}).value || '';
   const email = document.getElementById('inp-email').value;
   const tel = document.getElementById('inp-telefono').value;
+  const tipoServVal = choices['tipo-servicio'] || 'mudanza';
+  const delicadoVal = choices['delicado'] || 'no';
+  const estacOrig = choices['estac-orig'] || '';
+  const estacDest = choices['estac-dest'] || '';
 
-  const ascOrigSelected = document.querySelector('[onclick*="asc-orig"][onclick*="selectChoice"].wiz-choice.selected');
-  const ascDestSelected = document.querySelector('[onclick*="asc-dest"][onclick*="selectChoice"].wiz-choice.selected');
-  const delicadoSelected = document.querySelector('[onclick*="delicado"][onclick*="selectChoice"].wiz-choice.selected');
-  const estacOrigSelected = document.querySelector('[onclick*="estac-orig"][onclick*="selectChoice"].wiz-choice.selected');
-  const estacDestSelected = document.querySelector('[onclick*="estac-dest"][onclick*="selectChoice"].wiz-choice.selected');
+  const km = await estimarKmGoogle(origenDir, destinoDir);
+  const pisosOrigen = getPisos(origenTipo, origenPiso, origenAsc, choices['asc-orig']||'');
+  const pisosDestino = getPisos(destinoTipo, destinoPiso, destinoAsc, '');
 
-  const formData = {
-    nombre,
-    tipoServicio: choices['tipo-servicio'] || 'mudanza',
-    plan: choices['plan'] || 'lite',
-    fecha,
-    origen: { tipo: origenTipo, direccion: origenDir, numero: origenNum, piso: origenPiso, ascensor: origenAsc, ascSeleccionado: ascOrigSelected?.textContent || 'no' },
-    destino: { tipo: destinoTipo, direccion: destinoDir, numero: destinoNum, piso: destinoPiso, ascensor: destinoAsc, ascSeleccionado: ascDestSelected?.textContent || 'no' },
-    delicado: delicadoSelected?.textContent.includes('Sí') ? 'si' : 'no',
-    estacionamiento: { origen: estacOrigSelected?.textContent || 'no', destino: estacDestSelected?.textContent || 'no' },
-    email,
-    telefono: tel,
-    inventario: getInventoryData(),
-    volumenTotal: totalVol,
-    itemsTotal: totalItems
+  const baseOpts = { m3: totalVol, km, pisosOrigen, pisosDestino, delicado: delicadoVal, estacOrigen: estacOrig, estacDestino: estacDest };
+  const precios = {
+    lite:  calcularPrecio(Object.assign({}, baseOpts, {plan:'lite'})),
+    smart: calcularPrecio(Object.assign({}, baseOpts, {plan:'smart'})),
+    pro:   calcularPrecio(Object.assign({}, baseOpts, {plan:'pro'}))
   };
 
-  document.getElementById('final-title').textContent = `¡Listo, ${nombre.split(' ')[0]}! 🎉`;
-  document.getElementById('final-msg').textContent = `Procesando tu cotización...`;
+  window._cotizacionData = {
+    nombre, tipoServicio: tipoServVal, fecha,
+    origen: { tipo: origenTipo, direccion: origenDir, numero: origenNum, piso: origenPiso, ascensor: origenAsc, estacionamiento: estacOrig },
+    destino: { tipo: destinoTipo, direccion: destinoDir, numero: destinoNum, piso: destinoPiso, ascensor: destinoAsc, estacionamiento: estacDest },
+    delicado: delicadoVal,
+    email, telefono: tel,
+    inventario: getInventoryData(),
+    volumenTotal: totalVol, itemsTotal: totalItems,
+    km, pisosOrigen, pisosDestino,
+    precios
+  };
 
-  try {
-    const response = await fetch('/api/cotizar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
+  document.getElementById('finalContent').innerHTML = `
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="font-size:42px;margin-bottom:4px;">🎉</div>
+      <h2 style="font-size:24px;font-weight:900;color:#0F1C2E;letter-spacing:-.5px;">¡Listo, ${nombre.split(' ')[0]}!</h2>
+      <p style="font-size:14px;color:#64748B;margin-top:4px;">Elige el plan que mejor se ajusta a ti</p>
+    </div>
+    <div class="plan-cards">
+      <div class="plan-card" onclick="selectPlan('lite')">
+        <div class="plan-name">Muevelo Lite</div>
+        <div class="plan-desc">Lo esencial para mover tus cosas</div>
+        <div class="plan-price">${fmtCLP(precios.lite.total)}</div>
+        <ul class="plan-includes">
+          <li>Carga de muebles</li>
+          <li>Traslado seguro</li>
+          <li>Descarga en destino</li>
+        </ul>
+        <button class="plan-btn">Elegir Lite</button>
+      </div>
+      <div class="plan-card popular" onclick="selectPlan('smart')">
+        <div class="plan-badge">Más popular</div>
+        <div class="plan-name">Muevelo Smart</div>
+        <div class="plan-desc">Lo más elegido por nuestros clientes</div>
+        <div class="plan-price">${fmtCLP(precios.smart.total)}</div>
+        <ul class="plan-includes">
+          <li>Todo lo de Lite</li>
+          <li>Embalaje básico de muebles</li>
+          <li>Materiales incluidos</li>
+        </ul>
+        <button class="plan-btn">Elegir Smart</button>
+      </div>
+      <div class="plan-card" onclick="selectPlan('pro')">
+        <div class="plan-name">Muevelo Pro</div>
+        <div class="plan-desc">Servicio completo, tú no haces nada</div>
+        <div class="plan-price">${fmtCLP(precios.pro.total)}</div>
+        <ul class="plan-includes">
+          <li>Todo lo de Smart</li>
+          <li>Empaque en cajas</li>
+          <li>Cuidado premium muebles</li>
+        </ul>
+        <button class="plan-btn">Elegir Pro</button>
+      </div>
+    </div>
+    <div class="wiz-final-summary">
+      <strong>Resumen:</strong> ${totalVol.toFixed(1)} m³ · ${totalItems} ítems · ${km} km estimados<br>
+      <strong>${origenTipo} en ${origenDir.split(',')[0]}</strong> → <strong>${destinoTipo} en ${destinoDir.split(',')[0]}</strong>
+    </div>
+    <p id="final-status" style="font-size:11px;color:#94a3b8;text-align:center;font-style:italic;">Estos son precios estimados. El precio final se confirma con un asesor antes del servicio.</p>
+  `;
 
-    if(response.ok) {
-      const result = await response.json();
-      document.getElementById('final-msg').textContent = `✅ ¡Excelente! Te enviaremos el presupuesto a ${email} y al +56${tel} en menos de 1 hora.`;
-      const tipoServ = (choices['tipo-servicio']||'mudanza').toUpperCase();
-      const planTxt = { lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[choices['plan']||'lite'];
-      const msg = `Hola Mueveloexpress! Quiero cotizar un servicio:\n\n👤 Nombre: ${nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan: ${planTxt}\n📅 Fecha estimada: ${fecha}\n📍 Origen: ${origenTipo} · ${origenDir}\n📦 Destino: ${destinoTipo} · ${destinoDir}\n📊 Volumen estimado: ${totalVol.toFixed(1)} m³ (${totalItems} ítems)\n✉️ Email: ${email}\n📱 Teléfono: +56${tel}`;
-      document.getElementById('final-wa-link').href = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
-    } else {
-      document.getElementById('final-msg').textContent = `❌ Error procesando la cotización. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
-    }
-  } catch(err) {
-    console.error('Error enviando cotización:', err);
-    document.getElementById('final-msg').textContent = `❌ No pudimos conectar con nuestro servidor. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
-  }
+  // Enviar correos vía EmailJS
+  enviarCorreosCotizacion(window._cotizacionData);
+}
+
+function selectPlan(planKey){
+  const data = window._cotizacionData;
+  if(!data) return;
+  const planTxt = { lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planKey];
+  const precio = data.precios[planKey];
+  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));
+  if(event && event.currentTarget) event.currentTarget.classList.add('selected');
+  const tipoServ = (data.tipoServicio||'mudanza').toUpperCase();
+  const msg = `Hola Mueveloexpress! Quiero confirmar mi cotización:\n\n👤 ${data.nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan elegido: *${planTxt}*\n💰 *Total: ${fmtCLP(precio.total)}*\n📅 Fecha: ${data.fecha}\n📍 ${data.origen.tipo} · ${data.origen.direccion}\n🎯 ${data.destino.tipo} · ${data.destino.direccion}\n📊 ${data.volumenTotal.toFixed(1)} m³ · ${data.itemsTotal} ítems\n✉️ ${data.email}\n📱 +56${data.telefono}`;
+  const waUrl = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
+  document.getElementById('finalContent').innerHTML = `
+    <div style="text-align:center;padding:20px 0;">
+      <div style="font-size:56px;margin-bottom:12px;">✅</div>
+      <h2 style="font-size:24px;font-weight:900;color:#0F1C2E;letter-spacing:-.5px;margin-bottom:8px;">¡Plan ${planTxt} elegido!</h2>
+      <p style="font-size:14px;color:#64748B;margin-bottom:24px;">Confirma con un asesor y agenda tu mudanza por WhatsApp.</p>
+      <div style="background:linear-gradient(135deg,#D32F2F,#B71C1C);color:white;border-radius:18px;padding:24px;margin-bottom:20px;box-shadow:0 12px 32px rgba(211,47,47,.25);">
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85;margin-bottom:6px;">Tu cotización</div>
+        <div style="font-size:36px;font-weight:900;letter-spacing:-1.5px;line-height:1;">${fmtCLP(precio.total)}</div>
+        <div style="font-size:13px;margin-top:8px;opacity:.9;">${planTxt}</div>
+      </div>
+      <a href="${waUrl}" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:white;padding:16px 28px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:currentColor;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Confirmar por WhatsApp
+      </a>
+      <p style="font-size:11px;color:#94a3b8;margin-top:14px;font-style:italic;">Te contactaremos también por correo a ${data.email}</p>
+    </div>
+  `;
 }
 
 function getInventoryData() {
@@ -1354,6 +1628,113 @@ function textSimilarity(str1, str2){
 updateProgress();
 document.getElementById('btnBack').style.display='none';
 document.getElementById('btnNext').textContent = 'Continuar al inventario →';
+
+// ════════════════════════════════════════════════════════
+// GOOGLE PLACES AUTOCOMPLETE + MAPS PREVIEW
+// ════════════════════════════════════════════════════════
+const _addressMaps = {};
+function initAddressAutocomplete(){
+  if(!window.google || !window.google.maps || !window.google.maps.places){
+    setTimeout(initAddressAutocomplete, 500);
+    return;
+  }
+  ['origen','destino'].forEach(tipo => {
+    const input  = document.getElementById('inp-' + tipo + '-dir');
+    const mapDiv = document.getElementById('map-' + tipo);
+    if(!input || !mapDiv || _addressMaps[tipo]) return;
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+      componentRestrictions: { country: 'cl' },
+      fields: ['geometry', 'formatted_address', 'name'],
+      types: ['address']
+    });
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if(!place.geometry || !place.geometry.location) return;
+      const loc = place.geometry.location;
+      mapDiv.classList.add('visible');
+      let map = _addressMaps[tipo]?.map;
+      let marker = _addressMaps[tipo]?.marker;
+      if(!map){
+        map = new google.maps.Map(mapDiv, {
+          center: loc, zoom: 16, disableDefaultUI: true, zoomControl: true,
+          gestureHandling: 'cooperative',
+          styles: [
+            { featureType:'poi', stylers:[{visibility:'simplified'}] },
+            { featureType:'transit', stylers:[{visibility:'off'}] }
+          ]
+        });
+        marker = new google.maps.Marker({ position: loc, map: map, draggable: true, animation: google.maps.Animation.DROP });
+        marker.addListener('dragend', () => {
+          const pos = marker.getPosition();
+          const geocoder = new google.maps.Geocoder();
+          geocoder.geocode({ location: pos }, (results, status) => {
+            if(status === 'OK' && results[0]){ input.value = results[0].formatted_address; }
+          });
+        });
+        _addressMaps[tipo] = { map, marker };
+      } else {
+        map.setCenter(loc); map.setZoom(16);
+        marker.setPosition(loc);
+        marker.setAnimation(google.maps.Animation.DROP);
+      }
+    });
+  });
+}
+const _origOpenWizard = window.openWizard;
+window.openWizard = function(){
+  if(typeof _origOpenWizard === 'function') _origOpenWizard();
+  setTimeout(initAddressAutocomplete, 200);
+};
+window.addEventListener('load', () => { setTimeout(initAddressAutocomplete, 800); });
+
+// ════════════════════════════════════════════════════════
+// PANEL ADMIN OCULTO — accede con ?admin=1
+// ════════════════════════════════════════════════════════
+function showAdminPanel(){
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const fields = [
+    ['baseChico','Base furgón chico (≤10 m³)'],
+    ['baseMedio','Base camión mediano (≤24 m³)'],
+    ['baseGrande','Base camión grande (>24 m³)'],
+    ['precioM3','Precio por m³'],
+    ['m3Min','M³ mínimo cobrable'],
+    ['precioKm','Precio por km'],
+    ['kmGratis','Km incluidos en tarifa base'],
+    ['bajadaPiso','Costo bajada por piso'],
+    ['subidaPiso','Costo subida por piso'],
+    ['recargoDelicado','Recargo delicado (decimal, ej 0.05 = 5%)'],
+    ['recargoEstacionamientoLejos','Recargo estacionamiento >40m'],
+    ['recargoEstacionamientoSubterraneo','Recargo subterráneo']
+  ];
+  overlay.innerHTML = `
+    <div style="background:white;border-radius:16px;max-width:540px;width:100%;max-height:90vh;overflow-y:auto;padding:24px;">
+      <h2 style="font-size:20px;font-weight:900;color:#0F1C2E;margin-bottom:6px;">⚙️ Panel Admin — Tarifas</h2>
+      <p style="font-size:12px;color:#64748B;margin-bottom:18px;">Los cambios se guardan en este navegador. Para usuarios distintos hay que repetir.</p>
+      ${fields.map(([k,l])=>`<div style="margin-bottom:12px;"><label style="font-size:12px;font-weight:700;color:#0F1C2E;display:block;margin-bottom:4px;">${l}</label><input id="adm-${k}" type="number" step="any" value="${TARIFAS[k]}" style="width:100%;padding:10px;border:1.5px solid #E2E8F0;border-radius:8px;font-family:Outfit,sans-serif;font-size:14px;"></div>`).join('')}
+      <div style="display:flex;gap:10px;margin-top:18px;">
+        <button id="adm-save" style="flex:1;background:#D32F2F;color:white;border:none;padding:12px;border-radius:8px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;">Guardar</button>
+        <button id="adm-reset" style="background:#F1F5F9;color:#0F1C2E;border:none;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;">Restaurar default</button>
+        <button id="adm-close" style="background:white;color:#0F1C2E;border:1.5px solid #E2E8F0;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;">Cerrar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.getElementById('adm-save').onclick = ()=>{
+    const newT = Object.assign({}, TARIFAS);
+    fields.forEach(([k])=>{ const v = parseFloat(document.getElementById('adm-'+k).value); if(!isNaN(v)) newT[k] = v; });
+    TARIFAS = newT; saveTarifas(newT);
+    alert('Tarifas guardadas ✓');
+    overlay.remove();
+  };
+  document.getElementById('adm-reset').onclick = ()=>{
+    localStorage.removeItem('mvx_tarifas'); TARIFAS = TARIFAS_DEFAULT;
+    alert('Tarifas restauradas a default ✓');
+    overlay.remove();
+  };
+  document.getElementById('adm-close').onclick = ()=>overlay.remove();
+}
+if(new URLSearchParams(location.search).get('admin') === '1'){ showAdminPanel(); }
 </script>
 </body>
 </html>
