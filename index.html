@@ -4,45 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mueveloexpress — Mudanzas en Todo Chile</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- GOOGLE MAPS — Distance Matrix API                                    -->
-<!-- Para activar: 1) Crear API key en console.cloud.google.com           -->
-<!--               2) Habilitar "Distance Matrix API" + "Maps JS API"     -->
-<!--               3) Restringir la key a tu dominio (HTTP referrer)      -->
-<!--               4) Reemplazar TU_API_KEY_AQUI abajo                    -->
-<!-- Si no se configura, cae automáticamente al estimador heurístico.     -->
-<!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- ═══════════════════════════════════════════════════════════════════ -->
-<!-- CONFIGURACIÓN — credenciales y settings del sitio                   -->
-<!-- ═══════════════════════════════════════════════════════════════════ -->
-<script>
-  // País actual del sitio (CL = Chile, BR = Brasil)
-  window.MUEVELO_COUNTRY = 'CL';
-  // API key de Google Maps (placeholder — configurar después)
-  window.GOOGLE_MAPS_API_KEY = 'AIzaSyC2ishtb5-FQEjMegq841hRsvoF3j1az-I';
-  // EmailJS — credenciales del servicio de envío de correos
-  window.EMAILJS_PUBLIC_KEY    = 'FtOrMqehgYbWvNCRR';
-  window.EMAILJS_SERVICE_ID    = 'service_91g9gos';
-  window.EMAILJS_TPL_CLIENTE   = 'template_j7jzanp';
-  window.EMAILJS_TPL_ADMIN     = 'template_975jzsa';
-</script>
-<!-- EmailJS SDK + inicialización -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  if(typeof emailjs !== 'undefined'){
-    emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
-  }
-</script>
-<script>
-(function loadGoogleMaps(){
-  if(!window.GOOGLE_MAPS_API_KEY || window.GOOGLE_MAPS_API_KEY === 'TU_API_KEY_AQUI') return;
-  const s = document.createElement('script');
-  s.src = 'https://maps.googleapis.com/maps/api/js?key=' + window.GOOGLE_MAPS_API_KEY + '&libraries=places&loading=async';
-  s.async = true; s.defer = true;
-  document.head.appendChild(s);
-})();
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -116,6 +78,9 @@ h2.section-title{font-size:clamp(30px,4vw,48px);font-weight:900;color:var(--navy
 .section-sub{font-size:16px;color:var(--gray);line-height:1.75;max-width:520px;margin-bottom:56px;}
 .services{background:var(--gray-light);}
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.services-plans{grid-template-columns:repeat(3,1fr);}
+@media(max-width:960px){.services-plans{grid-template-columns:1fr;gap:24px;}}
+@media(max-width:600px){.services-plans{grid-template-columns:1fr;gap:20px;}.services-plans .service-card{min-height:auto;padding:28px 24px;}}
 .service-card{background:white;border-radius:18px;padding:32px;border:1.5px solid var(--border);transition:all .3s;position:relative;overflow:hidden;}
 .service-card::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transition:transform .3s;transform-origin:left;}
 .service-card:hover{border-color:transparent;box-shadow:0 12px 40px rgba(0,0,0,.09);transform:translateY(-4px);}
@@ -196,43 +161,64 @@ footer{background:#080F19;padding:56px 60px 32px;}
 .footer-divider{height:1px;background:rgba(255,255,255,.06);margin-bottom:24px;}
 .footer-copy{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
 .footer-copy p{font-size:12px;color:rgba(255,255,255,.2);}
-.wizard-overlay{position:fixed;inset:0;background:rgba(5,10,20,.65);backdrop-filter:blur(4px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.wizard-overlay{position:fixed;inset:0;background:rgba(15,28,46,.78);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
 .wizard-overlay.open{display:flex;}
-.wizard-box{background:white;border-radius:24px;width:100%;max-width:680px;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.2);}
-.wizard-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:10;}
-.wizard-logo{font-size:16px;font-weight:900;color:var(--navy);letter-spacing:-.3px;}
+.wizard-box{background:#FAFBFC;border-radius:20px;width:100%;max-width:760px;max-height:94vh;overflow:hidden;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.35);display:flex;flex-direction:column;}
+.wizard-header{padding:18px 28px;background:linear-gradient(135deg,#0F1C2E 0%,#1E2D3D 100%);display:flex;align-items:center;justify-content:space-between;color:white;}
+.wizard-logo{font-size:15px;font-weight:900;color:white;letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.wizard-logo::before{content:"";width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse 2s infinite;}
 .wizard-logo span{color:var(--red);}
-.wizard-close{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gray);transition:all .2s;}
-.wizard-close:hover{background:var(--gray-light);}
-.wizard-progress{padding:0 28px;margin-top:20px;}
-.progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
-.progress-fill{height:100%;background:var(--red);border-radius:2px;transition:width .4s ease;}
-.progress-text{font-size:11px;color:var(--gray);margin-top:8px;text-align:right;font-weight:500;}
-.sofia-row{display:flex;align-items:center;gap:0;margin:24px 28px 0;}
-.sofia-row::before,.sofia-row::after{content:"";flex:1;height:1.5px;background:var(--border);}
-.sofia-avatar-placeholder{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red-dark));display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 16px;border:3px solid white;box-shadow:0 4px 12px rgba(211,47,47,.25);}
-.wizard-step{padding:28px;display:none;}
-.wizard-step.active{display:block;}
-.wiz-question{font-size:clamp(20px,2.5vw,24px);font-weight:800;color:var(--navy);line-height:1.35;margin-bottom:8px;text-align:center;letter-spacing:-.3px;}
-.wiz-question strong{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--red);}
-.wiz-sub{font-size:14px;color:var(--gray);text-align:center;margin-bottom:28px;line-height:1.65;}
-.wiz-input{width:100%;border:2px solid var(--border);border-radius:10px;padding:14px 16px;font-size:15px;font-family:"Outfit",sans-serif;outline:none;transition:border-color .2s;color:var(--text);}
-.wiz-input:focus{border-color:var(--red);}
+.wizard-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.5);}
+.wizard-close{width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:white;transition:all .2s;}
+.wizard-close:hover{background:rgba(255,255,255,.15);}
+.wizard-progress{padding:18px 28px;background:white;border-bottom:1px solid var(--border);}
+.progress-steps{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.progress-step-dot{flex:1;height:6px;background:#E2E8F0;border-radius:3px;transition:background .4s ease;position:relative;overflow:hidden;}
+.progress-step-dot.done{background:var(--red);}
+.progress-step-dot.current{background:#E2E8F0;}
+.progress-step-dot.current::after{content:"";position:absolute;top:0;left:0;height:100%;width:50%;background:var(--red);border-radius:3px;}
+.progress-meta{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.progress-meta .meta-step{color:var(--red);}
+.progress-meta .meta-time{color:var(--gray);}
+.wizard-content{flex:1;overflow-y:auto;background:#FAFBFC;}
+.wizard-step{padding:36px 32px 24px;display:none;}
+.wizard-step.active{display:block;animation:fadeSlide .35s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.wiz-step-badge{display:inline-flex;align-items:center;gap:8px;background:white;border:1px solid var(--border);border-radius:50px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--red);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:18px;}
+.wiz-step-badge .badge-icon{width:18px;height:18px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:10px;}
+.wiz-question{font-size:clamp(22px,2.8vw,28px);font-weight:800;color:#0F1C2E;line-height:1.25;margin-bottom:10px;text-align:left;letter-spacing:-.6px;}
+.wiz-question strong{color:var(--red);text-decoration:none;}
+.wiz-sub{font-size:14.5px;color:var(--gray);text-align:left;margin-bottom:28px;line-height:1.65;}
+.wiz-input{width:100%;border:1.5px solid var(--border);background:white;border-radius:12px;padding:15px 18px;font-size:15px;font-family:"Outfit",sans-serif;outline:none;transition:all .2s;color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.02);}
+.wiz-input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(211,47,47,.08);}
 .wiz-input-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-.wiz-label{font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:6px;display:block;letter-spacing:.2px;}
-.wiz-select{width:100%;border:2px solid var(--border);border-radius:10px;padding:14px 16px;font-size:15px;font-family:"Outfit",sans-serif;outline:none;appearance:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 14px center;transition:border-color .2s;cursor:pointer;color:var(--text);}
-.wiz-select:focus{border-color:var(--red);}
+.wiz-label{font-size:12px;font-weight:700;color:#0F1C2E;margin-bottom:7px;display:block;letter-spacing:.4px;text-transform:uppercase;}
+.wiz-select{width:100%;border:1.5px solid var(--border);background:white;border-radius:12px;padding:15px 18px;font-size:15px;font-family:"Outfit",sans-serif;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23D32F2F' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;transition:all .2s;cursor:pointer;color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.02);}
+.wiz-select:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(211,47,47,.08);}
 .wiz-error{background:#FFF5F5;border:1px solid #FCA5A5;border-radius:8px;padding:10px 14px;font-size:13px;color:#DC2626;text-align:center;margin-bottom:16px;display:none;}
 .wiz-error.show{display:block;}
 .wiz-addr-row{display:grid;grid-template-columns:1.2fr 2fr;gap:12px;margin-bottom:12px;}
 .wiz-subrow{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:12px;margin-bottom:12px;}
-.wiz-choices{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
-.wiz-choice{border:2px solid var(--border);border-radius:10px;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:14px;font-size:14px;font-weight:500;color:var(--text);transition:all .2s;background:white;}
-.wiz-choice:hover{border-color:var(--red);background:var(--red-light);}
-.wiz-choice.selected{border-color:var(--red);background:var(--red-light);color:var(--red);font-weight:600;}
-.choice-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.wiz-section{background:white;border:1.5px solid var(--border);border-radius:14px;padding:22px 22px 18px;margin-bottom:18px;}
+.wiz-section-title{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;color:#0F1C2E;margin-bottom:14px;letter-spacing:-.2px;}
+.wiz-section-num{width:26px;height:26px;border-radius:8px;background:var(--red);color:white;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wiz-section-sub{font-size:13px;color:var(--gray);margin-top:-8px;margin-bottom:16px;line-height:1.55;}
+.wiz-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.wiz-choices-compact{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+@media(max-width:600px){.wiz-row-2,.wiz-choices-compact{grid-template-columns:1fr;}}
+.inventory-search{position:sticky;top:0;background:#FAFBFC;z-index:5;padding:12px 0 14px;margin-bottom:0;}
+.inventory-search-input{width:100%;border:1.5px solid var(--border);background:white;border-radius:12px;padding:13px 16px 13px 44px;font-size:14.5px;font-family:"Outfit",sans-serif;outline:none;transition:all .2s;color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.02);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='%23D32F2F' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath stroke-linecap='round' d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center;}
+.inventory-search-input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(211,47,47,.08);}
+.inv-no-results{padding:24px;text-align:center;font-size:14px;color:var(--gray);font-style:italic;display:none;}
+.inv-no-results.show{display:block;}
+.wiz-choices{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.wiz-choice{border:1.5px solid var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:14px;font-size:14.5px;font-weight:500;color:var(--text);transition:all .2s;background:white;box-shadow:0 1px 2px rgba(0,0,0,.02);position:relative;}
+.wiz-choice:hover{border-color:var(--red);transform:translateX(4px);box-shadow:0 4px 14px rgba(211,47,47,.08);}
+.wiz-choice.selected{border-color:var(--red);background:linear-gradient(135deg,#FFF5F5 0%,#FFFAFA 100%);color:#0F1C2E;font-weight:600;box-shadow:0 4px 14px rgba(211,47,47,.12);}
+.wiz-choice.selected::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:4px;height:60%;background:var(--red);border-radius:0 4px 4px 0;}
+.choice-check{width:24px;height:24px;border-radius:8px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;background:white;}
 .wiz-choice.selected .choice-check{background:var(--red);border-color:var(--red);}
-.wiz-choice.selected .choice-check::after{content:"\2713";color:white;font-size:13px;}
+.wiz-choice.selected .choice-check::after{content:"\2713";color:white;font-size:14px;font-weight:bold;}
 .inventory-header{background:var(--gray-light);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;font-size:13px;color:var(--gray);font-weight:500;}
 .inventory-header strong{color:var(--red);font-weight:700;}
 .inv-categories{border:2px solid var(--border);border-radius:14px;overflow:hidden;}
@@ -262,13 +248,13 @@ footer{background:#080F19;padding:56px 60px 32px;}
 .wiz-checkbox{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;cursor:pointer;accent-color:var(--red);}
 .wiz-check-label{font-size:13px;color:var(--gray);}
 .wiz-check-label a{color:var(--red);}
-.wiz-footer{padding:0 28px 28px;display:flex;gap:12px;}
-.wiz-btn{flex:1;padding:15px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:"Outfit",sans-serif;}
-.wiz-btn-next{background:var(--red);color:white;}
-.wiz-btn-next:hover{background:var(--red-dark);}
-.wiz-btn-next:disabled{background:#D1D5DB;cursor:not-allowed;}
-.wiz-btn-back{background:var(--gray-light);color:var(--gray);max-width:100px;}
-.wiz-btn-back:hover{background:var(--border);}
+.wiz-footer{padding:18px 28px;display:flex;gap:12px;background:white;border-top:1px solid var(--border);align-items:center;}
+.wiz-btn{padding:14px 26px;border-radius:12px;font-size:14.5px;font-weight:700;cursor:pointer;border:none;transition:all .2s;font-family:"Outfit",sans-serif;letter-spacing:.3px;}
+.wiz-btn-next{flex:1;background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);color:white;box-shadow:0 4px 14px rgba(211,47,47,.3);display:flex;align-items:center;justify-content:center;gap:10px;}
+.wiz-btn-next:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(211,47,47,.4);}
+.wiz-btn-next:disabled{background:#E2E8F0;color:#94A3B8;cursor:not-allowed;box-shadow:none;transform:none;}
+.wiz-btn-back{background:white;color:var(--navy);border:1.5px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:6px;}
+.wiz-btn-back:hover{border-color:var(--navy);background:var(--gray-light);}
 .wiz-final{text-align:center;padding:40px 28px;}
 .wiz-final-icon{font-size:56px;margin-bottom:20px;}
 .wiz-final h2{font-size:24px;font-weight:900;color:var(--navy);margin-bottom:12px;letter-spacing:-.5px;}
@@ -302,6 +288,14 @@ footer{background:#080F19;padding:56px 60px 32px;}
   .services-grid,.why-grid,.reviews-grid{grid-template-columns:1fr;}
   .how-steps{grid-template-columns:1fr;}
   .coverage-grid{grid-template-columns:1fr;}
+  .wizard-box{max-width:100%;border-radius:16px;}
+  .wizard-header{padding:14px 20px;}
+  .wizard-progress{padding:14px 20px;}
+  .wizard-step{padding:24px 20px 16px;}
+  .wiz-question{font-size:21px;}
+  .wiz-input-row,.wiz-addr-row,.wiz-subrow{grid-template-columns:1fr;}
+  .wiz-footer{padding:14px 20px;}
+  .wiz-btn-next{padding:14px 18px;font-size:14px;}
 }
 /* ── PHOTO UPLOAD ── */
 .photo-scan-panel{background:linear-gradient(135deg,#FFF5F5,#FFFAFA);border:2px dashed rgba(211,47,47,.3);border-radius:14px;padding:20px;margin-bottom:20px;transition:border-color .3s;}
@@ -329,51 +323,68 @@ footer{background:#080F19;padding:56px 60px 32px;}
 .photo-result-badge{background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
 .photo-error{background:#FFF5F5;border:1px solid #FCA5A5;border-radius:8px;padding:10px 14px;font-size:13px;color:#DC2626;margin-top:10px;display:none;}
 
-/* ── Form único (paso 1) ── */
-.form-section{background:var(--gray-light);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;}
-.form-section h3{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.form-group{margin-bottom:14px;}
-.wiz-choices-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.wiz-choices-row .wiz-choice{padding:14px;text-align:center;border:1.5px solid var(--border);border-radius:12px;font-weight:600;cursor:pointer;font-size:14px;transition:all .2s;}
-.wiz-choices-row .wiz-choice:hover{border-color:var(--red);}
-.wiz-choices-row .wiz-choice.selected{background:var(--red-light);border-color:var(--red);color:var(--red-dark);}
+/* ── ANIMACIÓN CAMIÓN + BANDERA ── */
+.truck-banner{position:relative;width:100%;height:140px;overflow:hidden;background:linear-gradient(180deg,#FAFBFC 0%,#FFFFFF 60%,#F1F5F9 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.truck-banner::before{content:"";position:absolute;bottom:38px;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,#94A3B8 0,#94A3B8 20px,transparent 20px,transparent 40px);opacity:.4;}
+.truck-banner::after{content:"";position:absolute;bottom:0;left:0;right:0;height:38px;background:linear-gradient(180deg,#475569 0%,#334155 100%);}
+.truck-scene{position:absolute;bottom:34px;right:-500px;display:flex;align-items:flex-end;gap:0;animation:truckDrive 14s linear infinite;will-change:transform;}
+@keyframes truckDrive{0%{transform:translateX(0);}100%{transform:translateX(calc(-100vw - 500px));}}
+.truck-wrap{position:relative;width:220px;display:block;animation:truckBounce 0.4s ease-in-out infinite alternate;}
+.truck-svg{width:100%;height:auto;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.18));}
+.truck-logo-overlay{position:absolute;top:24%;left:56%;transform:translateX(-50%);width:auto;height:48%;max-width:48%;object-fit:contain;pointer-events:none;}
+@keyframes truckBounce{from{transform:translateY(0);}to{transform:translateY(-2px);}}
+.truck-flag-pole{position:relative;width:3px;height:78px;background:linear-gradient(180deg,#1A1A1A 0%,#475569 100%);margin-left:6px;border-radius:2px;align-self:flex-end;margin-bottom:14px;order:2;}
+.truck-flag{position:absolute;left:3px;top:0;width:240px;height:44px;background:linear-gradient(90deg,#D32F2F 0%,#B71C1C 100%);clip-path:polygon(0 0,100% 0,90% 50%,100% 100%,0 100%);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:800;color:white;font-size:13px;letter-spacing:1.5px;line-height:1.1;padding:0 24px 0 14px;text-shadow:0 1px 3px rgba(0,0,0,.35);box-shadow:0 4px 14px rgba(211,47,47,.45);animation:flagWave 1.2s ease-in-out infinite;transform-origin:left center;text-transform:uppercase;text-align:center;}
+@keyframes flagWave{0%,100%{transform:skewX(-2deg) scaleY(1);}50%{transform:skewX(2deg) scaleY(.97);}}
+.truck-banner-text{position:absolute;top:18px;left:50%;transform:translateX(-50%);text-align:center;z-index:2;pointer-events:none;}
+.truck-banner-text h3{font-size:14px;font-weight:900;color:var(--navy);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
+.truck-banner-text p{font-size:12px;color:var(--gray);font-weight:600;}
+@media(max-width:600px){
+  .truck-banner{height:110px;}
+  .truck-svg{width:160px;}
+  .truck-flag{width:100px;height:32px;font-size:11px;}
+  .truck-flag-pole{height:62px;}
+  .truck-scene{bottom:30px;}
+  .truck-banner::after{height:30px;}
+  .truck-banner::before{bottom:30px;}
+}
 
-/* ── Plan cards (paso final) ── */
-.plan-cards{display:grid;grid-template-columns:1fr;gap:14px;margin:24px 0;}
-@media(min-width:640px){.plan-cards{grid-template-columns:1fr 1fr 1fr;}}
-.plan-card{background:white;border:2px solid var(--border);border-radius:18px;padding:24px 20px;text-align:center;cursor:pointer;transition:all .25s;position:relative;display:flex;flex-direction:column;}
-.plan-card:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:0 12px 32px rgba(211,47,47,.12);}
-.plan-card.selected{border-color:var(--red);background:var(--red-light);}
-.plan-card.popular{border-color:var(--red);box-shadow:0 8px 28px rgba(211,47,47,.18);}
-.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--red);color:white;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;text-transform:uppercase;}
-.plan-name{font-size:17px;font-weight:900;color:var(--navy);margin-bottom:6px;letter-spacing:-.3px;}
-.plan-desc{font-size:12px;color:var(--gray);margin-bottom:16px;line-height:1.5;min-height:32px;}
-.plan-price{font-size:28px;font-weight:900;color:var(--red);letter-spacing:-1px;margin-bottom:14px;line-height:1;}
-.plan-includes{font-size:11px;color:var(--gray);margin-bottom:16px;text-align:left;flex:1;}
-.plan-includes li{padding:3px 0;display:flex;align-items:flex-start;gap:6px;}
-.plan-includes li::before{content:"✓";color:var(--red);font-weight:900;flex-shrink:0;}
-.plan-btn{background:white;color:var(--navy);padding:10px 16px;border:1.5px solid var(--navy);border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;width:100%;}
-.plan-card.popular .plan-btn{background:var(--red);color:white;border-color:var(--red);}
-.plan-card:hover .plan-btn{background:var(--navy);color:white;}
-.plan-card.popular:hover .plan-btn{background:var(--red-dark);}
+/* ── SECCIÓN EQUIPO ── */
+.team{background:linear-gradient(135deg,#0F1C2E 0%,#1E2D3D 100%);position:relative;overflow:hidden;}
+.team::before{content:"";position:absolute;top:-100px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(211,47,47,.18) 0%,transparent 65%);border-radius:50%;}
+.team-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center;position:relative;z-index:1;}
+.team-content .section-label{color:rgba(239,68,68,.8);}
+.team-content .section-label::before{background:rgba(239,68,68,.8);}
+.team-content h2{font-size:clamp(30px,4vw,46px);font-weight:900;color:white;line-height:1.15;margin-bottom:20px;letter-spacing:-1.5px;}
+.team-content h2 em{font-style:normal;color:var(--red);}
+.team-content p{font-size:15px;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:28px;}
+.team-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.team-stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;}
+.team-stat-num{font-size:28px;font-weight:900;color:var(--red);letter-spacing:-1px;line-height:1;}
+.team-stat-lbl{font-size:11px;color:rgba(255,255,255,.5);margin-top:6px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;}
+.team-image{position:relative;border-radius:24px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.5);aspect-ratio:3/4;background:linear-gradient(135deg,#1A1A1A 0%,#2D2D2D 100%);display:flex;align-items:center;justify-content:center;}
+.team-image img{width:100%;height:100%;object-fit:cover;display:block;}
+.team-image-placeholder{font-size:14px;color:rgba(255,255,255,.4);text-align:center;padding:40px;}
+.team-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(15,28,46,.6) 100%);pointer-events:none;}
+.team-badge{position:absolute;bottom:24px;left:24px;right:24px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;z-index:2;}
+.team-badge-icon{width:42px;height:42px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.team-badge-text{font-size:13px;font-weight:700;color:var(--navy);line-height:1.3;}
+.team-badge-text span{display:block;font-size:11px;color:var(--gray);font-weight:500;margin-top:2px;}
+@media(max-width:960px){.team-inner{grid-template-columns:1fr;gap:40px;}.team-image{aspect-ratio:4/3;max-width:500px;margin:0 auto;}}
 
-/* ── Estado de envío en final ── */
-.wiz-final-summary{background:var(--gray-light);border-radius:12px;padding:16px;margin:16px 0;font-size:13px;color:var(--gray);}
-.wiz-final-summary strong{color:var(--navy);}
-
-
-
-/* ── Map preview para autocompletar direcciones ── */
-.address-map{height:180px;border-radius:14px;margin-top:12px;background:#F1F5F9;display:none;overflow:hidden;border:1px solid var(--border);}
-.address-map.visible{display:block;animation:mapFadeIn .35s ease-out;}
-@keyframes mapFadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
-.pac-container{border-radius:12px;border:1px solid #E2E8F0;box-shadow:0 8px 24px rgba(0,0,0,.08);font-family:'Outfit',sans-serif;margin-top:4px;}
-.pac-item{padding:10px 14px;border-top:1px solid #F1F5F9;font-size:13px;cursor:pointer;}
-.pac-item:hover,.pac-item-selected{background:rgba(211,47,47,.05);}
-.pac-icon{display:none;}
-.pac-item-query{color:var(--navy);font-weight:600;font-size:14px;}
-.pac-matched{color:var(--red);font-weight:700;}
-
+/* ── FOTO FLOTA ── */
+.fleet-strip{background:white;padding:60px 60px;}
+.fleet-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center;}
+.fleet-img{border-radius:20px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.12);aspect-ratio:4/3;background:#F1F5F9;display:flex;align-items:center;justify-content:center;}
+.fleet-img img{width:100%;height:100%;object-fit:cover;}
+.fleet-img-placeholder{font-size:14px;color:var(--gray);text-align:center;padding:40px;}
+.fleet-text h3{font-size:clamp(24px,3vw,36px);font-weight:900;color:var(--navy);line-height:1.15;margin-bottom:14px;letter-spacing:-1px;}
+.fleet-text h3 em{font-style:normal;color:var(--red);}
+.fleet-text p{font-size:15px;color:var(--gray);line-height:1.75;margin-bottom:20px;}
+.fleet-features{display:flex;flex-direction:column;gap:10px;}
+.fleet-feat{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text);font-weight:500;}
+.fleet-feat-icon{width:28px;height:28px;background:var(--red-light);color:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;}
+@media(max-width:960px){.fleet-inner{grid-template-columns:1fr;gap:32px;}.fleet-strip{padding:48px 24px;}}
 </style>
 </head>
 <body>
@@ -449,17 +460,63 @@ footer{background:#080F19;padding:56px 60px 32px;}
     <div class="trust-item">&#9200; Puntualidad garantizada</div>
   </div>
 </div>
+
+<!-- ════ BANNER ANIMADO CAMIÓN + BANDERA ════ -->
+<div class="truck-banner">
+  <div class="truck-scene">
+    <div class="truck-wrap">
+      <svg class="truck-svg" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg">
+        <!-- Caja del camión -->
+        <rect x="68" y="22" width="135" height="60" rx="3" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+        <rect x="68" y="22" width="135" height="6" fill="#F1F5F9"/>
+        <line x1="200" y1="22" x2="200" y2="82" stroke="#E2E8F0" stroke-width="1"/>
+        <!-- Cabina -->
+        <path d="M10 82 L10 50 Q10 38 22 38 L52 38 Q60 38 64 44 L68 50 L68 82 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+        <!-- Visera/techo -->
+        <path d="M5 38 Q5 30 14 30 L56 30 Q62 30 62 36 L62 42 L10 42 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+        <!-- Ventana -->
+        <path d="M22 46 L52 46 Q56 46 58 49 L60 56 L22 56 Z" fill="#7DD3FC" opacity=".85"/>
+        <!-- Línea reflectiva -->
+        <rect x="68" y="74" width="135" height="3" fill="#F59E0B"/>
+        <!-- Patente -->
+        <rect x="38" y="72" width="20" height="7" rx="1" fill="#FFFFFF" stroke="#94A3B8" stroke-width=".5"/>
+        <text x="48" y="77.5" text-anchor="middle" fill="#0F1C2E" font-family="monospace" font-size="5" font-weight="700">RXVJ45</text>
+        <!-- Sombra debajo -->
+        <ellipse cx="120" cy="98" rx="105" ry="3" fill="#000000" opacity=".18"/>
+        <!-- Ruedas -->
+        <circle cx="38" cy="92" r="11" fill="#1A1A1A"/>
+        <circle cx="38" cy="92" r="5" fill="#475569"/>
+        <circle cx="38" cy="92" r="2" fill="#94A3B8"/>
+        <circle cx="158" cy="92" r="11" fill="#1A1A1A"/>
+        <circle cx="158" cy="92" r="5" fill="#475569"/>
+        <circle cx="158" cy="92" r="2" fill="#94A3B8"/>
+        <circle cx="188" cy="92" r="11" fill="#1A1A1A"/>
+        <circle cx="188" cy="92" r="5" fill="#475569"/>
+        <circle cx="188" cy="92" r="2" fill="#94A3B8"/>
+        <!-- Luz delantera -->
+        <circle cx="10" cy="68" r="3" fill="#FBBF24"/>
+        <!-- Manijas -->
+        <rect x="20" y="62" width="4" height="2" fill="#94A3B8"/>
+      </svg>
+    </div>
+    <div class="truck-flag-pole">
+      <div class="truck-flag">
+        Mudarte sin pagar de más
+      </div>
+    </div>
+  </div>
+</div>
 <section class="services" id="servicios">
   <div class="section-inner">
     <div class="section-label">Nuestros Servicios</div>
     <h2 class="section-title">Elige el plan que<br>se adapta a ti</h2>
     <p class="section-sub">Tres tipos de servicios diseñados para cubrir cada necesidad. Tú eliges el nivel de ayuda que necesitas.</p>
-    <div class="services-grid" style="grid-template-columns:repeat(3,1fr);">
+    <div class="services-grid services-plans">
 
       <div class="service-card" style="display:flex;flex-direction:column;">
         <div class="sc-icon">&#128666;</div>
         <div style="display:inline-block;background:#F8FAFC;color:#64748B;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;align-self:flex-start;margin-bottom:12px;">Básico</div>
-        <div class="sc-title" style="font-size:22px;">Muévelo Lite</div>
+        <div class="sc-title" style="font-size:22px;">Muevelo Lite</div>
         <div class="sc-desc" style="margin-top:8px;"><strong>Carga + Traslado + Descarga</strong></div>
         <div class="sc-desc" style="margin-top:8px;font-style:italic;color:var(--gray);">Rápido y directo, tú dejas todo listo.</div>
         <div class="sc-tags" style="margin-top:auto;padding-top:18px;">
@@ -473,7 +530,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
         <div style="position:absolute;top:-12px;right:20px;background:var(--red);color:white;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;">Más popular</div>
         <div class="sc-icon">&#128230;</div>
         <div style="display:inline-block;background:var(--red-light);color:var(--red);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;align-self:flex-start;margin-bottom:12px;">Recomendado</div>
-        <div class="sc-title" style="font-size:22px;">Muévelo Smart</div>
+        <div class="sc-title" style="font-size:22px;">Muevelo Smart</div>
         <div class="sc-desc" style="margin-top:8px;"><strong>Carga + Traslado + Descarga + Embalaje</strong></div>
         <div class="sc-desc" style="margin-top:8px;font-style:italic;color:var(--gray);">Protegemos lo más importante sin complicarte, tú dejas el empaque listo.</div>
         <div class="sc-tags" style="margin-top:auto;padding-top:18px;">
@@ -486,7 +543,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
       <div class="service-card" style="display:flex;flex-direction:column;">
         <div class="sc-icon">&#127942;</div>
         <div style="display:inline-block;background:#1A1A1A;color:white;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;align-self:flex-start;margin-bottom:12px;">Premium</div>
-        <div class="sc-title" style="font-size:22px;">Muévelo Pro</div>
+        <div class="sc-title" style="font-size:22px;">Muevelo Pro</div>
         <div class="sc-desc" style="margin-top:8px;"><strong>Carga + Traslado + Descarga + Embalaje + Empaque en cajas</strong></div>
         <div class="sc-desc" style="margin-top:8px;font-style:italic;color:var(--gray);">Nos encargamos de todo, de inicio a fin.</div>
         <div class="sc-tags" style="margin-top:auto;padding-top:18px;">
@@ -530,6 +587,71 @@ footer{background:#080F19;padding:56px 60px 32px;}
     </div>
   </div>
 </section>
+<!-- ════ SECCIÓN EQUIPO ════ -->
+<section class="team">
+  <div class="section-inner">
+    <div class="team-inner">
+      <div class="team-content">
+        <div class="section-label">Nuestro Equipo</div>
+        <h2>Profesionales que <em>cuidan tu mudanza</em> como propia</h2>
+        <p>Equipo entrenado, uniformado y con antecedentes verificados. Cada miembro de Muevelo Express está capacitado para tratar tus pertenencias con el máximo cuidado, desde el embalaje hasta la instalación final.</p>
+        <div class="team-stats">
+          <div class="team-stat">
+            <div class="team-stat-num">15+</div>
+            <div class="team-stat-lbl">Profesionales en terreno</div>
+          </div>
+          <div class="team-stat">
+            <div class="team-stat-num">100%</div>
+            <div class="team-stat-lbl">Antecedentes verificados</div>
+          </div>
+          <div class="team-stat">
+            <div class="team-stat-num">4.9★</div>
+            <div class="team-stat-lbl">Calificación promedio</div>
+          </div>
+        </div>
+      </div>
+      <div class="team-image">
+        <img src="/equipo.jpg" alt="Equipo Mueveloexpress" onerror="this.style.display='none';this.parentElement.querySelector('.team-image-placeholder').style.display='block';">
+        <div class="team-image-placeholder" style="display:none;">
+          📷 Coloca tu foto del equipo aquí<br>
+          <span style="font-size:11px;opacity:.7;">(equipo.jpg en /public)</span>
+        </div>
+        <div class="team-badge">
+          <div class="team-badge-icon">👕</div>
+          <div class="team-badge-text">
+            Uniformados y capacitados
+            <span>Tu hogar en manos expertas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ SECCIÓN FLOTA ════ -->
+<section class="fleet-strip">
+  <div class="fleet-inner">
+    <div class="fleet-img">
+      <img src="/camiones.jpg" alt="Flota Mueveloexpress" onerror="this.style.display='none';this.parentElement.querySelector('.fleet-img-placeholder').style.display='block';">
+      <div class="fleet-img-placeholder" style="display:none;">
+        🚚 Coloca tu foto de la flota aquí<br>
+        <span style="font-size:11px;opacity:.7;">(camiones.jpg en /public)</span>
+      </div>
+    </div>
+    <div class="fleet-text">
+      <div class="section-label">Flota Propia</div>
+      <h3>Camiones <em>modernos y equipados</em> para cada tipo de servicio</h3>
+      <p>Contamos con flota propia de camiones de distintos tamaños, todos equipados con elementos de protección y seguimiento GPS en tiempo real.</p>
+      <div class="fleet-features">
+        <div class="fleet-feat"><div class="fleet-feat-icon">✓</div>Camiones cerrados con protección climática</div>
+        <div class="fleet-feat"><div class="fleet-feat-icon">✓</div>Cinturones, mantas y huinchas profesionales</div>
+        <div class="fleet-feat"><div class="fleet-feat-icon">✓</div>Seguimiento GPS en tiempo real</div>
+        <div class="fleet-feat"><div class="fleet-feat-icon">✓</div>Mantención al día y revisión técnica</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="coverage" id="cobertura">
   <div class="section-inner">
     <div class="section-label">Cobertura Nacional</div>
@@ -632,611 +754,350 @@ footer{background:#080F19;padding:56px 60px 32px;}
 <div class="wizard-overlay" id="wizardOverlay">
   <div class="wizard-box">
     <div class="wizard-header">
-      <div class="wizard-logo" style="font-size:17px;font-weight:800;color:#1A1A1A;">muevelo<span style="color:#D32F2F;">express</span></div>
+      <div>
+        <div class="wizard-logo">Muevelo<span> Express</span></div>
+        <div class="wizard-tag" style="margin-top:4px;">Cotizador inteligente</div>
+      </div>
       <button class="wizard-close" onclick="closeWizard()">×</button>
     </div>
     <div class="wizard-progress">
-      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
-      <div class="progress-text" id="progressText">Paso 1 de 3</div>
+      <div class="progress-steps" id="progressSteps">
+        <div class="progress-step-dot current"></div>
+        <div class="progress-step-dot"></div>
+      </div>
+      <div class="progress-meta">
+        <span class="meta-step" id="progressText">Paso 1 de 2 · Cuestionario</span>
+        <span class="meta-time">⏱ ~2 min</span>
+      </div>
     </div>
-    <div class="sofia-row">
-      <div class="sofia-avatar-placeholder">👨‍💼</div>
-    </div>
-        <!-- ════════ STEP 1: Datos del viaje (TODO EN UNA PÁGINA) ════════ -->
+    <div class="wizard-content">
+    <!-- STEP 1 — CUESTIONARIO COMPLETO -->
     <div class="wizard-step active" id="step-1">
-      <p class="wiz-question">¡Hola! Soy Felipe.<br>Cuéntame de tu mudanza 👋</p>
+      <div class="wiz-step-badge"><span class="badge-icon">1</span> Cuestionario</div>
+      <p class="wiz-question">Cuéntanos sobre tu <strong>servicio</strong></p>
+      <p class="wiz-sub">Responde estas preguntas y te enviaremos un presupuesto exacto en menos de 1 hora.</p>
 
-      <div class="form-group">
-        <label class="wiz-label">Tu nombre</label>
-        <div class="wiz-input-row">
-          <input class="wiz-input" id="inp-nombre" type="text" placeholder="Nombre">
-          <input class="wiz-input" id="inp-apellido" type="text" placeholder="Apellido">
+      <!-- Sección: Datos personales -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">1</span>Tus datos</div>
+        <div class="wiz-row-2">
+          <div><label class="wiz-label">Nombre</label><input class="wiz-input" id="inp-nombre" type="text" placeholder="Tu nombre" oninput="checkStep1()"></div>
+          <div><label class="wiz-label">Apellido</label><input class="wiz-input" id="inp-apellido" type="text" placeholder="Tu apellido" oninput="checkStep1()"></div>
+        </div>
+        <div class="wiz-row-2">
+          <div><label class="wiz-label">Correo electrónico</label><input class="wiz-input" id="inp-email" type="email" placeholder="tu@correo.com"></div>
+          <div><label class="wiz-label">Teléfono / WhatsApp</label><div class="phone-row"><div class="phone-prefix">🇨🇱 +56</div><input class="phone-input" id="inp-telefono" type="tel" placeholder="9 XXXX XXXX" maxlength="9"></div></div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="wiz-label">¿Qué necesitas?</label>
-        <div class="wiz-choices wiz-choices-row" id="choices-tipo-servicio">
-          <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','mudanza')">🚚 Mudanza</div>
-          <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','flete')">📦 Flete</div>
+      <!-- Sección: Tipo de servicio -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">2</span>Tipo de servicio</div>
+        <div class="wiz-choices" id="choices-tipo-servicio">
+          <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','mudanza');checkStep1()"><div class="choice-check"></div>🚚 <strong>Mudanza</strong> — Cambio de hogar u oficina (varios muebles)</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'tipo-servicio','flete');checkStep1()"><div class="choice-check"></div>📦 <strong>Flete</strong> — Traslado puntual de pocos ítems</div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="wiz-label">Fecha estimada</label>
+      <!-- Sección: Plan -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">3</span>Plan</div>
+        <div class="wiz-choices" id="choices-plan">
+          <div class="wiz-choice" onclick="selectChoice(this,'plan','lite');checkStep1()"><div class="choice-check"></div><strong>Muevelo Lite</strong> — Carga + traslado + descarga</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'plan','smart');checkStep1()"><div class="choice-check"></div><strong>Muevelo Smart</strong> — Lite + embalaje</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'plan','pro');checkStep1()"><div class="choice-check"></div><strong>Muevelo Pro</strong> — Smart + empaque en cajas</div>
+        </div>
+      </div>
+
+      <!-- Sección: Fecha -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">4</span>Fecha estimada</div>
+        <label class="wiz-label">¿Cuándo te estás moviendo?</label>
         <input class="wiz-input" id="inp-fecha" type="date">
       </div>
 
-      <div class="form-section">
-        <h3>📍 Origen</h3>
+      <!-- Sección: Origen -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">5</span>Origen</div>
+        <p class="wiz-section-sub">¿De dónde retiramos?</p>
         <div class="wiz-addr-row">
-          <select class="wiz-select" id="sel-origen-tipo">
-            <option value="">Tipo de inmueble...</option>
-            <option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option>
-          </select>
-          <input class="wiz-input" id="inp-origen-dir" type="text" placeholder="Dirección completa, comuna">
-          <div id="map-origen" class="address-map"></div>
+          <div><label class="wiz-label">Tipo</label><select class="wiz-select" id="sel-origen-tipo"><option value="">Selecciona...</option><option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option></select></div>
+          <div><label class="wiz-label">Dirección</label><input class="wiz-input" id="inp-origen-dir" type="text" placeholder="Ej: Av. Providencia 1234, Santiago"></div>
         </div>
-        <div class="wiz-subrow" id="subrow-origen" style="display:none;margin-top:10px;">
-          <input class="wiz-input" id="inp-origen-num" placeholder="N° depto/oficina">
-          <input class="wiz-input" id="inp-origen-piso" type="number" placeholder="Piso" min="1">
-          <select class="wiz-select" id="sel-origen-asc">
-            <option value="">¿Ascensor?</option>
-            <option>Sí, hay ascensor</option><option>No hay ascensor</option>
-          </select>
-          <select class="wiz-select" id="sel-origen-estac">
-            <option value="">Estacionamiento</option>
-            <option value="cerca">A menos de 40m</option>
-            <option value="lejos">A más de 40m</option>
-            <option value="subterraneo">Por subterráneo</option>
-          </select>
+        <div class="wiz-subrow" id="subrow-origen" style="display:none;margin-top:12px;">
+          <div><label class="wiz-label">N° Depto / Oficina</label><input class="wiz-input" id="inp-origen-num" type="text" placeholder="Ej: 305"></div>
+          <div><label class="wiz-label">Piso</label><input class="wiz-input" id="inp-origen-piso" type="number" placeholder="Ej: 3" min="1"></div>
+          <div><label class="wiz-label">¿Hay ascensor?</label><select class="wiz-select" id="sel-origen-asc"><option value="">Selecciona...</option><option>Sí, hay ascensor</option><option>No hay ascensor</option></select></div>
         </div>
       </div>
 
-      <div class="form-section">
-        <h3>🎯 Destino</h3>
+      <!-- Sección: Destino -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">6</span>Destino</div>
+        <p class="wiz-section-sub">¿A dónde llevamos?</p>
         <div class="wiz-addr-row">
-          <select class="wiz-select" id="sel-destino-tipo">
-            <option value="">Tipo de inmueble...</option>
-            <option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option>
-          </select>
-          <input class="wiz-input" id="inp-destino-dir" type="text" placeholder="Dirección completa, comuna">
-          <div id="map-destino" class="address-map"></div>
+          <div><label class="wiz-label">Tipo</label><select class="wiz-select" id="sel-destino-tipo"><option value="">Selecciona...</option><option>Casa</option><option>Departamento</option><option>Oficina</option><option>Bodega</option></select></div>
+          <div><label class="wiz-label">Dirección</label><input class="wiz-input" id="inp-destino-dir" type="text" placeholder="Ej: Las Condes 5678, Santiago"></div>
         </div>
-        <div class="wiz-subrow" id="subrow-destino" style="display:none;margin-top:10px;">
-          <input class="wiz-input" id="inp-destino-num" placeholder="N° depto/oficina">
-          <input class="wiz-input" id="inp-destino-piso" type="number" placeholder="Piso" min="1">
-          <select class="wiz-select" id="sel-destino-asc">
-            <option value="">¿Ascensor?</option>
-            <option>Sí, hay ascensor</option><option>No hay ascensor</option>
-          </select>
-          <select class="wiz-select" id="sel-destino-estac">
-            <option value="">Estacionamiento</option>
-            <option value="cerca">A menos de 40m</option>
-            <option value="lejos">A más de 40m</option>
-            <option value="subterraneo">Por subterráneo</option>
-          </select>
+        <div class="wiz-subrow" id="subrow-destino" style="display:none;margin-top:12px;">
+          <div><label class="wiz-label">N° Depto / Oficina</label><input class="wiz-input" id="inp-destino-num" type="text" placeholder="Ej: 102"></div>
+          <div><label class="wiz-label">Piso</label><input class="wiz-input" id="inp-destino-piso" type="number" placeholder="Ej: 1" min="1"></div>
+          <div><label class="wiz-label">¿Hay ascensor?</label><select class="wiz-select" id="sel-destino-asc"><option value="">Selecciona...</option><option>Sí, hay ascensor</option><option>No hay ascensor</option></select></div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="wiz-label">¿Tienes muebles delicados (vidrio, antigüedades, alto valor)?</label>
-        <div class="wiz-choices wiz-choices-row" id="choices-delicado">
-          <div class="wiz-choice" onclick="selectChoice(this,'delicado','no')">No, todo estándar</div>
-          <div class="wiz-choice" onclick="selectChoice(this,'delicado','si')">Sí, algunos</div>
+      <!-- Sección: Accesibilidad -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">7</span>Acceso al origen</div>
+        <div class="wiz-choices" id="choices-asc-orig">
+          <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','todo')"><div class="choice-check"></div>🛗 Todo cabe en el ascensor</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','algunas')"><div class="choice-check"></div>📦 Algunas cosas no caben</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'asc-orig','noaplica')"><div class="choice-check"></div>🏠 Es casa / sin ascensor</div>
         </div>
       </div>
 
-      <div class="wiz-error" id="err-1">Por favor completa todos los campos requeridos.</div>
+      <!-- Sección: Estacionamiento Origen -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">8</span>Estacionamiento en origen</div>
+        <p class="wiz-section-sub">¿A qué distancia del lugar puede estacionarse el camión?</p>
+        <div class="wiz-choices" id="choices-estac-orig">
+          <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','menos40')"><div class="choice-check"></div>🚚 Menos de 40 metros (cerca de la puerta)</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','mas40')"><div class="choice-check"></div>🚶 Más de 40 metros (lejos de la puerta)</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'estac-orig','subterraneo')"><div class="choice-check"></div>🅿️ Entrada por estacionamiento subterráneo</div>
+        </div>
+      </div>
+
+      <!-- Sección: Estacionamiento Destino -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">9</span>Estacionamiento en destino</div>
+        <p class="wiz-section-sub">¿A qué distancia del lugar puede estacionarse el camión?</p>
+        <div class="wiz-choices" id="choices-estac-dest">
+          <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','menos40')"><div class="choice-check"></div>🚚 Menos de 40 metros (cerca de la puerta)</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','mas40')"><div class="choice-check"></div>🚶 Más de 40 metros (lejos de la puerta)</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'estac-dest','subterraneo')"><div class="choice-check"></div>🅿️ Entrada por estacionamiento subterráneo</div>
+        </div>
+      </div>
+
+      <!-- Sección: Cuidados -->
+      <div class="wiz-section">
+        <div class="wiz-section-title"><span class="wiz-section-num">10</span>Piezas frágiles o valiosas</div>
+        <p class="wiz-section-sub">Cristales, espejos, obras de arte, electrónicos delicados, antigüedades.</p>
+        <div class="wiz-choices" id="choices-delicado">
+          <div class="wiz-choice" onclick="selectChoice(this,'delicado','si')"><div class="choice-check"></div>💎 Sí, tengo piezas que necesitan cuidado extra</div>
+          <div class="wiz-choice" onclick="selectChoice(this,'delicado','no')"><div class="choice-check"></div>✅ No, todo es estándar</div>
+        </div>
+      </div>
+
+      <label class="wiz-check-row"><input type="checkbox" class="wiz-checkbox" id="chk-terms" checked><span class="wiz-check-label">Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de privacidad</a></span></label>
+      <div class="wiz-error" id="err-1">Por favor completa todos los campos del cuestionario.</div>
     </div>
-
-    <!-- ════════ STEP 2: Inventario (con foto IA) ════════ -->
+    <!-- STEP 2: Inventario + Buscador -->
     <div class="wizard-step" id="step-2">
-<p class="wiz-question">¡Ya estamos casi listos!<br>Agrega los ítems de tu inventario</p>
+      <div class="wiz-step-badge"><span class="badge-icon">2</span> Inventario</div>
+      <p class="wiz-question">¿Qué vamos a <strong>mover</strong>?</p>
+      <p class="wiz-sub">Busca o navega por categorías. Calcularemos el volumen automáticamente.</p>
+      <div class="inventory-search">
+        <input type="text" class="inventory-search-input" id="inventorySearch" placeholder="Buscar ítem... (ej: cama, sofá, refrigerador)" oninput="filterInventory(this.value)">
+      </div>
+      <!-- FOTO SCAN -->
+      <div class="photo-scan-panel" id="photoScanPanel">
+        <div class="photo-scan-header" onclick="togglePhotoPanel()">
+          <span style="font-size:28px;">&#128247;</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--navy);">¿Prefieres subir fotos?</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:2px;">Nuestra IA detecta tus muebles automáticamente</div>
+          </div>
+          <button class="photo-scan-toggle" id="photoToggleBtn">Probar IA &#8595;</button>
+        </div>
+        <div class="photo-scan-body" id="photoScanBody" style="display:none;">
+          <div class="photo-drop-zone" id="photoDropZone" onclick="document.getElementById('photoFileInput').click()">
+            <input type="file" id="photoFileInput" accept="image/*" multiple style="display:none;">
+            <div style="font-size:32px;margin-bottom:8px;">&#128444;</div>
+            <div style="font-size:14px;font-weight:600;color:var(--navy);">Haz clic o arrastra fotos aquí</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:6px;">Hasta 5 fotos &middot; JPG o PNG &middot; Una habitación por foto</div>
+          </div>
+          <div class="photo-previews" id="photoPreviews"></div>
+          <button class="photo-analyze-btn" id="photoAnalyzeBtn" onclick="analyzePhotos()" disabled>&#10024; Analizar fotos con IA</button>
+          <div class="photo-loading" id="photoLoading">
+            <div class="photo-spinner"></div>
+            <div style="font-size:14px;font-weight:700;color:var(--navy);">Analizando tus fotos...</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:4px;">Identificando muebles y objetos</div>
+          </div>
+          <div class="photo-results" id="photoResults">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;">&#9989; Detectamos estos muebles:</div>
+            <div id="photoResultsList"></div>
+            <div style="font-size:12px;color:var(--gray);margin-top:10px;font-style:italic;">Revisa y ajusta las cantidades abajo si es necesario.</div>
+          </div>
+          <div class="photo-error" id="photoError">No pudimos analizar las fotos. Por favor agrega los muebles manualmente abajo.</div>
+        </div>
+      </div>
       <div class="inventory-header">
         <span>Volumen total: <strong id="vol-total">0 m³</strong></span>
         <span>Ítems: <strong id="items-total">0</strong></span>
       </div>
+      <div class="inv-no-results" id="invNoResults">No encontramos ítems con esa búsqueda. Intenta otra palabra.</div>
       <div class="inv-categories">
-        <div class="inv-cat" id="cat-dormitorio">
-          <div class="inv-cat-header" onclick="toggleCat('dormitorio')"><div class="inv-cat-title"><span class="inv-cat-icon">🛏️</span>Dormitorio</div><span class="inv-arrow">▼</span></div>
+        <div class="inv-cat" id="cat-camas">
+          <div class="inv-cat-header" onclick="toggleCat('camas')"><div class="inv-cat-title"><span class="inv-cat-icon">🛏️</span>Camas</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Cama King + colchón</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Camarote + colchones</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cama 2 plazas + colchón</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Ropero / Closet grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cuna no desarmable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cama 1½ plaza + colchón</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cama clínica</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Camarote desarmado</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cama 1 plaza + colchón</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Colchón King / 2 plazas suelto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cama nido</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Tocador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cómoda</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Colchón 1 / 1½ plaza suelto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama King (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 2 Plazas (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 1½ Plaza (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cama 1 Plaza (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Camarote (incluye colchón)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.2)">+</button></div></div>
             <div class="inv-item"><span class="inv-item-name">Cuna desarmable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Respaldo de cama grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Velador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Respaldo de cama mediano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Respaldo de cama pequeño</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.08)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.08)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Lámpara de noche</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
           </div>
         </div>
-        <div class="inv-cat" id="cat-living">
-          <div class="inv-cat-header" onclick="toggleCat('living')"><div class="inv-cat-title"><span class="inv-cat-icon">🛋️</span>Living / Estar</div><span class="inv-arrow">▼</span></div>
+        <div class="inv-cat" id="cat-comodas">
+          <div class="inv-cat-header" onclick="toggleCat('comodas')"><div class="inv-cat-title"><span class="inv-cat-icon">🗄️</span>Cómodas, Veladores y Otros</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Sillón en L</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sofá 4 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Futón / Sofá cama 2 plazas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sofá 3 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Rack TV grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Vitrina o buffet</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Velador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cómoda</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Estante / Repisa</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
             <div class="inv-item"><span class="inv-item-name">Biblioteca</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sofá 2 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Futón / Sofá cama 1 plaza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Bergère</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.9)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.9)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Bar</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Rack TV mediano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estante</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sillón / Sitial</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Repisa escalera</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sitial pequeño</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Rack TV pequeño</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de centro</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa lateral / Nido</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Puf</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Lámpara de pie</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Lámpara colgante</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Rack TV</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Ropero / Closet</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Zapatera</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
           </div>
         </div>
-        <div class="inv-cat" id="cat-comedor">
-          <div class="inv-cat-header" onclick="toggleCat('comedor')"><div class="inv-cat-title"><span class="inv-cat-icon">🍽️</span>Comedor</div><span class="inv-arrow">▼</span></div>
+        <div class="inv-cat" id="cat-mesas">
+          <div class="inv-cat-header" onclick="toggleCat('mesas')"><div class="inv-cat-title"><span class="inv-cat-icon">🪑</span>Mesas</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Mesa comedor 10 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.9)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.9)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa comedor 8 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa comedor 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa comedor 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Banqueta de comedor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Arrimo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla mecedora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.75)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.75)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla reclinable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla de comedor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.25)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.25)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Piso alto / Taburete</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla de cocina</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Piso bajo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de Centro</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa Comedor 8+ personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa Plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-sofas">
+          <div class="inv-cat-header" onclick="toggleCat('sofas')"><div class="inv-cat-title"><span class="inv-cat-icon">🛋️</span>Sofás</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Sillón / Sitial</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sofá 2 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sofá 3 cuerpos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Sillón en L</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Futón / Sofá Cama</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
+          </div>
+        </div>
+        <div class="inv-cat" id="cat-sillas">
+          <div class="inv-cat-header" onclick="toggleCat('sillas')"><div class="inv-cat-title"><span class="inv-cat-icon">🪑</span>Sillas</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-items">
+            <div class="inv-item"><span class="inv-item-name">Silla de Comedor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla de Escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.25)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.25)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla Reclinable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla Plegable</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.08)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.08)">+</button></div></div>
           </div>
         </div>
         <div class="inv-cat" id="cat-cocina">
-          <div class="inv-cat-header" onclick="toggleCat('cocina')"><div class="inv-cat-title"><span class="inv-cat-icon">🍳</span>Cocina y Lavandería</div><span class="inv-arrow">▼</span></div>
+          <div class="inv-cat-header" onclick="toggleCat('cocina')"><div class="inv-cat-title"><span class="inv-cat-icon">🍳</span>Cocina</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Refrigerador 2 puertas (side by side)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Congelador / Freezer</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.6)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Refrigerador 1 puerta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Lavadora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Secadora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Lavavajillas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cocina (gas o eléctrica)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cava de vinos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Frigobar</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Microondas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Horno eléctrico</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Artefactos pequeños (juguera, tostador, etc.)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-          </div>
-        </div>
-        <div class="inv-cat" id="cat-oficina">
-          <div class="inv-cat-header" onclick="toggleCat('oficina')"><div class="inv-cat-title"><span class="inv-cat-icon">💼</span>Oficina</div><span class="inv-arrow">▼</span></div>
-          <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 12 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 10 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.9)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.9)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 8 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estación trabajo no desarmable 4 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estación trabajo no desarmable 3 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estación trabajo no desarmable 2 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Escritorio grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Escritorio mediano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estación trabajo desarmable 4 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.55)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.55)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de reunión 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estación trabajo desarmable 3 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.425)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.425)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Combo PC sin monitor</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Fotocopiadora grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estación trabajo desarmable 2 puestos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla de escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Archivador grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.22)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.22)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Impresora mediana</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estación trabajo desarmable 1 puesto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.175)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.175)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Archivador mediano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.17)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.17)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Archivador pequeño</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.12)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.12)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Pizarra</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Impresora pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Monitor 25-30&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.09)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.09)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Monitor 20-25&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.08)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.08)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Monitor 15-20&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.07)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.07)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Refrigerador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lavadora / Secadora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lavavajillas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Cocina / Horno</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Microondas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.12)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.12)">+</button></div></div>
           </div>
         </div>
         <div class="inv-cat" id="cat-electronica">
           <div class="inv-cat-header" onclick="toggleCat('electronica')"><div class="inv-cat-title"><span class="inv-cat-icon">📺</span>Electrónica</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Equipo de música / Parlantes</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Computador de escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">AC portátil</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">TV 70&quot; o más</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Aspiradora</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">TV 55&quot;-65&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Impresora mediana (hogar)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">TV hasta 50&quot;</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Impresora pequeña (hogar)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">TV hasta 50"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">TV 55"-65"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">TV 70"+"</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Computador de escritorio</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Equipo de música / Parlantes</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
           </div>
         </div>
-        <div class="inv-cat" id="cat-terraza">
-          <div class="inv-cat-header" onclick="toggleCat('terraza')"><div class="inv-cat-title"><span class="inv-cat-icon">🌿</span>Terraza y Exterior</div><span class="inv-arrow">▼</span></div>
+        <div class="inv-cat" id="cat-otros">
+          <div class="inv-cat-header" onclick="toggleCat('otros')"><div class="inv-cat-title"><span class="inv-cat-icon">💡</span>Lámparas, Terraza y Otros</div><span class="inv-arrow">▼</span></div>
           <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Macetero grande pesado (sobre 50kg)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sillón 3 cuerpos terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla colgante</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sillón 2 cuerpos terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Escultura pesada</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Banca de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa comedor terraza 6 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa comedor terraza 4 personas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Parrilla</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Macetero grande pesado</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.7)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.7)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Casa de perro grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Sofá terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla acapulco</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Reposera</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de centro terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Macetero pequeño liviano</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Silla de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.25)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.25)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Casa de perro pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Toldo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-          </div>
-        </div>
-        <div class="inv-cat" id="cat-fitness">
-          <div class="inv-cat-header" onclick="toggleCat('fitness')"><div class="inv-cat-title"><span class="inv-cat-icon">💪</span>Deportes y Fitness</div><span class="inv-arrow">▼</span></div>
-          <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Cama elástica</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,2.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,2.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Casa de niños plástica</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,3.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,3.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Jaula de pesas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Trotadora / Elíptica / Máquina</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Banco de pesas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de ping pong</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de taca taca</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Bolso de golf y palos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Tabla de surf</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Tabla de snowboard</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Bicicleta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.6)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.6)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Pelota de pilates</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Piso goma eva (por unidad)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Disco de pesa</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
-          </div>
-        </div>
-        <div class="inv-cat" id="cat-musica">
-          <div class="inv-cat-header" onclick="toggleCat('musica')"><div class="inv-cat-title"><span class="inv-cat-icon">🎹</span>Instrumentos Musicales</div><span class="inv-arrow">▼</span></div>
-          <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Piano de cola</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,3.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,3.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Piano vertical</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.8)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.8)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Órgano eléctrico horizontal</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Guitarra / Bajo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-          </div>
-        </div>
-        <div class="inv-cat" id="cat-misc">
-          <div class="inv-cat-header" onclick="toggleCat('misc')"><div class="inv-cat-title"><span class="inv-cat-icon">📦</span>Cajas, Maletas y Otros</div><span class="inv-arrow">▼</span></div>
-          <div class="inv-items">
-            <div class="inv-item"><span class="inv-item-name">Caja fuerte vertical</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Alfombra grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Plancha de ropa con pedestal</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.3)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.3)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Contenedor plástico (100L)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Maleta grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Espejo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cuadro grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estufa eléctrica grande</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estufa a gas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Baúl</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Estufa eléctrica pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Biombo</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Contenedor plástico (50L)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cajas de r
-              opa</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cooler</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.15)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.15)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Caja de cocina</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.07)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.07)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Caja de adornos / libros</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Maleta pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Bolsa o bulto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Caja de herramientas</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Caja fuerte de closet</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Canasto</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Alfombra pequeña</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cuadros pequeños</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Almohada</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Cojín</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.05)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.05)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Bidón (20L)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.04)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.04)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Dispensador de agua</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.02)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.02)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Árbol de navidad</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.75)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.75)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Mesa de planchado</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Perchero</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,1.0)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,1.0)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Ventilador</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
-            <div class="inv-item"><span class="inv-item-name">Rascador de gatos</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Lámpara de pie</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Silla de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Mesa de terraza</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.5)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.5)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Bicicleta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.4)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.4)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Planta grande (macetero)</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.2)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.2)">+</button></div></div>
+            <div class="inv-item"><span class="inv-item-name">Caja / Maleta</span><div class="inv-counter"><button class="inv-btn minus" onclick="changeItem(this,-1,0.1)">−</button><span class="inv-count">0</span><button class="inv-btn plus" onclick="changeItem(this,1,0.1)">+</button></div></div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- ════════ STEP 3: Datos de contacto ════════ -->
-    <div class="wizard-step" id="step-3">
-      <p class="wiz-question">Último paso: tus datos 📩</p>
-      <p class="wiz-sub">Para enviarte tu cotización y coordinar la mudanza.</p>
-
-      <div class="form-group">
-        <label class="wiz-label">Correo electrónico</label>
-        <input class="wiz-input" id="inp-email" type="email" placeholder="tu@correo.com">
-      </div>
-      <div class="form-group">
-        <label class="wiz-label">Teléfono / WhatsApp</label>
-        <div class="phone-row">
-          <div class="phone-prefix">🇨🇱 +56</div>
-          <input class="phone-input" id="inp-telefono" type="tel" placeholder="9 XXXX XXXX" maxlength="9">
-        </div>
-      </div>
-      <label class="wiz-check-row">
-        <input type="checkbox" class="wiz-checkbox" id="chk-terms" checked>
-        <span class="wiz-check-label">Acepto los <a href="#">Términos y Condiciones</a> y la <a href="#">Política de privacidad</a></span>
-      </label>
-      <div class="wiz-error" id="err-3">Por favor completa correo y teléfono.</div>
-    </div>
-
-    <!-- ════════ STEP FINAL: 3 planes con precios ════════ -->
+    <!-- STEP FINAL -->
     <div class="wizard-step" id="step-final">
-      <div class="wiz-final" id="finalContent"></div>
+      <div class="wiz-final">
+        <div class="wiz-final-icon">🎉</div>
+        <h2 id="final-title">¡Listo!</h2>
+        <p id="final-msg">Recibimos tu solicitud. Nuestro equipo te enviará el presupuesto al WhatsApp y correo que nos dejaste en menos de 1 hora.</p>
+        <a id="final-wa-link" href="#" target="_blank" class="wiz-final-wa">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Hablar por WhatsApp ahora
+        </a>
+      </div>
     </div>
-
+    </div><!-- /wizard-content -->
     <div class="wiz-footer" id="wizFooter">
       <button class="wiz-btn wiz-btn-back" id="btnBack" onclick="wizBack()" style="display:none;">← Atrás</button>
-      <button class="wiz-btn wiz-btn-next" id="btnNext" onclick="wizNext()">Comencemos →</button>
+      <button class="wiz-btn wiz-btn-next" id="btnNext" onclick="wizNext()">Continuar al inventario →</button>
     </div>
   </div>
 </div>
 <script>
 let currentStep = 1;
-const totalSteps = 4;
+const totalSteps = 2;
+const stepLabels = {1:'Cuestionario', 2:'Inventario'};
 let totalVol = 0;
 let totalItems = 0;
 const choices = {};
-
-// ════════════════════════════════════════════════════════
-// MOTOR DE CÁLCULO DE PRECIO
-// Basado en lógica de calculadora interna.
-// Tarifas editables desde el panel admin (?admin=1).
-// Persiste en localStorage para que se mantengan entre sesiones.
-// ════════════════════════════════════════════════════════
-// Calibrado a abril 2026 vs mercado chileno (Mudango, Cronoshare, 2x3.cl, Habitissimo).
-// Estrategia: quedar 10-15% bajo Mudango (penetración).
-// Calibrado a -10% (o más) vs Mudango — bajadas adicionales para garantizar margen.
-// Modelo: base baja por tipo de camión + precio por m³ alto (escala lineal).
-const TARIFAS_DEFAULT = {
-  baseChico:   20000,   // furgón hasta 10 m³ (-$10K para asegurar margen)
-  baseMedio:   15000,   // camión mediano hasta 24 m³ (-$10K idem)
-  baseGrande:  10000,   // camión grande sobre 24 m³ (-$10K idem)
-  precioM3:    10000,   // CLP por m³ (matchea slope real de Mudango)
-  m3Min:           3,   // m³ mínimo cobrable
-  precioKm:      500,   // CLP por km
-  kmGratis:       15,   // km incluidos en tarifa base
-  bajadaPiso:   3000,   // CLP por piso de bajada (bajo para mantener -10% con escaleras)
-  subidaPiso:   3000,   // CLP por piso de subida (idem)
-  recargoDelicado: 0.05, // 5% extra si declara muebles delicados
-  recargoEstacionamientoLejos: 10000,    // si camión > 40m
-  recargoEstacionamientoSubterraneo: 15000, // si entrada por subterráneo
-  // Factor por tramo desactivado (todo en 0) — la escala ya la da precioM3.
-  tramos: [
-    { desde: 0,  hasta: 10,   factor: 0 },
-    { desde: 10, hasta: 20,   factor: 0 },
-    { desde: 20, hasta: 30,   factor: 0 },
-    { desde: 30, hasta: 40,   factor: 0 },
-    { desde: 40, hasta: null, factor: 0 }
-  ]
-};
-
-function loadTarifas(){
-  try {
-    const t = localStorage.getItem('mvx_tarifas');
-    if(t) return Object.assign({}, TARIFAS_DEFAULT, JSON.parse(t));
-  } catch(e){}
-  return TARIFAS_DEFAULT;
-}
-function saveTarifas(t){ localStorage.setItem('mvx_tarifas', JSON.stringify(t)); }
-
-let TARIFAS = loadTarifas();
-
-// Estimación rápida de km entre dos direcciones de Chile.
-// Si origen y destino son la misma comuna/ciudad → urbano (8 km).
-// Si son distintas pero en RM → 25 km. Otros casos → 50 km.
-// (Aproximación heurística; reemplazar con Google Maps API si se necesita exactitud)
-function estimarKm(origenDir, destinoDir){
-  const norm = s => (s||'').toLowerCase().replace(/[^a-záéíóúñ\s]/g,'').trim();
-  const o = norm(origenDir), d = norm(destinoDir);
-  if(!o || !d) return 8;
-  const sharedComuna = o.split(/\s+/).some(w => w.length > 4 && d.includes(w));
-  if(sharedComuna) return 8;
-  // Heurística simple: si menciona Santiago, Providencia, Las Condes, Ñuñoa... = RM
-  const rmKeywords = ['santiago','providencia','las condes','ñuñoa','vitacura','la reina','macul','maipú','puente alto','la florida','peñalolén','san miguel','quilicura','independencia','recoleta','colina','lo barnechea','huechuraba'];
-  const oRM = rmKeywords.some(k=>o.includes(k));
-  const dRM = rmKeywords.some(k=>d.includes(k));
-  if(oRM && dRM) return 25;
-  if(oRM !== dRM) return 80; // RM a otra región
-  return 50; // ambas fuera de RM
-}
-// ── Distancia REAL via Google Maps Distance Matrix (con fallback a heurística) ──
-async function estimarKmGoogle(origenDir, destinoDir){
-  // Si Google Maps no está cargado, usar heurística
-  if(!window.google || !window.google.maps || !window.google.maps.DistanceMatrixService){
-    return estimarKm(origenDir, destinoDir);
-  }
-  try {
-    const service = new google.maps.DistanceMatrixService();
-    const result = await new Promise((resolve, reject) => {
-      service.getDistanceMatrix({
-        origins: [origenDir + ', Chile'],
-        destinations: [destinoDir + ', Chile'],
-        travelMode: google.maps.TravelMode.DRIVING,
-        unitSystem: google.maps.UnitSystem.METRIC
-      }, (response, status) => {
-        if(status === 'OK' && response.rows[0].elements[0].status === 'OK'){
-          const meters = response.rows[0].elements[0].distance.value;
-          resolve(Math.round(meters / 1000));
-        } else {
-          reject(status);
-        }
-      });
-    });
-    return result;
-  } catch(err){
-    console.warn('Google Maps falló, usando heurística:', err);
-    return estimarKm(origenDir, destinoDir);
-  }
-}
-
-function getPisos(tipoUbicacion, pisoVal, ascensorVal, ascSeleccionado){
-  // Pisos cuentan solo si NO hay ascensor o si "no cabe todo" en el ascensor
-  const piso = parseInt(pisoVal) || 0;
-  if(piso === 0) return 0;
-  if(tipoUbicacion === 'Casa') return 0;
-  const sinAscensor = (ascensorVal||'').toLowerCase().includes('no');
-  if(sinAscensor) return piso;
-  // Si tiene ascensor pero no cabe todo, contamos la mitad
-  if(ascSeleccionado && ascSeleccionado.toLowerCase().includes('algunas')) return Math.ceil(piso/2);
-  return 0;
-}
-
-function calcularPrecio(opts){
-  const T = TARIFAS;
-  const m3 = Math.max(0, opts.m3 || 0);
-  const km = opts.km || 8;
-  const pisosOrigen = opts.pisosOrigen || 0;
-  const pisosDestino = opts.pisosDestino || 0;
-  const efectivoM3 = Math.max(m3, T.m3Min);
-
-  // Base por tipo de camión
-  let baseCamion, camionLabel;
-  if(m3 <= 10){ baseCamion = T.baseChico; camionLabel = 'Furgón chico'; }
-  else if(m3 <= 24){ baseCamion = T.baseMedio; camionLabel = 'Camión mediano'; }
-  else { baseCamion = T.baseGrande; camionLabel = 'Camión grande'; }
-
-  // Factor incremental por tramo de volumen
-  const tramo = T.tramos.find(t => t.hasta === null || m3 <= t.hasta) || T.tramos[T.tramos.length-1];
-  const factorTramo = tramo.factor;
-
-  const costoVolumen = efectivoM3 * T.precioM3;
-  const kmExcedente = Math.max(0, km - T.kmGratis);
-  const costoDistancia = kmExcedente * T.precioKm;
-  const costoBajada = pisosOrigen * T.bajadaPiso;
-  const costoSubida = pisosDestino * T.subidaPiso;
-
-  // Recargos
-  let recargoDelicado = 0;
-  if(opts.delicado === 'si'){
-    recargoDelicado = Math.round((baseCamion + factorTramo + costoVolumen) * T.recargoDelicado);
-  }
-  let recargoEstac = 0;
-  if((opts.estacOrigen||'').includes('mas40') || (opts.estacDestino||'').includes('mas40')){
-    recargoEstac += T.recargoEstacionamientoLejos;
-  }
-  if((opts.estacOrigen||'').includes('subterraneo') || (opts.estacDestino||'').includes('subterraneo')){
-    recargoEstac += T.recargoEstacionamientoSubterraneo;
-  }
-
-  // Recargo por plan
-  const PLAN_MULT = { lite: 1.0, smart: 1.45, pro: 2.0 };
-  const planMult = PLAN_MULT[opts.plan] || 1.0;
-
-  const subtotal = baseCamion + factorTramo + costoVolumen + costoDistancia + costoBajada + costoSubida + recargoDelicado + recargoEstac;
-  const total = Math.round(subtotal * planMult);
-  const recargoPlan = total - subtotal;
-
-  return {
-    camionLabel, baseCamion, factorTramo, costoVolumen, costoDistancia,
-    costoBajada, costoSubida, recargoDelicado, recargoEstac, recargoPlan,
-    subtotal, total, m3, efectivoM3, km
-  };
-}
-
-function fmtCLP(n){ return '$' + Math.round(n).toLocaleString('es-CL'); }
-
-// ════════════════════════════════════════════════════════
-// PANEL ADMIN OCULTO — accede con ?admin=1 al final de la URL
-// ════════════════════════════════════════════════════════
-function showAdminPanel(){
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  const fields = [
-    ['baseChico','Base furgón chico (≤10 m³)'],
-    ['baseMedio','Base camión mediano (≤24 m³)'],
-    ['baseGrande','Base camión grande (>24 m³)'],
-    ['precioM3','Precio por m³'],
-    ['m3Min','M³ mínimo cobrable'],
-    ['precioKm','Precio por km'],
-    ['kmGratis','Km gratis incluidos'],
-    ['bajadaPiso','Bajada por piso (origen)'],
-    ['subidaPiso','Subida por piso (destino)'],
-    ['recargoEstacionamientoLejos','Recargo estac. > 40m'],
-    ['recargoEstacionamientoSubterraneo','Recargo estac. subterráneo']
-  ];
-  let html = '<div style="background:white;border-radius:16px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:28px;font-family:Outfit,sans-serif;">';
-  html += '<h2 style="font-size:22px;font-weight:900;color:#0F1C2E;margin-bottom:8px;">Ajustar tarifas</h2>';
-  html += '<p style="font-size:13px;color:#64748B;margin-bottom:20px;">Cambios se guardan en este navegador. Para sincronizar a producción, contactar dev.</p>';
-  fields.forEach(([k,label])=>{
-    html += `<div style="margin-bottom:12px;"><label style="display:block;font-size:12px;font-weight:700;color:#0F1C2E;margin-bottom:4px;">${label}</label><input type="number" id="adm-${k}" value="${TARIFAS[k]}" style="width:100%;padding:8px 12px;border:1px solid #E2E8F0;border-radius:8px;font-size:14px;"></div>`;
-  });
-  html += '<h3 style="font-size:14px;font-weight:700;color:#0F1C2E;margin:18px 0 8px;">Recargo por plan</h3>';
-  html += '<p style="font-size:12px;color:#64748B;margin-bottom:8px;">Lite: 1.00 (sin recargo) · Smart: 1.45 · Pro: 2.00</p>';
-  html += '<div style="display:flex;gap:10px;margin-top:20px;">';
-  html += '<button onclick="saveAdminTarifas()" style="flex:1;background:#D32F2F;color:white;padding:12px;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Guardar</button>';
-  html += '<button onclick="this.closest(\'div\').parentElement.remove()" style="flex:1;background:white;color:#0F1C2E;padding:12px;border:1.5px solid #E2E8F0;border-radius:8px;font-weight:700;cursor:pointer;">Cerrar</button>';
-  html += '<button onclick="if(confirm(\'Restablecer tarifas por defecto?\')){localStorage.removeItem(\'mvx_tarifas\');location.reload();}" style="flex:1;background:#FAEEDA;color:#854F0B;padding:12px;border:1.5px solid #BA7517;border-radius:8px;font-weight:700;cursor:pointer;">Reset</button>';
-  html += '</div></div>';
-  overlay.innerHTML = html;
-  document.body.appendChild(overlay);
-}
-function saveAdminTarifas(){
-  const T = Object.assign({}, TARIFAS);
-  ['baseChico','baseMedio','baseGrande','precioM3','m3Min','precioKm','kmGratis','bajadaPiso','subidaPiso','recargoEstacionamientoLejos','recargoEstacionamientoSubterraneo'].forEach(k=>{
-    const el = document.getElementById('adm-'+k);
-    if(el) T[k] = parseFloat(el.value) || 0;
-  });
-  saveTarifas(T);
-  TARIFAS = T;
-  alert('Tarifas guardadas. Las próximas cotizaciones usarán los nuevos valores.');
-  document.querySelector('div[style*="z-index:9999"]').remove();
-}
-
-// Si la URL tiene ?admin=1, abrir panel admin al cargar
-if(new URLSearchParams(window.location.search).get('admin') === '1'){
-  setTimeout(showAdminPanel, 500);
-}
-
 
 function openWizard(){ document.getElementById('wizardOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
 function closeWizard(){ document.getElementById('wizardOverlay').classList.remove('open'); document.body.style.overflow=''; }
 document.getElementById('wizardOverlay').addEventListener('click',function(e){ if(e.target===this) closeWizard(); });
 
 function updateProgress(){
-  const pasos = 3;
-  const visibleStep = Math.min(currentStep, pasos);
-  const pct = Math.round((visibleStep/pasos)*100);
-  document.getElementById('progressFill').style.width = pct+'%';
-  document.getElementById('progressText').textContent = currentStep > pasos ? 'Tu cotización' : `Paso ${visibleStep} de ${pasos}`;
+  const dots = document.querySelectorAll('#progressSteps .progress-step-dot');
+  dots.forEach((dot,i)=>{
+    dot.classList.remove('done','current');
+    if(i+1 < currentStep) dot.classList.add('done');
+    else if(i+1 === currentStep) dot.classList.add('current');
+  });
+  const pt = document.getElementById('progressText');
+  if(pt) pt.textContent = `Paso ${currentStep} de ${totalSteps} · ${stepLabels[currentStep]||''}`;
 }
 function selectChoice(el, group, val){
-  const parent = el.closest('.wiz-choices');
+  const parent = el.closest('.wiz-choices, .wiz-choices-compact');
   parent.querySelectorAll('.wiz-choice').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
   choices[group] = val;
 }
-function checkStep1(){
-  const n = document.getElementById('inp-nombre').value.trim();
-  if(n) document.getElementById('q-step2').textContent = `${n}, ¡gracias por confiar en Mueveloexpress! ¿Para cuándo necesitas la mudanza?`;
+function checkStep1(){ /* validación dinámica si es necesaria */ }
+function filterInventory(query){
+  const q = query.trim().toLowerCase();
+  const cats = document.querySelectorAll('.inv-cat');
+  const noResults = document.getElementById('invNoResults');
+  let anyMatch = false;
+  cats.forEach(cat=>{
+    const items = cat.querySelectorAll('.inv-item');
+    let catHasMatch = false;
+    items.forEach(item=>{
+      const name = item.querySelector('.inv-item-name').textContent.toLowerCase();
+      if(!q || name.includes(q)){
+        item.style.display = '';
+        catHasMatch = true;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+    if(q){
+      cat.style.display = catHasMatch ? '' : 'none';
+      if(catHasMatch) cat.classList.add('open');
+    } else {
+      cat.style.display = '';
+      cat.classList.remove('open');
+    }
+    if(catHasMatch) anyMatch = true;
+  });
+  if(noResults) noResults.classList.toggle('show', q && !anyMatch);
 }
 document.getElementById('sel-origen-tipo').addEventListener('change',function(){
   document.getElementById('subrow-origen').style.display = (this.value==='Departamento'||this.value==='Oficina') ? 'grid' : 'none';
@@ -1265,41 +1126,31 @@ function validateStep(step){
   if(step===1){
     const n=document.getElementById('inp-nombre').value.trim();
     const a=document.getElementById('inp-apellido').value.trim();
+    const email=document.getElementById('inp-email').value.trim();
+    const tel=document.getElementById('inp-telefono').value.trim();
     const f=document.getElementById('inp-fecha').value;
-    const ot=document.getElementById('sel-origen-tipo').value;
-    const od=document.getElementById('inp-origen-dir').value.trim();
-    const dt=document.getElementById('sel-destino-tipo').value;
-    const dd=document.getElementById('inp-destino-dir').value.trim();
-    if(!n||!a||!choices['tipo-servicio']||!f||!ot||!od||!dt||!dd||!choices['delicado']){
-      showErr('err-1'); return false;
+    const tOri=document.getElementById('sel-origen-tipo').value;
+    const dOri=document.getElementById('inp-origen-dir').value.trim();
+    const tDest=document.getElementById('sel-destino-tipo').value;
+    const dDest=document.getElementById('inp-destino-dir').value.trim();
+    if(!n||!a||!email||!tel||tel.length<8||!f||!choices['tipo-servicio']||!choices['plan']||!tOri||!dOri||!tDest||!dDest||!choices['asc-orig']||!choices['estac-orig']||!choices['estac-dest']||!choices['delicado']){
+      showErr('err-1');
+      return false;
     }
     return true;
   }
-  if(step===2){ return true; } // inventario opcional, validamos en step 3
-  if(step===3){
-    const e=document.getElementById('inp-email').value.trim();
-    const t=document.getElementById('inp-telefono').value.trim();
-    if(!e||!t||t.length<8){ showErr('err-3'); return false; }
-    return true;
-  }
+  if(step===2){ return true; }
   return true;
 }
 function wizNext(){
-  if(currentStep<=3 && !validateStep(currentStep)) return;
-  if(currentStep===3){
-    buildFinalStep();
-    showStep('final');
-    document.getElementById('wizFooter').style.display='none';
-    currentStep = 4;
-    updateProgress();
-    return;
-  }
+  if(!validateStep(currentStep)) return;
+  if(currentStep===totalSteps){ buildFinalStep(); showStep('final'); document.getElementById('wizFooter').style.display='none'; return; }
   const nextStep = currentStep+1;
   showStep(nextStep);
   currentStep = nextStep;
   updateProgress();
   if(currentStep>1) document.getElementById('btnBack').style.display='';
-  document.getElementById('btnNext').textContent = currentStep===3 ? 'Ver mi cotización →' : 'Siguiente →';
+  if(currentStep===totalSteps) document.getElementById('btnNext').textContent='Recibir presupuesto →';
 }
 function wizBack(){
   if(currentStep<=1) return;
@@ -1307,8 +1158,7 @@ function wizBack(){
   showStep(currentStep);
   updateProgress();
   if(currentStep===1) document.getElementById('btnBack').style.display='none';
-  document.getElementById('btnNext').textContent = currentStep===3 ? 'Ver mi cotización →' : 'Siguiente →';
-  document.getElementById('wizFooter').style.display='';
+  document.getElementById('btnNext').textContent = currentStep<totalSteps ? 'Continuar →' : 'Recibir presupuesto →';
 }
 function showStep(s){
   document.querySelectorAll('.wizard-step').forEach(el=>el.classList.remove('active'));
@@ -1320,181 +1170,64 @@ async function buildFinalStep(){
   const fecha = document.getElementById('inp-fecha').value;
   const origenTipo = document.getElementById('sel-origen-tipo').value;
   const origenDir = document.getElementById('inp-origen-dir').value;
-  const origenNum = (document.getElementById('inp-origen-num')||{}).value || '';
-  const origenPiso = (document.getElementById('inp-origen-piso')||{}).value || '';
-  const origenAsc = (document.getElementById('sel-origen-asc')||{}).value || '';
-  const origenEstac = (document.getElementById('sel-origen-estac')||{}).value || '';
+  const origenNum = document.getElementById('inp-origen-num').value;
+  const origenPiso = document.getElementById('inp-origen-piso').value;
+  const origenAsc = document.getElementById('sel-origen-asc').value;
   const destinoTipo = document.getElementById('sel-destino-tipo').value;
   const destinoDir = document.getElementById('inp-destino-dir').value;
-  const destinoNum = (document.getElementById('inp-destino-num')||{}).value || '';
-  const destinoPiso = (document.getElementById('inp-destino-piso')||{}).value || '';
-  const destinoAsc = (document.getElementById('sel-destino-asc')||{}).value || '';
-  const destinoEstac = (document.getElementById('sel-destino-estac')||{}).value || '';
+  const destinoNum = document.getElementById('inp-destino-num').value;
+  const destinoPiso = document.getElementById('inp-destino-piso').value;
+  const destinoAsc = document.getElementById('sel-destino-asc').value;
   const email = document.getElementById('inp-email').value;
   const tel = document.getElementById('inp-telefono').value;
-  const tipoServVal = choices['tipo-servicio'] || 'mudanza';
-  const delicadoVal = choices['delicado'] || 'no';
 
-  const km = await estimarKmGoogle(origenDir, destinoDir);
-  const pisosOrigen = getPisos(origenTipo, origenPiso, origenAsc, '');
-  const pisosDestino = getPisos(destinoTipo, destinoPiso, destinoAsc, '');
+  const ascOrigSelected = document.querySelector('[onclick*="asc-orig"][onclick*="selectChoice"].wiz-choice.selected');
+  const ascDestSelected = document.querySelector('[onclick*="asc-dest"][onclick*="selectChoice"].wiz-choice.selected');
+  const delicadoSelected = document.querySelector('[onclick*="delicado"][onclick*="selectChoice"].wiz-choice.selected');
+  const estacOrigSelected = document.querySelector('[onclick*="estac-orig"][onclick*="selectChoice"].wiz-choice.selected');
+  const estacDestSelected = document.querySelector('[onclick*="estac-dest"][onclick*="selectChoice"].wiz-choice.selected');
 
-  // Calcular precios para los 3 planes
-  const baseOpts = {
-    m3: totalVol, km, pisosOrigen, pisosDestino,
-    delicado: delicadoVal,
-    estacOrigen: origenEstac,
-    estacDestino: destinoEstac
-  };
-  const precios = {
-    lite:  calcularPrecio(Object.assign({}, baseOpts, {plan:'lite'})),
-    smart: calcularPrecio(Object.assign({}, baseOpts, {plan:'smart'})),
-    pro:   calcularPrecio(Object.assign({}, baseOpts, {plan:'pro'}))
-  };
-
-  // Guardar en variable global para usar después al elegir plan
-  window._cotizacionData = {
-    nombre, tipoServicio: tipoServVal, fecha,
-    origen: { tipo: origenTipo, direccion: origenDir, numero: origenNum, piso: origenPiso, ascensor: origenAsc, estacionamiento: origenEstac },
-    destino: { tipo: destinoTipo, direccion: destinoDir, numero: destinoNum, piso: destinoPiso, ascensor: destinoAsc, estacionamiento: destinoEstac },
-    delicado: delicadoVal,
-    email, telefono: tel,
+  const formData = {
+    nombre,
+    tipoServicio: choices['tipo-servicio'] || 'mudanza',
+    plan: choices['plan'] || 'lite',
+    fecha,
+    origen: { tipo: origenTipo, direccion: origenDir, numero: origenNum, piso: origenPiso, ascensor: origenAsc, ascSeleccionado: ascOrigSelected?.textContent || 'no' },
+    destino: { tipo: destinoTipo, direccion: destinoDir, numero: destinoNum, piso: destinoPiso, ascensor: destinoAsc, ascSeleccionado: ascDestSelected?.textContent || 'no' },
+    delicado: delicadoSelected?.textContent.includes('Sí') ? 'si' : 'no',
+    estacionamiento: { origen: estacOrigSelected?.textContent || 'no', destino: estacDestSelected?.textContent || 'no' },
+    email,
+    telefono: tel,
     inventario: getInventoryData(),
-    volumenTotal: totalVol, itemsTotal: totalItems,
-    km, pisosOrigen, pisosDestino,
-    precios
+    volumenTotal: totalVol,
+    itemsTotal: totalItems
   };
 
-  const finalContainer = document.getElementById('finalContent');
-  finalContainer.innerHTML = `
-    <div style="text-align:center;margin-bottom:8px;">
-      <div style="font-size:42px;margin-bottom:4px;">🎉</div>
-      <h2 style="font-size:24px;font-weight:900;color:#0F1C2E;letter-spacing:-.5px;">¡Listo, ${nombre.split(' ')[0]}!</h2>
-      <p style="font-size:14px;color:#64748B;margin-top:4px;">Elige el plan que mejor se ajusta a ti</p>
-    </div>
-    <div class="plan-cards">
-      <div class="plan-card" onclick="selectPlan('lite')">
-        <div class="plan-name">Muévelo Lite</div>
-        <div class="plan-desc">Lo esencial para mover tus cosas</div>
-        <div class="plan-price">${fmtCLP(precios.lite.total)}</div>
-        <ul class="plan-includes" style="list-style:none;padding:0;">
-          <li>Carga de muebles</li>
-          <li>Traslado seguro</li>
-          <li>Descarga en destino</li>
-        </ul>
-        <button class="plan-btn">Elegir Lite</button>
-      </div>
-      <div class="plan-card popular" onclick="selectPlan('smart')">
-        <div class="plan-badge">Más popular</div>
-        <div class="plan-name">Muévelo Smart</div>
-        <div class="plan-desc">Lo más elegido por nuestros clientes</div>
-        <div class="plan-price">${fmtCLP(precios.smart.total)}</div>
-        <ul class="plan-includes" style="list-style:none;padding:0;">
-          <li>Todo lo de Lite</li>
-          <li>Embalaje básico de muebles</li>
-          <li>Materiales incluidos</li>
-        </ul>
-        <button class="plan-btn">Elegir Smart</button>
-      </div>
-      <div class="plan-card" onclick="selectPlan('pro')">
-        <div class="plan-name">Muévelo Pro</div>
-        <div class="plan-desc">Servicio completo, tú no haces nada</div>
-        <div class="plan-price">${fmtCLP(precios.pro.total)}</div>
-        <ul class="plan-includes" style="list-style:none;padding:0;">
-          <li>Todo lo de Smart</li>
-          <li>Empaque en cajas</li>
-          <li>Cuidado premium muebles</li>
-        </ul>
-        <button class="plan-btn">Elegir Pro</button>
-      </div>
-    </div>
-    <div class="wiz-final-summary">
-      <strong>Resumen:</strong> ${totalVol.toFixed(1)} m³ · ${totalItems} ítems · ${km} km estimados<br>
-      <strong>${origenTipo} en ${origenDir.split(',')[0]}</strong> → <strong>${destinoTipo} en ${destinoDir.split(',')[0]}</strong>
-    </div>
-    <p id="final-status" style="font-size:11px;color:#94a3b8;text-align:center;font-style:italic;">Estos son precios estimados. El precio final se confirma con un asesor antes del servicio.</p>
-  `;
+  document.getElementById('final-title').textContent = `¡Listo, ${nombre.split(' ')[0]}! 🎉`;
+  document.getElementById('final-msg').textContent = `Procesando tu cotización...`;
 
-  // Enviar correos vía EmailJS (cliente + admin) en paralelo
-  enviarCorreosCotizacion(window._cotizacionData);
-}
+  try {
+    const response = await fetch('/api/cotizar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
 
-// ════════════════════════════════════════════════════════
-// EmailJS — envío de correos cliente + admin
-// ════════════════════════════════════════════════════════
-function enviarCorreosCotizacion(d){
-  if(typeof emailjs === 'undefined' || !window.EMAILJS_PUBLIC_KEY){
-    console.warn('EmailJS no disponible — saltando envío');
-    return;
+    if(response.ok) {
+      const result = await response.json();
+      document.getElementById('final-msg').textContent = `✅ ¡Excelente! Te enviaremos el presupuesto a ${email} y al +56${tel} en menos de 1 hora.`;
+      const tipoServ = (choices['tipo-servicio']||'mudanza').toUpperCase();
+      const planTxt = { lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[choices['plan']||'lite'];
+      const msg = `Hola Mueveloexpress! Quiero cotizar un servicio:\n\n👤 Nombre: ${nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan: ${planTxt}\n📅 Fecha estimada: ${fecha}\n📍 Origen: ${origenTipo} · ${origenDir}\n📦 Destino: ${destinoTipo} · ${destinoDir}\n📊 Volumen estimado: ${totalVol.toFixed(1)} m³ (${totalItems} ítems)\n✉️ Email: ${email}\n📱 Teléfono: +56${tel}`;
+      document.getElementById('final-wa-link').href = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
+    } else {
+      document.getElementById('final-msg').textContent = `❌ Error procesando la cotización. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
+    }
+  } catch(err) {
+    console.error('Error enviando cotización:', err);
+    document.getElementById('final-msg').textContent = `❌ No pudimos conectar con nuestro servidor. Por favor intenta nuevamente o contáctanos por WhatsApp.`;
   }
-  // Construir inventario detallado en texto plano
-  const invList = Object.entries(d.inventario || {})
-    .map(([item, qty]) => qty + '× ' + item)
-    .join('\n') || '(sin ítems)';
-
-  // Variables compartidas para ambos templates
-  const params = {
-    customer_name:  d.nombre,
-    customer_email: d.email,
-    customer_phone: '+56' + (d.telefono || ''),
-    fecha:    d.fecha || 'A coordinar',
-    origen:   (d.origen?.tipo || '') + ' · ' + (d.origen?.direccion || ''),
-    destino:  (d.destino?.tipo || '') + ' · ' + (d.destino?.direccion || ''),
-    volumen:  (d.volumenTotal || 0).toFixed(1),
-    items:    d.itemsTotal || 0,
-    precio_lite:  fmtCLP(d.precios?.lite?.total  || 0),
-    precio_smart: fmtCLP(d.precios?.smart?.total || 0),
-    precio_pro:   fmtCLP(d.precios?.pro?.total   || 0),
-    inventario_detallado: invList
-  };
-
-  const status = document.getElementById('final-status');
-  // Enviar ambos correos en paralelo
-  Promise.all([
-    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_CLIENTE, params),
-    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_ADMIN,   params)
-  ]).then(() => {
-    if(status) status.textContent = '✓ Cotización enviada a ' + d.email + '. Revisa tu correo.';
-  }).catch(err => {
-    console.error('Error EmailJS:', err);
-    if(status) status.textContent = '⚠️ No pudimos enviar el correo automático. Por favor confirma por WhatsApp.';
-  });
 }
-
-function selectPlan(planKey){
-  const data = window._cotizacionData;
-  if(!data) return;
-  const planTxt = { lite:'Muévelo Lite', smart:'Muévelo Smart', pro:'Muévelo Pro' }[planKey];
-  const precio = data.precios[planKey];
-  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-
-  // Construir mensaje WhatsApp
-  const tipoServ = (data.tipoServicio||'mudanza').toUpperCase();
-  const msg = `Hola Mueveloexpress! Quiero confirmar mi cotización:\n\n👤 ${data.nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan elegido: *${planTxt}*\n💰 *Total: ${fmtCLP(precio.total)}*\n📅 Fecha: ${data.fecha}\n📍 ${data.origen.tipo} · ${data.origen.direccion}\n🎯 ${data.destino.tipo} · ${data.destino.direccion}\n📊 ${data.volumenTotal.toFixed(1)} m³ · ${data.itemsTotal} ítems\n✉️ ${data.email}\n📱 +56${data.telefono}`;
-  const waUrl = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
-
-  // Reemplazar contenido con confirmación + botón WhatsApp
-  document.getElementById('finalContent').innerHTML = `
-    <div style="text-align:center;padding:20px 0;">
-      <div style="font-size:56px;margin-bottom:12px;">✅</div>
-      <h2 style="font-size:24px;font-weight:900;color:#0F1C2E;letter-spacing:-.5px;margin-bottom:8px;">¡Plan ${planTxt} elegido!</h2>
-      <p style="font-size:14px;color:#64748B;margin-bottom:24px;">Confirma con un asesor y agenda tu mudanza por WhatsApp.</p>
-      <div style="background:linear-gradient(135deg,#D32F2F,#B71C1C);color:white;border-radius:18px;padding:24px;margin-bottom:20px;box-shadow:0 12px 32px rgba(211,47,47,.25);">
-        <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85;margin-bottom:6px;">Tu cotización</div>
-        <div style="font-size:36px;font-weight:900;letter-spacing:-1.5px;line-height:1;">${fmtCLP(precio.total)}</div>
-        <div style="font-size:13px;margin-top:8px;opacity:.9;">${planTxt}</div>
-      </div>
-      <a href="${waUrl}" target="_blank" class="wiz-final-wa" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:white;padding:16px 28px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
-        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:currentColor;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        Confirmar por WhatsApp
-      </a>
-      <p style="font-size:11px;color:#94a3b8;margin-top:14px;font-style:italic;">Te contactaremos también por correo a ${data.email}</p>
-    </div>
-  `;
-}
-
-
 
 function getInventoryData() {
   const inventory = {};
@@ -1507,96 +1240,120 @@ function getInventoryData() {
 }
 window.addEventListener('scroll', function(){ document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20); });
 
+// ── PHOTO UPLOAD & AI ──
+let uploadedPhotos = [];
+function togglePhotoPanel(){
+  const body = document.getElementById('photoScanBody');
+  const btn = document.getElementById('photoToggleBtn');
+  const isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? 'Probar IA ↓' : 'Cerrar ↑';
+}
+document.getElementById('photoFileInput').addEventListener('change', function(e){ handlePhotoFiles(e.target.files); });
+const dropZone = document.getElementById('photoDropZone');
+dropZone.addEventListener('dragover', e=>{e.preventDefault();dropZone.classList.add('drag-over');});
+dropZone.addEventListener('dragleave', ()=>dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e=>{ e.preventDefault(); dropZone.classList.remove('drag-over'); handlePhotoFiles(e.dataTransfer.files); });
+function handlePhotoFiles(files){
+  const allowed = [...files].filter(f=>f.type.startsWith('image/')).slice(0, 5 - uploadedPhotos.length);
+  allowed.forEach(file=>{
+    if(uploadedPhotos.length >= 5) return;
+    const reader = new FileReader();
+    reader.onload = e=>{ uploadedPhotos.push({data: e.target.result.split(',')[1], type: file.type, url: e.target.result}); renderPhotoPreviews(); };
+    reader.readAsDataURL(file);
+  });
+}
+function renderPhotoPreviews(){
+  const container = document.getElementById('photoPreviews');
+  container.innerHTML = uploadedPhotos.map((p,i)=>
+    '<div class="photo-preview"><img src="'+p.url+'" alt="Foto '+(i+1)+'"><button class="photo-preview-remove" onclick="removePhoto('+i+')">&#215;</button></div>'
+  ).join('');
+  document.getElementById('photoAnalyzeBtn').disabled = uploadedPhotos.length === 0;
+}
+function removePhoto(i){ uploadedPhotos.splice(i,1); renderPhotoPreviews(); }
+async function analyzePhotos(){
+  if(uploadedPhotos.length === 0) return;
+  const analyzeBtn = document.getElementById('photoAnalyzeBtn');
+  const loading = document.getElementById('photoLoading');
+  const results = document.getElementById('photoResults');
+  const errorDiv = document.getElementById('photoError');
+  analyzeBtn.style.display = 'none';
+  loading.style.display = 'block';
+  results.style.display = 'none';
+  errorDiv.style.display = 'none';
+  try{
+    const imageContent = uploadedPhotos.map(p => ({
+      type: 'image',
+      source: { type: 'base64', media_type: p.type || 'image/jpeg', data: p.data }
+    }));
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-6',
+        max_tokens: 1024,
+        messages: [{
+          role: 'user',
+          content: [
+            ...imageContent,
+            { type: 'text', text: 'Eres un asistente especializado en mudanzas. Analiza estas fotos y lista todos los muebles y electrodomésticos que puedas ver. Responde ÚNICAMENTE con un JSON válido con este formato exacto, sin texto adicional:\n{"items": [{"nombre": "nombre del mueble en español de Chile", "cantidad": número}]}\n\nReglas:\n- Solo muebles y objetos grandes que se mueven en mudanzas\n- NO incluyas paredes, ventanas, pisos ni objetos pequeños\n- Usa nombres en español de Chile (Cama 2 Plazas, Ropero, Velador, Sillón, Refrigerador, etc.)' }
+          ]
+        }]
+      })
+    });
+    if(!response.ok) throw new Error('API error');
+    const apiData = await response.json();
+    const responseText = apiData.content?.[0]?.text || '';
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error('No JSON found');
+    const parsed = JSON.parse(jsonMatch[0]);
+    if(parsed.items && parsed.items.length > 0){ populateInventoryFromAI(parsed.items); }
+    else { errorDiv.style.display = 'block'; }
+  } catch(err){ console.error(err); errorDiv.style.display = 'block'; }
+  loading.style.display = 'none';
+  analyzeBtn.style.display = 'block';
+}
+function populateInventoryFromAI(items){
+  const resultsList = document.getElementById('photoResultsList');
+  resultsList.innerHTML = items.map(item=>'<div class="photo-result-item"><span class="photo-result-name">'+item.nombre+'</span><span class="photo-result-badge">'+item.cantidad+'x</span></div>').join('');
+  document.getElementById('photoResults').style.display = 'block';
+  items.forEach(item=>{ autoFillInventoryItem(item.nombre.toLowerCase(), Math.max(1, parseInt(item.cantidad)||1)); });
+}
+function autoFillInventoryItem(nombre, cantidad){
+  const allItems = document.querySelectorAll('.inv-item');
+  let bestMatch = null;
+  let bestScore = 0;
+  allItems.forEach(item=>{
+    const itemName = item.querySelector('.inv-item-name').textContent.toLowerCase();
+    const score = textSimilarity(nombre, itemName);
+    if(score > bestScore && score > 0.35){ bestScore = score; bestMatch = item; }
+  });
+  if(bestMatch){
+    const cat = bestMatch.closest('.inv-cat');
+    if(cat && !cat.classList.contains('open')) toggleCat(cat.id.replace('cat-',''));
+    const plusBtn = bestMatch.querySelector('.inv-btn.plus');
+    for(let i = 0; i < cantidad; i++) plusBtn.click();
+  }
+}
+function textSimilarity(str1, str2){
+  const normalize = s => s.toLowerCase().replace(/[áàä]/g,'a').replace(/[éèë]/g,'e').replace(/[íìï]/g,'i').replace(/[óòö]/g,'o').replace(/[úùü]/g,'u').replace(/[^a-z0-9\s]/g,'');
+  const words1 = normalize(str1).split(/\s+/).filter(w=>w.length > 2);
+  const words2 = normalize(str2).split(/\s+/).filter(w=>w.length > 2);
+  if(!words1.length || !words2.length) return 0;
+  let matches = 0;
+  words1.forEach(w1=>{ if(words2.some(w2=> w2.includes(w1) || w1.includes(w2))) matches++; });
+  return matches / Math.max(words1.length, words2.length);
+}
 
 // Init
 updateProgress();
 document.getElementById('btnBack').style.display='none';
-document.getElementById('btnNext').textContent = 'Comencemos →';
-
-// ════════════════════════════════════════════════════════
-// GOOGLE PLACES AUTOCOMPLETE + MAPS PREVIEW
-// Agrega autocompletar de direcciones (restringido a Chile) y
-// muestra un mapita con pin arrastrable bajo cada campo de dirección.
-// ════════════════════════════════════════════════════════
-const _addressMaps = {};
-
-function initAddressAutocomplete(){
-  if(!window.google || !window.google.maps || !window.google.maps.places){
-    // Reintentar cuando Google Maps termine de cargar
-    setTimeout(initAddressAutocomplete, 500);
-    return;
-  }
-  ['origen','destino'].forEach(tipo => {
-    const input  = document.getElementById('inp-' + tipo + '-dir');
-    const mapDiv = document.getElementById('map-' + tipo);
-    if(!input || !mapDiv || _addressMaps[tipo]) return;
-
-    const autocomplete = new google.maps.places.Autocomplete(input, {
-      componentRestrictions: { country: 'cl' },
-      fields: ['geometry', 'formatted_address', 'name'],
-      types: ['address']
-    });
-
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if(!place.geometry || !place.geometry.location) return;
-      const loc = place.geometry.location;
-      mapDiv.classList.add('visible');
-
-      let map = _addressMaps[tipo]?.map;
-      let marker = _addressMaps[tipo]?.marker;
-
-      if(!map){
-        map = new google.maps.Map(mapDiv, {
-          center: loc,
-          zoom: 16,
-          disableDefaultUI: true,
-          zoomControl: true,
-          gestureHandling: 'cooperative',
-          styles: [
-            { featureType:'poi', stylers:[{visibility:'simplified'}] },
-            { featureType:'transit', stylers:[{visibility:'off'}] }
-          ]
-        });
-        marker = new google.maps.Marker({
-          position: loc,
-          map: map,
-          draggable: true,
-          animation: google.maps.Animation.DROP
-        });
-        // Si arrastra el pin, actualizar el campo con la nueva dirección
-        marker.addListener('dragend', () => {
-          const pos = marker.getPosition();
-          const geocoder = new google.maps.Geocoder();
-          geocoder.geocode({ location: pos }, (results, status) => {
-            if(status === 'OK' && results[0]){
-              input.value = results[0].formatted_address;
-            }
-          });
-        });
-        _addressMaps[tipo] = { map, marker };
-      } else {
-        map.setCenter(loc);
-        map.setZoom(16);
-        marker.setPosition(loc);
-        marker.setAnimation(google.maps.Animation.DROP);
-      }
-    });
-  });
-}
-
-// Inicializar cuando el wizard se abra (los inputs ya están en el DOM)
-const _origOpenWizard = window.openWizard;
-window.openWizard = function(){
-  if(typeof _origOpenWizard === 'function') _origOpenWizard();
-  setTimeout(initAddressAutocomplete, 200);
-};
-
-// También intentar al cargar la página por si Maps llega antes
-window.addEventListener('load', () => {
-  setTimeout(initAddressAutocomplete, 800);
-});
-
+document.getElementById('btnNext').textContent = 'Continuar al inventario →';
 </script>
 </body>
 </html>
