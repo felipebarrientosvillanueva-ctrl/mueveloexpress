@@ -986,7 +986,7 @@ footer{background:#080F19;padding:56px 60px 32px;}
     </div>
     <div class="footer-divider"></div>
     <div class="footer-copy">
-      <p>© 2026 Mueveloexpress · Todos los derechos reservados</p>
+      <p>© 2026 Mueveloexpress · Todos los derechos reservados · <a href="privacidad.html" style="color:rgba(255,255,255,.45);text-decoration:none;">Política de Privacidad</a></p>
       <p>Mudanzas en todo Chile &#127464;&#127473;</p>
     </div>
   </div>
@@ -1540,13 +1540,25 @@ function showStep(s){
 // MOTOR DE CÁLCULO DE PRECIO (frontend, sin servidor)
 // Tarifas persistidas en localStorage. Panel admin con ?admin=1.
 // ════════════════════════════════════════════════════════
+// ── TARIFAS CALIBRADAS con mudanzas reales de Mayo 2026 ──
+// REGLA: la base solo aplica para mudanzas dentro de RM (km ≤ 65)
+// Si km > 65 → mudanza interregional, NO se cobra base, solo m³ + km
 const TARIFAS_DEFAULT = {
-  baseChico:   20000, baseMedio:   15000, baseGrande:  10000,
-  precioM3:    10000, m3Min: 3, precioKm: 500, kmGratis: 15,
-  bajadaPiso:   3000, subidaPiso:   3000,
-  recargoDelicado: 0.05,
-  recargoEstacionamientoLejos: 10000,
-  recargoEstacionamientoSubterraneo: 15000,
+  base:         80000,   // base fija (solo aplica si km ≤ 65)
+  precioM3:      9500,   // CLP por m³
+  m3Min:            3,   // m³ mínimo cobrable
+  precioKm:      1500,   // CLP por km
+  kmGratis:        12,   // km incluidos en la tarifa base (solo si km ≤ 65)
+  kmLimiteBase:    65,   // umbral RM: arriba de esto NO se cobra base
+  kmLimiteLarga:  200,   // umbral interregional larga: arriba de esto SOLO se cobran km
+  // Compatibilidad legacy (panel admin):
+  baseChico:    80000, baseMedio: 80000, baseGrande: 80000,
+  bajadaPiso:    3000, subidaPiso: 3000,
+  recargoDelicado: 0.05,                    // +5% si declara muebles delicados
+  recargoEstacionamientoLejos: 20000,       // si camión > 40m
+  recargoEstacionamientoSubterraneo: 25000, // si entrada por subterráneo
+  recargoSinAscensorOrigen: 15000,          // si no hay ascensor en origen
+  recargoSinAscensorDestino: 15000,         // si no hay ascensor en destino
   tramos: [
     { desde: 0,  hasta: 10,   factor: 0 },
     { desde: 10, hasta: 20,   factor: 0 },
@@ -1555,6 +1567,13 @@ const TARIFAS_DEFAULT = {
     { desde: 40, hasta: null, factor: 0 }
   ]
 };
+
+// Auto-asignación de ayudantes según volumen (logística interna)
+function ayudantesAutoAsignados(m3){
+  if(m3 <= 4) return { total:1, descripcion:'Solo conductor' };
+  if(m3 <= 12) return { total:2, descripcion:'Conductor + 1 ayudante' };
+  return { total:3, descripcion:'Conductor + 2 ayudantes' };
+}
 function loadTarifas(){
   try { const t = localStorage.getItem('mvx_tarifas'); if(t) return Object.assign({}, TARIFAS_DEFAULT, JSON.parse(t)); } catch(e){}
   return TARIFAS_DEFAULT;
@@ -1609,34 +1628,103 @@ function getPisos(tipoUbicacion, pisoVal, ascensorVal, ascSeleccionado){
   return 0;
 }
 
+// ════════════════════════════════════════════════════════
+// CÁLCULO DE PRECIO (calibrado con mudanzas reales mayo 2026)
+//
+// Fórmula:
+//   precio_lite = BASE + (m³ × $/m³) + (km_excedente × $/km) + recargos
+//   precio_plan = precio_lite × multiplicador_plan
+//
+// Ayudantes se auto-asignan según m³ (no afecta precio, info logística).
+// ════════════════════════════════════════════════════════
 function calcularPrecio(opts){
   const T = TARIFAS;
   const m3 = Math.max(0, opts.m3 || 0);
   const km = opts.km || 8;
-  const pisosOrigen = opts.pisosOrigen || 0;
-  const pisosDestino = opts.pisosDestino || 0;
   const efectivoM3 = Math.max(m3, T.m3Min);
-  let baseCamion, camionLabel;
-  if(m3 <= 10){ baseCamion = T.baseChico; camionLabel = 'Furgón chico'; }
-  else if(m3 <= 24){ baseCamion = T.baseMedio; camionLabel = 'Camión mediano'; }
-  else { baseCamion = T.baseGrande; camionLabel = 'Camión grande'; }
-  const tramo = T.tramos.find(t => t.hasta === null || m3 <= t.hasta) || T.tramos[T.tramos.length-1];
-  const factorTramo = tramo.factor;
-  const costoVolumen = efectivoM3 * T.precioM3;
-  const kmExcedente = Math.max(0, km - T.kmGratis);
-  const costoDistancia = kmExcedente * T.precioKm;
-  const costoBajada = pisosOrigen * T.bajadaPiso;
-  const costoSubida = pisosDestino * T.subidaPiso;
+
+  // Detectar tipo de mudanza según distancia
+  const kmLimiteBase  = T.kmLimiteBase  || 65;
+  const kmLimiteLarga = T.kmLimiteLarga || 200;
+  const esInterregional = km > kmLimiteBase;
+  const esLargaDistancia = km > kmLimiteLarga;
+
+  let base = 0;
+  let costoVolumen = 0;
+  let costoDistancia = 0;
+  let recargoAccesibilidad = 0;
+  let subtotal = 0;
+
+  if(esLargaDistancia){
+    // ── ESCENARIO 3: Distancia muy larga (> 200 km) ──
+    // Solo se cobra km × precioKm (sin base, sin volumen, sin recargos)
+    costoDistancia = km * T.precioKm;
+    subtotal = costoDistancia;
+  } else {
+    // ── ESCENARIOS 1 y 2: RM o interregional cerca ──
+    // Base solo si km ≤ 65
+    base = esInterregional ? 0 : T.base;
+    // Volumen siempre se cobra
+    costoVolumen = efectivoM3 * T.precioM3;
+    // Km: interregional cobra desde 0, RM cobra solo los excedentes
+    const kmCobrables = esInterregional ? km : Math.max(0, km - T.kmGratis);
+    costoDistancia = kmCobrables * T.precioKm;
+
+    // Recargos por accesibilidad (sin ascensor, estacionamiento, subterráneo)
+    const ascOrigen = (opts.ascOrigen || '').toLowerCase();
+    const ascDestino = (opts.ascDestino || '').toLowerCase();
+    if((opts.ascSeleccionado || '').toLowerCase().includes('algunas') || ascOrigen.includes('no')){
+      recargoAccesibilidad += T.recargoSinAscensorOrigen;
+    }
+    if(ascDestino.includes('no')){
+      recargoAccesibilidad += T.recargoSinAscensorDestino;
+    }
+    if((opts.estacOrigen||'').includes('mas40')) recargoAccesibilidad += T.recargoEstacionamientoLejos;
+    if((opts.estacDestino||'').includes('mas40')) recargoAccesibilidad += T.recargoEstacionamientoLejos;
+    if((opts.estacOrigen||'').includes('subterraneo')) recargoAccesibilidad += T.recargoEstacionamientoSubterraneo;
+    if((opts.estacDestino||'').includes('subterraneo')) recargoAccesibilidad += T.recargoEstacionamientoSubterraneo;
+
+    subtotal = base + costoVolumen + costoDistancia + recargoAccesibilidad;
+  }
+
+  // Recargo por items delicados (5% sobre subtotal) — aplica en TODOS los escenarios
   let recargoDelicado = 0;
-  if(opts.delicado === 'si'){ recargoDelicado = Math.round((baseCamion + factorTramo + costoVolumen) * T.recargoDelicado); }
-  let recargoEstac = 0;
-  if((opts.estacOrigen||'').includes('mas40') || (opts.estacDestino||'').includes('mas40')){ recargoEstac += T.recargoEstacionamientoLejos; }
-  if((opts.estacOrigen||'').includes('subterraneo') || (opts.estacDestino||'').includes('subterraneo')){ recargoEstac += T.recargoEstacionamientoSubterraneo; }
-  const PLAN_MULT = { lite: 1.0, smart: 1.45, pro: 2.0 };
+  if(opts.delicado === 'si'){
+    recargoDelicado = Math.round(subtotal * T.recargoDelicado);
+    subtotal += recargoDelicado;
+  }
+
+  // 7) Multiplicador del plan elegido
+  const PLAN_MULT = { lite: 1.0, smart: 1.30, pro: 1.70 };
   const planMult = PLAN_MULT[opts.plan] || 1.0;
-  const subtotal = baseCamion + factorTramo + costoVolumen + costoDistancia + costoBajada + costoSubida + recargoDelicado + recargoEstac;
   const total = Math.round(subtotal * planMult);
-  return { camionLabel, baseCamion, factorTramo, costoVolumen, costoDistancia, costoBajada, costoSubida, recargoDelicado, recargoEstac, subtotal, total, m3, efectivoM3, km };
+
+  // 8) Asignación interna de personal (no afecta precio)
+  const personal = ayudantesAutoAsignados(m3);
+
+  // Label de camión (informativo)
+  let camionLabel;
+  if(m3 <= 10) camionLabel = 'Furgón chico';
+  else if(m3 <= 24) camionLabel = 'Camión mediano';
+  else camionLabel = 'Camión grande';
+
+  // Categoría de mudanza
+  let categoria;
+  if(esLargaDistancia) categoria = 'Interregional larga (>200 km)';
+  else if(esInterregional) categoria = 'Interregional (65-200 km)';
+  else categoria = 'RM';
+
+  return {
+    camionLabel,
+    base, costoVolumen, costoDistancia, recargoAccesibilidad, recargoDelicado,
+    subtotal, total, m3, efectivoM3, km,
+    personal: personal.descripcion,
+    ayudantesTotal: personal.total,
+    esInterregional, esLargaDistancia, categoria,
+    // Compatibilidad con código existente
+    baseCamion: base, factorTramo: 0, costoBajada: 0, costoSubida: 0,
+    recargoEstac: recargoAccesibilidad
+  };
 }
 function fmtCLP(n){ return '$' + Math.round(n).toLocaleString('es-CL'); }
 
@@ -1707,7 +1795,13 @@ async function buildFinalStep(){
   const pisosOrigen = getPisos(origenTipo, origenPiso, origenAsc, choices['asc-orig']||'');
   const pisosDestino = getPisos(destinoTipo, destinoPiso, destinoAsc, '');
 
-  const baseOpts = { m3: totalVol, km, pisosOrigen, pisosDestino, delicado: delicadoVal, estacOrigen: estacOrig, estacDestino: estacDest };
+  const baseOpts = {
+    m3: totalVol, km,
+    delicado: delicadoVal,
+    estacOrigen: estacOrig, estacDestino: estacDest,
+    ascOrigen: origenAsc, ascDestino: destinoAsc,
+    ascSeleccionado: choices['asc-orig']
+  };
   const precios = {
     lite:  calcularPrecio(Object.assign({}, baseOpts, {plan:'lite'})),
     smart: calcularPrecio(Object.assign({}, baseOpts, {plan:'smart'})),
