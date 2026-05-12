@@ -21,6 +21,8 @@
 </script>
 <!-- EmailJS SDK + inicialización -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!-- jsPDF para generar PDF de cotización -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   if(typeof emailjs !== 'undefined'){
     emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY });
@@ -29,28 +31,12 @@
 <!-- Google Maps API (con Places + Distance Matrix) -->
 <script>
 (function loadGoogleMaps(){
-  if(!window.GOOGLE_MAPS_API_KEY || window.GOOGLE_MAPS_API_KEY === 'TU_API_KEY_AQUI'){
-    console.warn('[Mueveloexpress] Google Maps API key no configurada — usando heurística para distancias.');
-    return;
-  }
-  // Handler global para errores de Google Maps (API key inválida, sin facturación, etc.)
-  window.gm_authFailure = function(){
-    console.error('[Mueveloexpress] Google Maps authentication failed. Revisar API key en console.cloud.google.com');
-    window._gmapsFailed = true;
-  };
+  if(!window.GOOGLE_MAPS_API_KEY || window.GOOGLE_MAPS_API_KEY === 'TU_API_KEY_AQUI') return;
   const s = document.createElement('script');
-  s.src = 'https://maps.googleapis.com/maps/api/js?key=' + window.GOOGLE_MAPS_API_KEY + '&libraries=places&loading=async&callback=onGoogleMapsLoaded';
+  s.src = 'https://maps.googleapis.com/maps/api/js?key=' + window.GOOGLE_MAPS_API_KEY + '&libraries=places&loading=async';
   s.async = true; s.defer = true;
-  s.onerror = function(){
-    console.error('[Mueveloexpress] No se pudo cargar Google Maps script (error de red o bloqueo).');
-    window._gmapsFailed = true;
-  };
   document.head.appendChild(s);
 })();
-window.onGoogleMapsLoaded = function(){
-  console.log('[Mueveloexpress] Google Maps cargado correctamente ✓');
-  if(typeof initAddressAutocomplete === 'function') initAddressAutocomplete();
-};
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -62,7 +48,7 @@ window.onGoogleMapsLoaded = function(){
 }
 html{scroll-behavior:smooth;}
 body{font-family:"Outfit",sans-serif;color:var(--text);background:var(--white);-webkit-font-smoothing:antialiased;}
-nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 60px;height:100px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow .3s;}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 60px;height:115px;display:flex;align-items:center;justify-content:space-between;transition:box-shadow .3s;}
 nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.07);}
 .logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900;color:var(--navy);text-decoration:none;cursor:pointer;letter-spacing:-.4px;}
 .logo span{color:var(--red);}
@@ -420,13 +406,13 @@ footer{background:#080F19;padding:56px 60px 32px;}
 .truck-banner-text h3{font-size:14px;font-weight:900;color:var(--navy);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px;}
 .truck-banner-text p{font-size:12px;color:var(--gray);font-weight:600;}
 @media(max-width:600px){
-  .truck-banner{height:110px;}
-  .truck-svg{width:160px;}
-  .truck-flag{width:100px;height:32px;font-size:11px;}
-  .truck-flag-pole{height:62px;}
-  .truck-scene{bottom:30px;}
-  .truck-banner::after{height:30px;}
-  .truck-banner::before{bottom:30px;}
+  .truck-banner{height:120px;}
+  .truck-wrap{width:160px;}
+  .truck-flag{width:200px;height:40px;font-size:10px;letter-spacing:.5px;padding:0 18px 0 10px;line-height:1.15;}
+  .truck-flag-pole{height:68px;}
+  .truck-scene{bottom:32px;}
+  .truck-banner::after{height:32px;}
+  .truck-banner::before{bottom:32px;}
 }
 
 /* ── SECCIÓN EQUIPO ── */
@@ -469,11 +455,11 @@ footer{background:#080F19;padding:56px 60px 32px;}
 </head>
 <body>
 <nav id="mainNav">
-  <a href="#" class="logo" style="gap:14px;display:flex;align-items:center;">
-    <img src="/logo.png" alt="Mueveloexpress" style="height:110px;object-fit:contain;">
+  <a href="#" class="logo" style="display:flex;align-items:center;gap:14px;margin-left:30px;">
+    <img src="logo.png" alt="Mueveloexpress" style="height:115px;object-fit:contain;">
     <div style="display:flex;flex-direction:column;gap:0;line-height:0.9;">
-      <span style="font-size:28px;font-weight:900;color:#1A1A1A;letter-spacing:-1.2px;font-family:'Outfit',sans-serif;text-transform:uppercase;">MUEVELO</span>
-      <span style="font-size:28px;font-weight:900;color:#D32F2F;letter-spacing:-1.2px;font-family:'Outfit',sans-serif;text-transform:uppercase;">EXPRESS</span>
+      <span style="font-size:30px;font-weight:900;color:#1A1A1A;letter-spacing:-1.2px;font-family:'Outfit',sans-serif;text-transform:uppercase;">MUEVELO</span>
+      <span style="font-size:30px;font-weight:900;color:#D32F2F;letter-spacing:-1.2px;font-family:'Outfit',sans-serif;text-transform:uppercase;">EXPRESS</span>
     </div>
   </a>
   <div class="nav-links">
@@ -1347,11 +1333,13 @@ function calcularPrecio(opts){
 function fmtCLP(n){ return '$' + Math.round(n).toLocaleString('es-CL'); }
 
 // EmailJS — envío de correos cliente + admin
-function enviarCorreosCotizacion(d){
+function enviarCorreosCotizacion(d, planElegido){
   if(typeof emailjs === 'undefined' || !window.EMAILJS_PUBLIC_KEY){
-    console.warn('EmailJS no disponible — saltando envío'); return;
+    console.warn('EmailJS no disponible — saltando envío'); return Promise.resolve();
   }
   const invList = Object.entries(d.inventario || {}).map(([item, qty]) => qty + '× ' + item).join('\n') || '(sin ítems)';
+  const planTxt = planElegido ? ({ lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planElegido] || planElegido) : 'No elegido aún';
+  const precioElegido = planElegido && d.precios?.[planElegido] ? fmtCLP(d.precios[planElegido].total) : '—';
   const params = {
     customer_name:  d.nombre,
     customer_email: d.email,
@@ -1364,17 +1352,26 @@ function enviarCorreosCotizacion(d){
     precio_lite:  fmtCLP(d.precios?.lite?.total  || 0),
     precio_smart: fmtCLP(d.precios?.smart?.total || 0),
     precio_pro:   fmtCLP(d.precios?.pro?.total   || 0),
+    plan_elegido: planTxt,
+    precio_elegido: precioElegido,
+    tipo_servicio: (d.tipoServicio || 'mudanza').toUpperCase(),
     inventario_detallado: invList
   };
   const status = document.getElementById('final-status');
-  Promise.all([
+  // Usar allSettled: éxito si AL MENOS UNO de los correos se envía
+  return Promise.allSettled([
     emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_CLIENTE, params),
     emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_ADMIN,   params)
-  ]).then(() => {
-    if(status) status.textContent = '✓ Cotización enviada a ' + d.email + '. Revisa tu correo.';
-  }).catch(err => {
-    console.error('Error EmailJS:', err);
-    if(status) status.textContent = '⚠️ No pudimos enviar el correo automático. Por favor confirma por WhatsApp.';
+  ]).then(results => {
+    const ok = results.filter(r=>r.status==='fulfilled').length;
+    const fail = results.filter(r=>r.status==='rejected');
+    if(fail.length) console.warn('Algunos correos no se enviaron:', fail);
+    if(ok > 0){
+      if(status) status.textContent = '✓ Cotización enviada a ' + d.email + '. Revisa tu correo.';
+    } else {
+      if(status) status.textContent = '⚠️ No pudimos enviar el correo automático. Por favor confirma por WhatsApp.';
+    }
+    return ok > 0;
   });
 }
 
@@ -1469,18 +1466,15 @@ async function buildFinalStep(){
     </div>
     <p id="final-status" style="font-size:11px;color:#94a3b8;text-align:center;font-style:italic;">Estos son precios estimados. El precio final se confirma con un asesor antes del servicio.</p>
   `;
-
-  // Enviar correos vía EmailJS
-  enviarCorreosCotizacion(window._cotizacionData);
+  // El correo se envía SOLO cuando el cliente elige un plan (en selectPlan)
 }
 
 function selectPlan(planKey){
   const data = window._cotizacionData;
   if(!data) return;
+  data._planElegido = planKey;
   const planTxt = { lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planKey];
   const precio = data.precios[planKey];
-  document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));
-  if(event && event.currentTarget) event.currentTarget.classList.add('selected');
   const tipoServ = (data.tipoServicio||'mudanza').toUpperCase();
   const msg = `Hola Mueveloexpress! Quiero confirmar mi cotización:\n\n👤 ${data.nombre}\n🚚 Tipo: ${tipoServ}\n📦 Plan elegido: *${planTxt}*\n💰 *Total: ${fmtCLP(precio.total)}*\n📅 Fecha: ${data.fecha}\n📍 ${data.origen.tipo} · ${data.origen.direccion}\n🎯 ${data.destino.tipo} · ${data.destino.direccion}\n📊 ${data.volumenTotal.toFixed(1)} m³ · ${data.itemsTotal} ítems\n✉️ ${data.email}\n📱 +56${data.telefono}`;
   const waUrl = `https://wa.me/56934050395?text=${encodeURIComponent(msg)}`;
@@ -1488,19 +1482,207 @@ function selectPlan(planKey){
     <div style="text-align:center;padding:20px 0;">
       <div style="font-size:56px;margin-bottom:12px;">✅</div>
       <h2 style="font-size:24px;font-weight:900;color:#0F1C2E;letter-spacing:-.5px;margin-bottom:8px;">¡Plan ${planTxt} elegido!</h2>
-      <p style="font-size:14px;color:#64748B;margin-bottom:24px;">Confirma con un asesor y agenda tu mudanza por WhatsApp.</p>
+      <p style="font-size:14px;color:#64748B;margin-bottom:24px;">Descarga tu cotización en PDF o confirma directo por WhatsApp.</p>
       <div style="background:linear-gradient(135deg,#D32F2F,#B71C1C);color:white;border-radius:18px;padding:24px;margin-bottom:20px;box-shadow:0 12px 32px rgba(211,47,47,.25);">
         <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.85;margin-bottom:6px;">Tu cotización</div>
         <div style="font-size:36px;font-weight:900;letter-spacing:-1.5px;line-height:1;">${fmtCLP(precio.total)}</div>
         <div style="font-size:13px;margin-top:8px;opacity:.9;">${planTxt}</div>
       </div>
-      <a href="${waUrl}" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:white;padding:16px 28px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
+      <button onclick="descargarPDF()" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#0F1C2E;color:white;padding:14px 24px;border-radius:12px;font-size:14.5px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;border:none;cursor:pointer;font-family:'Outfit',sans-serif;margin-bottom:10px;">
+        📄 Descargar cotización (PDF)
+      </button>
+      <a href="${waUrl}" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:white;padding:14px 24px;border-radius:12px;font-size:14.5px;font-weight:700;text-decoration:none;width:100%;box-sizing:border-box;">
         <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:currentColor;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
         Confirmar por WhatsApp
       </a>
-      <p style="font-size:11px;color:#94a3b8;margin-top:14px;font-style:italic;">Te contactaremos también por correo a ${data.email}</p>
+      <p id="final-status" style="font-size:11px;color:#94a3b8;margin-top:14px;font-style:italic;">Enviando cotización a ${data.email}...</p>
     </div>
   `;
+  // Enviar correo con el plan elegido
+  enviarCorreosCotizacion(data, planKey);
+}
+
+// ════════════════════════════════════════════════════════
+// GENERAR PDF DE COTIZACIÓN
+// ════════════════════════════════════════════════════════
+function descargarPDF(){
+  const data = window._cotizacionData;
+  if(!data) return alert('No hay cotización para descargar.');
+  if(typeof window.jspdf === 'undefined') return alert('PDF no disponible. Recarga la página.');
+
+  const planKey = data._planElegido || 'smart';
+  const planTxt = { lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planKey];
+  const precio = data.precios[planKey];
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const W = doc.internal.pageSize.getWidth();
+  const RED = [211, 47, 47];
+  const NAVY = [15, 28, 46];
+  const GRAY = [100, 116, 139];
+  const LIGHT = [241, 245, 249];
+
+  // ── HEADER ──
+  doc.setFillColor(...NAVY);
+  doc.rect(0, 0, W, 120, 'F');
+  doc.setFillColor(...RED);
+  doc.rect(0, 110, W, 4, 'F');
+
+  // Logo (intentar cargar la imagen)
+  try {
+    const img = document.querySelector('img[alt="Mueveloexpress"]');
+    if(img && img.complete && img.naturalWidth > 0){
+      const canvas = document.createElement('canvas');
+      const size = 80;
+      canvas.width = size; canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, size, size);
+      doc.addImage(canvas.toDataURL('image/png'), 'PNG', 40, 20, 70, 70);
+    }
+  } catch(e){ console.warn('Logo no disponible para PDF', e); }
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(22);
+  doc.text('MUEVELO EXPRESS', 130, 50);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(255, 200, 200);
+  doc.text('Cotización de mudanza · Chile', 130, 70);
+  doc.setFontSize(9);
+  doc.setTextColor(255, 255, 255);
+  doc.text('+569 34050395 · www.mueveloexpress.cl', 130, 88);
+
+  // ── TÍTULO COTIZACIÓN ──
+  let y = 160;
+  doc.setTextColor(...NAVY);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(20);
+  doc.text('Cotización para ' + data.nombre.split(' ')[0], 40, y);
+  y += 18;
+  doc.setFontSize(10);
+  doc.setTextColor(...GRAY);
+  doc.setFont('helvetica', 'normal');
+  const fechaHoy = new Date().toLocaleDateString('es-CL', { day: '2-digit', month: 'long', year: 'numeric' });
+  doc.text('Generada el ' + fechaHoy + ' · Válida por 7 días', 40, y);
+
+  // ── PRECIO DESTACADO ──
+  y += 30;
+  doc.setFillColor(...RED);
+  doc.roundedRect(40, y, W - 80, 80, 12, 12, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.text('PLAN ELEGIDO', 60, y + 22);
+  doc.setFontSize(18);
+  doc.text(planTxt.toUpperCase(), 60, y + 44);
+  doc.setFontSize(28);
+  doc.text(fmtCLP(precio.total), W - 60, y + 50, { align: 'right' });
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('IVA incluido · Precio estimado', W - 60, y + 66, { align: 'right' });
+
+  // ── DATOS DEL SERVICIO ──
+  y += 110;
+  doc.setTextColor(...NAVY);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.text('Detalles del servicio', 40, y);
+  y += 6;
+  doc.setDrawColor(...RED);
+  doc.setLineWidth(2);
+  doc.line(40, y, 80, y);
+  y += 18;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...GRAY);
+  const rows = [
+    ['Tipo de servicio', (data.tipoServicio||'mudanza').toUpperCase()],
+    ['Fecha estimada', data.fecha || 'A coordinar'],
+    ['Origen', data.origen.tipo + ' · ' + data.origen.direccion],
+    ['Destino', data.destino.tipo + ' · ' + data.destino.direccion],
+    ['Distancia estimada', data.km + ' km'],
+    ['Volumen estimado', data.volumenTotal.toFixed(1) + ' m³'],
+    ['Cantidad de ítems', String(data.itemsTotal)],
+    ['Piezas frágiles', data.delicado === 'si' ? 'Sí' : 'No']
+  ];
+  rows.forEach(([label, value])=>{
+    doc.setTextColor(...GRAY);
+    doc.text(label + ':', 40, y);
+    doc.setTextColor(...NAVY);
+    doc.setFont('helvetica', 'bold');
+    doc.text(String(value), 180, y);
+    doc.setFont('helvetica', 'normal');
+    y += 16;
+  });
+
+  // ── INCLUYE ──
+  y += 12;
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...NAVY);
+  doc.text('Qué incluye tu plan ' + planTxt.replace('Muevelo ',''), 40, y);
+  y += 6;
+  doc.setDrawColor(...RED);
+  doc.line(40, y, 80, y);
+  y += 18;
+  const includes = {
+    lite:  ['Carga de muebles','Traslado seguro','Descarga en destino'],
+    smart: ['Todo lo de Lite','Embalaje básico de muebles','Materiales incluidos'],
+    pro:   ['Todo lo de Smart','Empaque profesional en cajas','Cuidado premium muebles']
+  }[planKey] || [];
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  includes.forEach(inc=>{
+    doc.setTextColor(...RED);
+    doc.text('✓', 40, y);
+    doc.setTextColor(...NAVY);
+    doc.text(inc, 56, y);
+    y += 16;
+  });
+
+  // ── INVENTARIO ──
+  if(data.inventario && Object.keys(data.inventario).length > 0){
+    y += 12;
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...NAVY);
+    doc.text('Inventario detallado', 40, y);
+    y += 6;
+    doc.setDrawColor(...RED);
+    doc.line(40, y, 80, y);
+    y += 18;
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...NAVY);
+    Object.entries(data.inventario).forEach(([item, qty])=>{
+      if(y > 780){ doc.addPage(); y = 60; }
+      doc.setTextColor(...GRAY);
+      doc.text(qty + '×', 40, y);
+      doc.setTextColor(...NAVY);
+      doc.text(item, 70, y);
+      y += 14;
+    });
+  }
+
+  // ── FOOTER ──
+  if(y > 720){ doc.addPage(); y = 60; }
+  y = Math.max(y + 30, 760);
+  doc.setFillColor(...LIGHT);
+  doc.rect(0, y, W, 80, 'F');
+  doc.setFontSize(9);
+  doc.setTextColor(...GRAY);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Esta cotización es estimada. El precio final se confirma con un asesor antes del servicio.', W/2, y + 22, { align: 'center' });
+  doc.text('Sin pago anticipado · Equipo capacitado · Puntualidad garantizada', W/2, y + 38, { align: 'center' });
+  doc.setTextColor(...RED);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Contacto: +569 34050395 · administracion@mueveloexpress.cl', W/2, y + 60, { align: 'center' });
+
+  // Descargar
+  const filename = 'cotizacion-mueveloexpress-' + data.nombre.split(' ')[0].toLowerCase() + '.pdf';
+  doc.save(filename);
 }
 
 function getInventoryData() {
