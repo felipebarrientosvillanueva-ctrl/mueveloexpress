@@ -1922,25 +1922,55 @@ function selectPlan(planKey){
 // ════════════════════════════════════════════════════════
 // GENERAR PDF DE COTIZACIÓN
 // ════════════════════════════════════════════════════════
-window.descargarPDF = function(){
+window.descargarPDF = async function(){
   try {
     const data = window._cotizacionData;
     if(!data){ alert('No hay cotización para descargar.'); return; }
-    // jsPDF UMD expone tanto window.jspdf como window.jsPDF
     const jsPDFConstructor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
     if(!jsPDFConstructor){
       console.error('jsPDF no disponible. window.jspdf=', window.jspdf, 'window.jsPDF=', window.jsPDF);
       alert('La librería de PDF no se cargó. Verifica tu conexión y recarga la página (Cmd+Shift+R).');
       return;
     }
-    generarPDF(data, jsPDFConstructor);
+    // Carga el logo de forma asíncrona y robusta ANTES de generar el PDF
+    const logoDataUrl = await cargarLogoBase64();
+    generarPDF(data, jsPDFConstructor, logoDataUrl);
   } catch(err){
     console.error('Error al generar PDF:', err);
     alert('Error al generar el PDF: ' + err.message + '\n\nRevisa la consola del navegador (F12) para más detalles.');
   }
 };
 
-function generarPDF(data, jsPDF){
+// Carga logo.png y lo convierte a base64 PNG (más confiable que drawImage del DOM)
+function cargarLogoBase64(){
+  return new Promise((resolve)=>{
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    let resolved = false;
+    const done = (val)=>{ if(!resolved){ resolved = true; resolve(val); } };
+    img.onload = function(){
+      try {
+        const maxSize = 300;
+        const scale = Math.min(maxSize/img.naturalWidth, maxSize/img.naturalHeight, 1);
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.round(img.naturalWidth * scale);
+        canvas.height = Math.round(img.naturalHeight * scale);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        done(canvas.toDataURL('image/png'));
+      } catch(e){
+        console.warn('Logo: no se pudo convertir a base64', e);
+        done(null);
+      }
+    };
+    img.onerror = ()=>{ console.warn('Logo: no se pudo cargar logo.png'); done(null); };
+    img.src = 'logo.png';
+    // Timeout de seguridad: si en 3s no responde, continuar sin logo
+    setTimeout(()=> done(null), 3000);
+  });
+}
+
+function generarPDF(data, jsPDF, logoDataUrl){
   const planKey = data._planElegido || 'smart';
   const planTxt = { lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planKey];
   const precio = data.precios[planKey];
@@ -1958,30 +1988,24 @@ function generarPDF(data, jsPDF){
   doc.setFillColor(...RED);
   doc.rect(0, 110, W, 4, 'F');
 
-  // Logo (intentar cargar la imagen)
-  try {
-    const img = document.querySelector('img[alt="Mueveloexpress"]');
-    if(img && img.complete && img.naturalWidth > 0){
-      const canvas = document.createElement('canvas');
-      const size = 80;
-      canvas.width = size; canvas.height = size;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, size, size);
-      doc.addImage(canvas.toDataURL('image/png'), 'PNG', 40, 20, 70, 70);
-    }
-  } catch(e){ console.warn('Logo no disponible para PDF', e); }
+  // Logo (precargado como base64)
+  if(logoDataUrl){
+    try {
+      doc.addImage(logoDataUrl, 'PNG', 40, 20, 85, 85);
+    } catch(e){ console.warn('No se pudo agregar logo al PDF', e); }
+  }
 
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(22);
-  doc.text('MUEVELO EXPRESS', 130, 50);
+  doc.text('MUEVELO EXPRESS', 140, 50);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
   doc.setTextColor(255, 200, 200);
-  doc.text('Cotización de mudanza · Chile', 130, 70);
+  doc.text('Cotización de mudanza · Chile', 140, 70);
   doc.setFontSize(9);
   doc.setTextColor(255, 255, 255);
-  doc.text('+569 34050395 · www.mueveloexpress.cl', 130, 88);
+  doc.text('+569 34050395  ·  www.mueveloexpress.cl', 140, 88);
 
   // ── TÍTULO COTIZACIÓN ──
   let y = 160;
