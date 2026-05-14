@@ -1903,22 +1903,74 @@ function enviarCorreosCotizacion(d, planElegido, modo){
   const planTxt = planElegido ? ({ lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planElegido] || planElegido) : 'No elegido aún — VER PRECIOS sin confirmar';
   const precioElegido = planElegido && d.precios?.[planElegido] ? fmtCLP(d.precios[planElegido].total) : '—';
 
+  // Formatear ascensor
+  const ascOrigen = (() => {
+    const a = (d.origen?.ascensor || '').toLowerCase();
+    if(a.includes('si') || a.includes('sí')) return '✅ Sí, hay ascensor';
+    if(a.includes('no')) return '❌ NO hay ascensor';
+    if(d.origen?.tipo === 'Casa') return '🏠 Casa (sin ascensor)';
+    return d.origen?.ascensor || 'No especificado';
+  })();
+  const ascDestino = (() => {
+    const a = (d.destino?.ascensor || '').toLowerCase();
+    if(a.includes('si') || a.includes('sí')) return '✅ Sí, hay ascensor';
+    if(a.includes('no')) return '❌ NO hay ascensor';
+    if(d.destino?.tipo === 'Casa') return '🏠 Casa (sin ascensor)';
+    return d.destino?.ascensor || 'No especificado';
+  })();
+  // Formatear estacionamiento
+  const formatEstac = (e) => {
+    const s = (e || '').toLowerCase();
+    if(s.includes('menos40')) return '🚚 Cerca (< 40m)';
+    if(s.includes('mas40')) return '🚶 Lejos (> 40m)';
+    if(s.includes('subterraneo') || s.includes('subterráneo')) return '🅿️ Entrada subterránea';
+    return e || 'No especificado';
+  };
+  const estacOrigen = formatEstac(d.origen?.estacionamiento);
+  const estacDestino = formatEstac(d.destino?.estacionamiento);
+  // Personal asignado según m³
+  const m3val = d.volumenTotal || 0;
+  let personal;
+  if(m3val <= 4) personal = '👤 Solo conductor (1 persona)';
+  else if(m3val <= 12) personal = '👥 Conductor + 1 ayudante (2 personas)';
+  else personal = '👥👥 Conductor + 2 ayudantes (3 personas)';
+
   const params = {
+    // Cliente
     customer_name:  d.nombre,
     customer_email: d.email,
     customer_phone: '+56' + (d.telefono || ''),
+    // Servicio
     fecha:    d.fecha || 'A coordinar',
+    tipo_servicio: (d.tipoServicio || 'mudanza').toUpperCase(),
+    // Direcciones
     origen:   (d.origen?.tipo || '') + ' · ' + (d.origen?.direccion || ''),
     destino:  (d.destino?.tipo || '') + ' · ' + (d.destino?.direccion || ''),
+    origen_tipo: d.origen?.tipo || '—',
+    destino_tipo: d.destino?.tipo || '—',
+    origen_piso: d.origen?.piso || '—',
+    destino_piso: d.destino?.piso || '—',
+    // Accesibilidad (NUEVO)
+    ascensor_origen: ascOrigen,
+    ascensor_destino: ascDestino,
+    estacionamiento_origen: estacOrigen,
+    estacionamiento_destino: estacDestino,
+    // Volumen y distancia
     volumen:  (d.volumenTotal || 0).toFixed(1),
     items:    d.itemsTotal || 0,
+    distancia_km: (d.km || '—') + ' km',
+    personal_asignado: personal,
+    delicado: d.delicado === 'si' ? '💎 SÍ — tiene piezas frágiles/valiosas' : '✅ No',
+    // Precios cotizados (los 3 SIEMPRE)
     precio_lite:  fmtCLP(d.precios?.lite?.total  || 0),
     precio_smart: fmtCLP(d.precios?.smart?.total || 0),
     precio_pro:   fmtCLP(d.precios?.pro?.total   || 0),
+    // Plan elegido (el seleccionado destacado)
     plan_elegido: planTxt,
     precio_elegido: precioElegido,
-    tipo_servicio: (d.tipoServicio || 'mudanza').toUpperCase(),
+    // Inventario
     inventario_detallado: invList,
+    // Estado del lead
     estado_lead: modo === 'lead_caliente'
       ? '🔥 LEAD CALIENTE — Cliente CONFIRMÓ plan'
       : '🟡 LEAD TIBIO — Cliente vio precios pero NO ha confirmado plan. Contactar con oferta especial.'
