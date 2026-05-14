@@ -1891,13 +1891,18 @@ function calcularPrecio(opts){
 function fmtCLP(n){ return '$' + Math.round(n).toLocaleString('es-CL'); }
 
 // EmailJS — envío de correos cliente + admin
-function enviarCorreosCotizacion(d, planElegido){
+// Envía notificación por correo
+// modo: 'lead_tibio' (solo admin, cliente vio precios) | 'lead_caliente' (admin + cliente, cliente eligió plan)
+function enviarCorreosCotizacion(d, planElegido, modo){
   if(typeof emailjs === 'undefined' || !window.EMAILJS_PUBLIC_KEY){
     console.warn('EmailJS no disponible — saltando envío'); return Promise.resolve();
   }
+  modo = modo || (planElegido ? 'lead_caliente' : 'lead_tibio');
+
   const invList = Object.entries(d.inventario || {}).map(([item, qty]) => qty + '× ' + item).join('\n') || '(sin ítems)';
-  const planTxt = planElegido ? ({ lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planElegido] || planElegido) : 'No elegido aún';
+  const planTxt = planElegido ? ({ lite:'Muevelo Lite', smart:'Muevelo Smart', pro:'Muevelo Pro' }[planElegido] || planElegido) : 'No elegido aún — VER PRECIOS sin confirmar';
   const precioElegido = planElegido && d.precios?.[planElegido] ? fmtCLP(d.precios[planElegido].total) : '—';
+
   const params = {
     customer_name:  d.nombre,
     customer_email: d.email,
@@ -1913,22 +1918,36 @@ function enviarCorreosCotizacion(d, planElegido){
     plan_elegido: planTxt,
     precio_elegido: precioElegido,
     tipo_servicio: (d.tipoServicio || 'mudanza').toUpperCase(),
-    inventario_detallado: invList
+    inventario_detallado: invList,
+    estado_lead: modo === 'lead_caliente'
+      ? '🔥 LEAD CALIENTE — Cliente CONFIRMÓ plan'
+      : '🟡 LEAD TIBIO — Cliente vio precios pero NO ha confirmado plan. Contactar con oferta especial.'
   };
+
   const status = document.getElementById('final-status');
-  // Usar allSettled: éxito si AL MENOS UNO de los correos se envía
-  return Promise.allSettled([
-    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_CLIENTE, params),
-    emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_ADMIN,   params)
-  ]).then(results => {
+
+  // Decidir a quién enviar según modo
+  const envios = [];
+  // Siempre enviar al ADMIN
+  envios.push(emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_ADMIN, params));
+  // Al CLIENTE solo si eligió plan (lead caliente)
+  if(modo === 'lead_caliente'){
+    envios.push(emailjs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TPL_CLIENTE, params));
+  }
+
+  return Promise.allSettled(envios).then(results => {
     const ok = results.filter(r=>r.status==='fulfilled').length;
     const fail = results.filter(r=>r.status==='rejected');
     if(fail.length) console.warn('Algunos correos no se enviaron:', fail);
-    if(ok > 0){
-      if(status) status.textContent = '✓ Cotización enviada a ' + d.email + '. Revisa tu correo.';
-    } else {
-      if(status) status.textContent = '⚠️ No pudimos enviar el correo automático. Por favor confirma por WhatsApp.';
+    // Solo mostrar mensaje en pantalla si es lead caliente (cuando elige plan)
+    if(status && modo === 'lead_caliente'){
+      if(ok > 0){
+        status.textContent = '✓ Cotización enviada a ' + d.email + '. Revisa tu correo.';
+      } else {
+        status.textContent = '⚠️ No pudimos enviar el correo automático. Por favor confirma por WhatsApp.';
+      }
     }
+    console.log(`📧 Correos enviados (${modo}):`, ok, '/', envios.length);
     return ok > 0;
   });
 }
@@ -2030,7 +2049,9 @@ async function buildFinalStep(){
     </div>
     <p id="final-status" style="font-size:11px;color:#94a3b8;text-align:center;font-style:italic;">Estos son precios estimados. El precio final se confirma con un asesor antes del servicio.</p>
   `;
-  // El correo se envía SOLO cuando el cliente elige un plan (en selectPlan)
+  // 📧 LEAD TIBIO: enviar al ADMIN cuando el cliente ve los precios (aunque no elija plan)
+  // Esto permite captar TODOS los leads y hacer follow-up a quienes no eligieron
+  enviarCorreosCotizacion(window._cotizacionData, null, 'lead_tibio');
 }
 
 function selectPlan(planKey){
@@ -2077,8 +2098,8 @@ function selectPlan(planKey){
       <p id="final-status" style="font-size:11px;color:#94a3b8;margin-top:14px;font-style:italic;">Enviando cotización a ${data.email}...</p>
     </div>
   `;
-  // Enviar correo con el plan elegido
-  enviarCorreosCotizacion(data, planKey);
+  // 📧 LEAD CALIENTE: enviar al ADMIN y al CLIENTE con el plan elegido
+  enviarCorreosCotizacion(data, planKey, 'lead_caliente');
 }
 
 // ════════════════════════════════════════════════════════
